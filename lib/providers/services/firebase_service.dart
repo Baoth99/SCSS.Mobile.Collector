@@ -33,7 +33,6 @@ Future<void> _firebaseLocalMessagingHandler() async {
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     RemoteNotification? notification = message.notification;
-    print(notification?.body.toString());
 
     AndroidNotification? android = message.notification?.android;
     if (notification != null && android != null) {
