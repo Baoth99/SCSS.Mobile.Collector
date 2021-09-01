@@ -1,5 +1,6 @@
 import 'package:collector_app/providers/configs/flavor_config.dart';
 import 'package:collector_app/providers/configs/injection_config.dart';
+import 'package:collector_app/providers/services/firebase_service.dart';
 import 'package:collector_app/ui/app.dart';
 import 'package:collector_app/utils/env_util.dart';
 import 'package:flutter/material.dart';
@@ -12,5 +13,8 @@ void main() async {
   FlavorConfiguration.addFlavorConfig(
       EnvBaseAppSettingValue.flavor, Colors.green);
   configureDependencies();
-  runApp(MyApp());
+  final firebase = getIt.get<FirebaseNotification>();
+  await firebase.initialize();
+  print(await firebase.getToken());
+  runApp(CollectorApp());
 }
