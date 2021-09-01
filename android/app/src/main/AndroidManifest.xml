@@ -1,8 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.collector_app">
+      <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+      <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+      <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="VECHAIXANH Thu Gom"
-        android:icon="@mipmap/ic_launcher">
+        android:label="VeChaiXANH Thu Gom"
+        android:icon="@mipmap/vechaixanh_ic_launcher">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
