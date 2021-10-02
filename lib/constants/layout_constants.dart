@@ -21,3 +21,8 @@ class MainLayoutConstants {
     account,
   ];
 }
+
+class ActivityLayoutConstants {
+  static const bulkyImage = ImagesPaths.bulky;
+  static const notBulkyImage = ImagesPaths.notBulky;
+}

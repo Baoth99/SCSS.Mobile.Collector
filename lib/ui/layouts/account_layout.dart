@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:collector_app/constants/constants.dart';
@@ -24,16 +25,16 @@ class AccountBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        avatar(),
+        avatar(context),
         options(context),
       ],
     );
   }
 
-  Widget avatar() {
+  Widget avatar(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 570.h,
+      height: 500.h,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
@@ -56,11 +57,7 @@ class AccountBody extends StatelessWidget {
               width: 250,
             ),
             margin: EdgeInsets.only(
-              left: 100.w,
-              top: 200.w,
-              right: 100.w,
-              bottom: 20.w
-            ),
+                left: 70.w, top: 170.h, right: 40.w, bottom: 40.h),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,53 +66,71 @@ class AccountBody extends StatelessWidget {
               Container(
                 child: CustomText(
                   text: 'Vũ Xuân Thiên',
-                  color: Colors.white70,
+                  color: AppColors.white,
                   fontSize: 70.sp,
                   fontWeight: FontWeight.w500,
                 ),
-                margin: EdgeInsets.only(
-                    top: 200.w,
-                    right: 100.w,
-                    bottom: 20.w
-                ),
+                margin: EdgeInsets.only(top: 170.h, right: 80.w, bottom: 20.h),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    Icons.control_point_duplicate_outlined,
-                    color: Colors.amber,
-                    size: 40.sp,
+                  Container(
+                    margin: EdgeInsets.only(right: 10.w),
+                    child: Icon(
+                      Icons.control_point_duplicate_outlined,
+                      color: Colors.amber,
+                      size: 50.sp,
+                    ),
                   ),
                   CustomText(
                     text: '56',
-                    fontSize: 45.sp,
+                    fontSize: 50.sp,
                     fontWeight: FontWeight.w500,
-                    color: Colors.white70,
+                    color: AppColors.white,
                   ),
                   Container(
                     child: Icon(
-                      Icons.fiber_manual_record,
-                      color: Colors.white70,
-                      size: 20.sp,
+                      Icons.star,
+                      color: Colors.amber,
+                      size: 50.sp,
                     ),
-                    margin: EdgeInsets.symmetric(
-                      horizontal: 25.w,
-                    ),
+                    margin: EdgeInsets.only(left: 40.w, right: 10.w),
                   ),
                   CustomText(
-                    text: '0767234215',
-                    color: Colors.white70,
-                    fontSize: 45.sp,
+                    text: '4.9',
+                    color: AppColors.white,
+                    fontSize: 50.sp,
                     fontWeight: FontWeight.w600,
                   ),
                 ],
               )
             ],
           ),
+          InkWell(
+            onTap: _onTapGetAccountQRCode(context),
+            child: Container(
+                margin: EdgeInsets.only(top: 170.h),
+                child:
+                // Icon(
+                //   Icons.qr_code_scanner,
+                //   size: 100.sp,
+                //   color: AppColors.white
+                // )
+                Image.asset(ImagesPaths.qrcode, width: 100.w,)
+            ),
+          )
         ],
       ),
     );
+  }
+
+  void Function() _onTapGetAccountQRCode(BuildContext context) {
+    return () {
+      Navigator.of(context).pushNamed(
+        Routes.accountQRCode,
+      );
+    };
   }
 
   Widget options(BuildContext context) {

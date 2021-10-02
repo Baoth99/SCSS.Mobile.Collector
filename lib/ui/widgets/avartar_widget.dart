@@ -30,7 +30,7 @@ class AvatarWidget extends StatelessWidget {
         shape: BoxShape.circle,
         border: Border.all(
           color: Colors.white,
-          width: 4.0,
+          width: 2.0,
         ),
       ),
     );
