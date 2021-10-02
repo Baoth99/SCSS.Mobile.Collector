@@ -53,6 +53,7 @@ flutter:
     - assets/env/.env_dev
     - assets/env/.env_testing
     - assets/env/.env_production
+    - assets/images/
 
   uses-material-design: true
   # An image asset can refer to one or more resolution-specific "variants", see

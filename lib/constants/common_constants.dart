@@ -30,6 +30,11 @@ class ImagesPaths {
   static const String bulky = '$imagePath/bulky.png';
   static const String maleProfile = '$imagePath/male_profile.png';
   static const String femaleProfile = '$imagePath/female_profile.png';
+  static const String createNewIcon = '$imagePath/newRequestIcon.png';
+  static const String categoriesIcon = '$imagePath/categoryIcon.png';
+  static const String dealerIcon = '$imagePath/dealerIcon.png';
+  static const String noRequestAvailable = '$imagePath/noRequestAvailable.png';
+  static const String qrcode = '$imagePath/qrcode.png';
 }
 
 class Symbols {
