@@ -1,7 +1,7 @@
 part of '../main_bloc.dart';
 
 class MainState extends Equatable {
-  const MainState({this.screenIndex = 0});
+  const MainState({this.screenIndex = 2});
 
   final int screenIndex;
 
