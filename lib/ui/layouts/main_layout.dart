@@ -31,27 +31,45 @@ class MainLayout extends StatelessWidget {
                 unselectedFontSize: 23.sp,
                 selectedFontSize: 26.sp,
                 currentIndex: state.screenIndex,
-                items: const <BottomNavigationBarItem>[
+                items: <BottomNavigationBarItem>[
                   BottomNavigationBarItem(
                     icon: Icon(
-                      Icons.analytics_outlined,
+                      state.screenIndex == MainLayoutConstants.statistic
+                          ? Icons.analytics
+                          : Icons.analytics_outlined,
                     ),
                     label: 'Thống kê',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.notifications_outlined),
+                    icon: Icon(
+                      state.screenIndex == MainLayoutConstants.notification
+                          ? Icons.notifications
+                          : Icons.notifications_outlined,
+                    ),
                     label: 'Thông báo',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.home_outlined),
+                    icon: Icon(
+                      state.screenIndex == MainLayoutConstants.home
+                          ? Icons.home
+                          : Icons.home_outlined,
+                    ),
                     label: 'Trang chủ',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.history_outlined),
+                    icon: Icon(
+                      state.screenIndex == MainLayoutConstants.activity
+                          ? Icons.history
+                          : Icons.history_outlined,
+                    ),
                     label: 'Hoạt động',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.person_outline),
+                    icon: Icon(
+                      state.screenIndex == MainLayoutConstants.account
+                          ? Icons.person
+                          : Icons.person_outline,
+                    ),
                     label: 'Tài khoản',
                   ),
                 ],
