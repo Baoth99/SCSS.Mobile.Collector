@@ -24,5 +24,6 @@ class Routes {
   static const dealers = 'dealers';
 
   //QR Code
-static const accountQRCode = 'accountQRCode';
+  static const accountQRCode = 'accountQRCode';
+
 }

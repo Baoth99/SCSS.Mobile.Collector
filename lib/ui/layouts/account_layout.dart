@@ -111,13 +111,10 @@ class AccountBody extends StatelessWidget {
             onTap: _onTapGetAccountQRCode(context),
             child: Container(
                 margin: EdgeInsets.only(top: 170.h),
-                child:
-                // Icon(
-                //   Icons.qr_code_scanner,
-                //   size: 100.sp,
-                //   color: AppColors.white
-                // )
-                Image.asset(ImagesPaths.qrcode, width: 100.w,)
+                child: Image.asset(
+                  ImagesPaths.qrcode,
+                  width: 100.w,
+                )
             ),
           )
         ],
