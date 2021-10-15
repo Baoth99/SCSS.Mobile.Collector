@@ -39,6 +39,7 @@ dependencies:
   mapbox_gl: 0.10.0
   equatable: ^2.0.3
   flutter_screenutil: ^5.0.0+2
+  qr_flutter: ^4.0.0
 
 dev_dependencies:
   flutter_test:
@@ -53,6 +54,7 @@ flutter:
     - assets/env/.env_dev
     - assets/env/.env_testing
     - assets/env/.env_production
+    - assets/images/
 
   uses-material-design: true
   # An image asset can refer to one or more resolution-specific "variants", see
