@@ -8,6 +8,9 @@ class APIKeyConstants {
 class APIServiceURI {
   static final accountDeviceID =
       '${EnvBaseAppSettingValue.baseApiUrl}collector/account/device-id';
+  static final imageGet = '${EnvBaseAppSettingValue.baseApiUrl}image/get';
+  static final accountCollectorInfo =
+      '${EnvBaseAppSettingValue.baseApiUrl}collector/account/collector-info';
 }
 
 class IdentityAPIConstants {

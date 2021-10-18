@@ -1,3 +1,5 @@
+import 'package:collector_app/blocs/models/gender_model.dart';
+import 'package:collector_app/blocs/profile_bloc.dart';
 import 'package:collector_app/constants/api_constants.dart';
 import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/log/logger.dart';
@@ -20,6 +22,8 @@ abstract class IdentityServerService {
   Future<bool> refreshToken();
 
   Future<bool> connectRevocation();
+
+  Future<ProfileState?> getProfile();
 }
 
 class IdentityServerServiceImpl implements IdentityServerService {
@@ -179,6 +183,35 @@ class IdentityServerServiceImpl implements IdentityServerService {
     } finally {
       client.close();
     }
+    return result;
+  }
+
+  @override
+  Future<ProfileState?> getProfile() async {
+    Client client = Client();
+    ProfileState? result;
+    var responseModel = await _identityServerNetwork
+        .getAccountInfo(client)
+        .whenComplete(() => client.close());
+    var m = responseModel.resData;
+    if (m != null) {
+      result = ProfileState(
+        id: m.id,
+        name: m.name ?? Symbols.empty,
+        address: m.address,
+        birthDate: m.birthDate == null
+            ? null
+            : CommonUtils.convertDDMMYYYToDateTime(m.birthDate!),
+        email: m.email,
+        gender: m.gender == 1 ? Gender.male : Gender.female,
+        image: m.image,
+        phone: m.phone ?? Symbols.empty,
+        totalPoint: m.totalPoint ?? 0,
+        idCard: m.idCard ?? Symbols.empty,
+        rate: m.rate ?? 0,
+      );
+    }
+
     return result;
   }
 }

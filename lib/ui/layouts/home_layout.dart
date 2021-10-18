@@ -1,8 +1,12 @@
+import 'package:collector_app/blocs/models/gender_model.dart';
+import 'package:collector_app/blocs/profile_bloc.dart';
 import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/ui/widgets/avartar_widget.dart';
 import 'package:collector_app/ui/widgets/custom_text_widget.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class HomeLayout extends StatelessWidget {
   const HomeLayout({Key? key}) : super(key: key);
@@ -23,7 +27,8 @@ class AccountBody extends StatelessWidget {
         avatar(context),
         waitToCollect(context, '8'),
         // waitToCollectEmpty(),
-        options(context)],
+        options(context)
+      ],
     );
   }
 
@@ -43,80 +48,86 @@ class AccountBody extends StatelessWidget {
           tileMode: TileMode.repeated, // repeats the gradient over the canvas
         ),
       ),
-      child: Row(
-        children: [
-          Container(
-            child: AvatarWidget(
-              imagePath:
-                  'https://cdn2.iconfinder.com/data/icons/flatfaces-everyday-people-square/128/beard_male_man_face_avatar-512.png',
-              isMale: false,
-              width: 250,
-            ),
-            margin: EdgeInsets.only(
-                left: 70.w, top: 170.h, right: 40.w, bottom: 40.h),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
+      child: BlocBuilder<ProfileBloc, ProfileState>(
+        builder: (context, state) {
+          return Row(
             children: [
               Container(
-                child: CustomText(
-                  text: 'Vũ Xuân Thiên',
-                  color: AppColors.white,
-                  fontSize: 70.sp,
-                  fontWeight: FontWeight.w500,
+                child: AvatarWidget(
+                  image: state.imageProfile,
+                  isMale: state.gender == Gender.male,
+                  width: 250,
                 ),
-                margin: EdgeInsets.only(top: 170.h, right: 80.w, bottom: 20.h),
+                margin: EdgeInsets.only(
+                    left: 70.w, top: 170.h, right: 40.w, bottom: 40.h),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(right: 10.w),
-                    child: Icon(
-                      Icons.control_point_duplicate_outlined,
-                      color: Colors.amber,
-                      size: 50.sp,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      child: CustomText(
+                        text: state.name,
+                        color: AppColors.white,
+                        fontSize: 70.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      margin: EdgeInsets.only(
+                          top: 170.h, right: 80.w, bottom: 20.h),
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(right: 10.w),
+                          child: Icon(
+                            Icons.control_point_duplicate_outlined,
+                            color: Colors.amber,
+                            size: 50.sp,
+                          ),
+                        ),
+                        CustomText(
+                          text: '${state.totalPoint}',
+                          fontSize: 50.sp,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.white,
+                        ),
+                        Container(
+                          child: Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                            size: 50.sp,
+                          ),
+                          margin: EdgeInsets.only(left: 40.w, right: 10.w),
+                        ),
+                        CustomText(
+                          text: '${state.rate.toStringAsFixed(1)}',
+                          color: AppColors.white,
+                          fontSize: 50.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              InkWell(
+                onTap: _onTapGetAccountQRCode(context),
+                child: Container(
+                  margin: EdgeInsets.only(
+                    top: 170.h,
+                    right: 70.w,
                   ),
-                  CustomText(
-                    text: '56',
-                    fontSize: 50.sp,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.white,
+                  child: Image.asset(
+                    ImagesPaths.qrcode,
+                    width: 100.w,
                   ),
-                  Container(
-                    child: Icon(
-                      Icons.star,
-                      color: Colors.amber,
-                      size: 50.sp,
-                    ),
-                    margin: EdgeInsets.only(left: 40.w, right: 10.w),
-                  ),
-                  CustomText(
-                    text: '4.9',
-                    color: AppColors.white,
-                    fontSize: 50.sp,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ],
+                ),
               )
             ],
-          ),
-          InkWell(
-            onTap: _onTapGetAccountQRCode(context),
-            child: Container(
-              margin: EdgeInsets.only(top: 170.h),
-                child:
-                // Icon(
-                //   Icons.qr_code_scanner,
-                //   size: 100.sp,
-                //   color: AppColors.white
-                // )
-              Image.asset(ImagesPaths.qrcode, width: 100.w,)
-            ),
-          )
-        ],
+          );
+        },
       ),
     );
   }
@@ -125,68 +136,63 @@ class AccountBody extends StatelessWidget {
     return Material(
       elevation: 1,
       child: Container(
-        decoration: BoxDecoration(
-          color: AppColors.white,
-        ),
-          child: Column(
+          decoration: BoxDecoration(
+            color: AppColors.white,
+          ),
+          child: Column(children: [
+            Row(children: [
+              Container(
+                padding: EdgeInsets.only(top: 30.h, left: 45.w),
+                child: CustomText(
+                  text: 'Yêu cầu chờ thu gom',
+                  fontSize: 45.sp,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ]),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Row(
-                    children: [
-                      Container(
-                          padding: EdgeInsets.only(top: 30.h, left: 45.w),
-                          child: CustomText(
-                              text: 'Yêu cầu chờ thu gom',
-                              fontSize: 45.sp,
-                              fontWeight: FontWeight.w500,
-                          ),
-                      ),
-                    ]
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: CollectingRequest(
-                            bookingId: 'SC00000001',
-                            distance: '2.1',
-                            bulky: false,
-                            cusName: 'Phạm Trung Hiếu',
-                            time: 'Th 4, 25/08/2021  10:00 - 12:00',
-                            placeTitle: 'EJ Sporting House',
-                            placeName: 'Lô D chung cư Nguyễn Trãi, phường 8, quận 5',
-                        ),
-                      )
-                    ],
-                ),
-                InkWell(
-                  onTap: _onTapGetAllNotCollectedRequest(context),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          margin: EdgeInsets.only(bottom: 20.h),
-                          child: CustomText(
-                            text: 'Xem tất cả ' + totalRequest + ' yêu cầu',
-                            fontSize: 45.sp,
-                            fontWeight: FontWeight.w500,
-                            textAlign: TextAlign.right,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(right: 30.w, bottom: 20.h),
-                        child: Icon(
-                          Icons.chevron_right,
-                          color: AppColors.greyFF9098B1,
-                          size: 80.sp,
-                        ),
-                      )
-                    ],
+                Expanded(
+                  child: CollectingRequest(
+                    bookingId: 'SC00000001',
+                    distance: '2.1',
+                    bulky: false,
+                    cusName: 'Phạm Trung Hiếu',
+                    time: 'Th 4, 25/08/2021  10:00 - 12:00',
+                    placeTitle: 'EJ Sporting House',
+                    placeName: 'Lô D chung cư Nguyễn Trãi, phường 8, quận 5',
                   ),
                 )
-              ]
-          )
-      ),
+              ],
+            ),
+            InkWell(
+              onTap: _onTapGetAllNotCollectedRequest(context),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      margin: EdgeInsets.only(bottom: 20.h),
+                      child: CustomText(
+                        text: 'Xem tất cả ' + totalRequest + ' yêu cầu',
+                        fontSize: 45.sp,
+                        fontWeight: FontWeight.w500,
+                        textAlign: TextAlign.right,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(right: 30.w, bottom: 20.h),
+                    child: Icon(
+                      Icons.chevron_right,
+                      color: AppColors.greyFF9098B1,
+                      size: 80.sp,
+                    ),
+                  )
+                ],
+              ),
+            )
+          ])),
     );
   }
 
@@ -194,42 +200,37 @@ class AccountBody extends StatelessWidget {
     return Material(
       elevation: 1,
       child: Container(
-        decoration: BoxDecoration(
-          color: AppColors.white,
-        ),
-          child: Column(
-              children: [
-                Row(
-                    children: [
-                      Container(
-                          padding: EdgeInsets.only(top: 30.h, left: 45.w),
-                          child: CustomText(
-                              text: 'Yêu cầu chờ thu gom',
-                              fontSize: 45.sp,
-                              fontWeight: FontWeight.w500,
-                          ),
-                      ),
-                    ]
+          decoration: BoxDecoration(
+            color: AppColors.white,
+          ),
+          child: Column(children: [
+            Row(children: [
+              Container(
+                padding: EdgeInsets.only(top: 30.h, left: 45.w),
+                child: CustomText(
+                  text: 'Yêu cầu chờ thu gom',
+                  fontSize: 45.sp,
+                  fontWeight: FontWeight.w500,
                 ),
-                Container(
-                  margin: EdgeInsets.only(top: 80.h,
-                  bottom: 20.h),
-                  child: Image.asset(ImagesPaths.noRequestAvailable,
-                  width: 400.w,),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 20.h,
-                  bottom: 80.h),
-                  child: CustomText(
-                      text: 'Bạn chưa xác nhận yêu cầu thu gom nào',
-                      fontSize: 40.sp,
-                      fontWeight: FontWeight.w500,
-                    color: AppColors.greyFF939393.withOpacity(1),
-                  ),
-                )
-              ]
-          )
-      ),
+              ),
+            ]),
+            Container(
+              margin: EdgeInsets.only(top: 80.h, bottom: 20.h),
+              child: Image.asset(
+                ImagesPaths.noRequestAvailable,
+                width: 400.w,
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 20.h, bottom: 80.h),
+              child: CustomText(
+                text: 'Bạn chưa xác nhận yêu cầu thu gom nào',
+                fontSize: 40.sp,
+                fontWeight: FontWeight.w500,
+                color: AppColors.greyFF939393.withOpacity(1),
+              ),
+            )
+          ])),
     );
   }
 
@@ -283,7 +284,7 @@ class AccountBody extends StatelessWidget {
           option(
             'Vựa hoạt động',
             'Danh sách vựa xung quanh',
-                () {
+            () {
               Navigator.of(context).pushNamed(
                 Routes.dealers,
               );
@@ -299,31 +300,28 @@ class AccountBody extends StatelessWidget {
   }
 
   Widget option(String name, String description, void Function() onPressed,
-      Color contentColor, Color startColor, Color endColor,
-      String icon) {
+      Color contentColor, Color startColor, Color endColor, String icon) {
     return Container(
       // color: Colors.white70,
       height: 270.h,
-      margin: EdgeInsets.symmetric(
-        vertical: 20.h,
-        horizontal: 100.w
-      ),
+      margin: EdgeInsets.symmetric(vertical: 20.h, horizontal: 100.w),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
-          end: Alignment.bottomRight, // 10% of the width, so there are ten blinds.
+          end: Alignment
+              .bottomRight, // 10% of the width, so there are ten blinds.
           colors: <Color>[
             startColor.withOpacity(0.9),
             endColor.withOpacity(0.9),
           ], // red to yellow
         ),
         boxShadow: [
-            BoxShadow(
-              color: AppColors.black.withOpacity(0.25),
-              blurRadius: 5.0,
-              spreadRadius: 0.0,
-              offset: Offset(1.0, 2.0), // shadow direction: bottom right
-            )
+          BoxShadow(
+            color: AppColors.black.withOpacity(0.25),
+            blurRadius: 5.0,
+            spreadRadius: 0.0,
+            offset: Offset(1.0, 2.0), // shadow direction: bottom right
+          )
         ],
         borderRadius: BorderRadius.circular(30.0.r),
       ),
@@ -335,12 +333,8 @@ class AccountBody extends StatelessWidget {
             child: Row(
               children: [
                 Container(
-                  margin: EdgeInsets.only(left: 50.w, right: 40.w),
-                  child: Image.asset(
-                    icon,
-                    width: 130.w
-                    )
-                ),
+                    margin: EdgeInsets.only(left: 50.w, right: 40.w),
+                    child: Image.asset(icon, width: 130.w)),
                 Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -407,17 +401,16 @@ class CollectingRequest extends StatelessWidget {
         minHeight: 130.h,
       ),
       decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(30.0.r),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.greyFFDADADA,
-            blurRadius: 2.0,
-            spreadRadius: 0.0,
-            offset: Offset(2.0, 2.0), // shadow direction: bottom right
-          )
-        ]
-      ),
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(30.0.r),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.greyFFDADADA,
+              blurRadius: 2.0,
+              spreadRadius: 0.0,
+              offset: Offset(2.0, 2.0), // shadow direction: bottom right
+            )
+          ]),
       child: InkWell(
         onTap: _onTapRequestWaitToCollect(context),
         child: ClipRRect(
@@ -447,21 +440,18 @@ class CollectingRequest extends StatelessWidget {
                       Container(
                         margin: EdgeInsets.only(top: 40.h),
                         child: CustomText(
-                            text: distance + 'km',
-                            fontWeight: FontWeight.w500,
+                          text: distance + 'km',
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ],
                   ),
-
                 ),
 
                 Expanded(
                   child: Container(
-                    margin: EdgeInsets.symmetric(
-                      horizontal: 20.w,
-                      vertical: 20.h
-                    ),
+                    margin:
+                        EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
                     constraints: BoxConstraints(minHeight: 130.h),
                     child: Column(
                       mainAxisSize: MainAxisSize.max,

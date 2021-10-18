@@ -1,4 +1,6 @@
 import 'package:collector_app/blocs/account_bloc.dart';
+import 'package:collector_app/blocs/models/gender_model.dart';
+import 'package:collector_app/blocs/profile_bloc.dart';
 import 'package:collector_app/ui/widgets/custom_progress_indicator_dialog_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -84,76 +86,86 @@ class AccountBody extends StatelessWidget {
           tileMode: TileMode.repeated, // repeats the gradient over the canvas
         ),
       ),
-      child: Row(
-        children: [
-          Container(
-            child: AvatarWidget(
-              imagePath:
-                  'https://cdn2.iconfinder.com/data/icons/flatfaces-everyday-people-square/128/beard_male_man_face_avatar-512.png',
-              isMale: false,
-              width: 250,
-            ),
-            margin: EdgeInsets.only(
-                left: 70.w, top: 170.h, right: 40.w, bottom: 40.h),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
+      child: BlocBuilder<ProfileBloc, ProfileState>(
+        builder: (context, state) {
+          return Row(
             children: [
               Container(
-                child: CustomText(
-                  text: 'Vũ Xuân Thiên',
-                  color: AppColors.white,
-                  fontSize: 70.sp,
-                  fontWeight: FontWeight.w500,
+                child: AvatarWidget(
+                  image: state.imageProfile,
+                  isMale: state.gender == Gender.male,
+                  width: 250,
                 ),
-                margin: EdgeInsets.only(top: 170.h, right: 80.w, bottom: 20.h),
+                margin: EdgeInsets.only(
+                    left: 70.w, top: 170.h, right: 40.w, bottom: 40.h),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(right: 10.w),
-                    child: Icon(
-                      Icons.control_point_duplicate_outlined,
-                      color: Colors.amber,
-                      size: 50.sp,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      child: CustomText(
+                        text: state.name,
+                        color: AppColors.white,
+                        fontSize: 70.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      margin: EdgeInsets.only(
+                          top: 170.h, right: 80.w, bottom: 20.h),
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(right: 10.w),
+                          child: Icon(
+                            Icons.control_point_duplicate_outlined,
+                            color: Colors.amber,
+                            size: 50.sp,
+                          ),
+                        ),
+                        CustomText(
+                          text: '${state.totalPoint}',
+                          fontSize: 50.sp,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.white,
+                        ),
+                        Container(
+                          child: Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                            size: 50.sp,
+                          ),
+                          margin: EdgeInsets.only(left: 40.w, right: 10.w),
+                        ),
+                        CustomText(
+                          text: '${state.rate.toStringAsFixed(1)}',
+                          color: AppColors.white,
+                          fontSize: 50.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              InkWell(
+                onTap: _onTapGetAccountQRCode(context),
+                child: Container(
+                  margin: EdgeInsets.only(
+                    top: 170.h,
+                    right: 70.w,
                   ),
-                  CustomText(
-                    text: '56',
-                    fontSize: 50.sp,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.white,
+                  child: Image.asset(
+                    ImagesPaths.qrcode,
+                    width: 100.w,
                   ),
-                  Container(
-                    child: Icon(
-                      Icons.star,
-                      color: Colors.amber,
-                      size: 50.sp,
-                    ),
-                    margin: EdgeInsets.only(left: 40.w, right: 10.w),
-                  ),
-                  CustomText(
-                    text: '4.9',
-                    color: AppColors.white,
-                    fontSize: 50.sp,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ],
+                ),
               )
             ],
-          ),
-          InkWell(
-            onTap: _onTapGetAccountQRCode(context),
-            child: Container(
-                margin: EdgeInsets.only(top: 170.h),
-                child: Image.asset(
-                  ImagesPaths.qrcode,
-                  width: 100.w,
-                )),
-          )
-        ],
+          );
+        },
       ),
     );
   }

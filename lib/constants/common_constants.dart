@@ -51,6 +51,8 @@ class Symbols {
 
 class Others {
   static const int otpLength = 6;
+
+  static final String ddMMyyyyPattern = 'dd-MM-yyyy';
 }
 
 class VietnameseDate {

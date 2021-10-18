@@ -4,12 +4,12 @@ BaseResponseModel baseResponseModelFromJson(String str) =>
     BaseResponseModel.fromJson(json.decode(str));
 
 class BaseResponseModel {
-  bool? isSuccess;
-  int? statusCode;
+  bool isSuccess;
+  int statusCode;
 
   BaseResponseModel({
-    this.isSuccess,
-    this.statusCode,
+    required this.isSuccess,
+    required this.statusCode,
   });
 
   factory BaseResponseModel.fromJson(Map<String, dynamic> json) =>

@@ -4,10 +4,12 @@ import 'dart:io';
 import 'package:collector_app/constants/api_constants.dart';
 import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/exceptions/custom_exceptions.dart';
+import 'package:collector_app/log/logger.dart';
 import 'package:collector_app/providers/networks/models/response/base_response_model.dart';
 import 'package:collector_app/utils/env_util.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 
 class SharedPreferenceUtils {
   static Future<bool> setString(String key, String value) async {
@@ -28,6 +30,17 @@ class SharedPreferenceUtils {
 }
 
 class CommonUtils {
+  static DateTime? convertDDMMYYYToDateTime(String date) {
+    DateTime? result;
+    try {
+      DateFormat format = DateFormat(Others.ddMMyyyyPattern);
+      result = format.parse(date);
+    } catch (e) {
+      AppLog.error('Exception at convertDDMMYYYToDateTime');
+    }
+    return result;
+  }
+
   static String concatString(List<String> strs,
       [String seperator = Symbols.space]) {
     return strs.join(seperator);
@@ -45,6 +58,52 @@ class NetworkUtils {
       CommonUtils.convertToBase64(
           '${EnvID4AppSettingValue.clientId}:${EnvID4AppSettingValue.clientSeret}'),
     );
+  }
+
+  static Future<Response> getNetworkWithBearer({
+    required String uri,
+    Map<String, String>? headers,
+    Map<String, dynamic>? queries,
+    required Client client,
+  }) async {
+    var newHeaders = <String, String>{
+      HttpHeaders.authorizationHeader: await getBearerToken(),
+    }..addAll(headers ?? {});
+
+    return await getNetwork(
+      uri: uri,
+      headers: newHeaders,
+      client: client,
+      queries: queries,
+    );
+  }
+
+  static Future<Response> getNetwork({
+    required String uri,
+    Map<String, String>? headers,
+    Map<String, dynamic>? queries,
+    required Client client,
+  }) async {
+    var url = Uri.parse(uri).replace(
+      queryParameters: queries,
+    );
+
+    //create request
+    var response = await client.get(
+      url,
+      headers: headers,
+    );
+
+    //add header
+
+    return response;
+  }
+
+  static String getUrlWithQueryString(String uri, Map<String, String> queries) {
+    // ignore: non_constant_identifier_names
+    var URI = Uri.parse(uri);
+    URI = URI.replace(queryParameters: queries);
+    return URI.toString();
   }
 
   static Future<Response> putBodyWithBearerAuth({
@@ -122,8 +181,7 @@ class NetworkUtils {
     );
 
     if (responseModel.statusCode == NetworkConstants.ok200 &&
-        responseModel.isSuccess != null &&
-        responseModel.isSuccess!) return responseModel;
+        responseModel.isSuccess) return responseModel;
 
     //
     throw Exception(

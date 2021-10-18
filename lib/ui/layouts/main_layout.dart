@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:collector_app/blocs/main_bloc.dart';
+import 'package:collector_app/blocs/profile_bloc.dart';
 import 'package:collector_app/constants/constants.dart';
+import 'package:collector_app/log/logger.dart';
 import 'package:collector_app/ui/layouts/account_layout.dart';
 import 'package:collector_app/ui/layouts/activity_layout.dart';
 import 'package:collector_app/ui/layouts/home_layout.dart';
@@ -9,8 +13,48 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class MainLayout extends StatelessWidget {
+class MainLayout extends StatefulWidget {
   const MainLayout({Key? key}) : super(key: key);
+
+  @override
+  _MainLayoutState createState() => _MainLayoutState();
+}
+
+class _MainLayoutState extends State<MainLayout> {
+  late Timer _timer;
+
+  @override
+  void initState() {
+    super.initState();
+
+    initProfileBloc();
+  }
+
+  void initProfileBloc() {
+    //profile
+    context.read<ProfileBloc>().add(ProfileClear());
+    context.read<ProfileBloc>().add(ProfileInitial());
+    try {
+      _timer = Timer.periodic(
+        const Duration(minutes: 1),
+        (timer) {
+          try {
+            context.read<ProfileBloc>().add(ProfileInitial());
+          } catch (e) {
+            AppLog.error(e);
+          }
+        },
+      );
+    } catch (e) {
+      AppLog.error(e);
+    }
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

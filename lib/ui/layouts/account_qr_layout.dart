@@ -27,8 +27,8 @@ class AccountQRLayout extends StatelessWidget {
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           leading: IconButton(
-            onPressed: (){
-                Navigator.pop(context);
+            onPressed: () {
+              Navigator.pop(context);
             },
             icon: Icon(Icons.arrow_back_ios),
           ),
@@ -48,51 +48,49 @@ class AccountQRBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-          width: 800.w,
-          height: 1400.h,
-          decoration: BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.circular(40.0.r),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.black.withOpacity(0.25),
-                blurRadius: 5.0,
-                spreadRadius: 0.0,
-                offset: Offset(1.0, 2.0), // shadow direction: bottom right
-              )
-            ],
-          ),
-          margin: EdgeInsets.only(bottom: 150.h),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                margin: EdgeInsets.only(bottom: 20.h),
-                child: AvatarWidget(
-                  imagePath:
-                  'https://cdn2.iconfinder.com/data/icons/flatfaces-everyday-people-square/128/beard_male_man_face_avatar-512.png',
-                  isMale: false,
-                  width: 500.w,
-                ),
+        width: 800.w,
+        height: 1400.h,
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(40.0.r),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.black.withOpacity(0.25),
+              blurRadius: 5.0,
+              spreadRadius: 0.0,
+              offset: Offset(1.0, 2.0), // shadow direction: bottom right
+            )
+          ],
+        ),
+        margin: EdgeInsets.only(bottom: 150.h),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              margin: EdgeInsets.only(bottom: 20.h),
+              child: AvatarWidget(
+                isMale: false,
+                width: 500.w,
               ),
-              CustomText(
-                text: 'Vũ Xuân Thiên',
+            ),
+            CustomText(
+              text: 'Vũ Xuân Thiên',
+              color: AppColors.black,
+              fontSize: 50.sp,
+              fontWeight: FontWeight.w400,
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 100.h),
+              child: CustomText(
+                text: 'Sử dụng mã QR để tạo giao dịch với vựa',
                 color: AppColors.black,
-                fontSize: 50.sp,
-                fontWeight: FontWeight.w400,
+                fontSize: 35.sp,
+                fontWeight: FontWeight.w300,
               ),
-              Container(
-                margin: EdgeInsets.only(top: 100.h),
-                child: CustomText(
-                  text: 'Sử dụng mã QR để tạo giao dịch với vựa',
-                  color: AppColors.black,
-                  fontSize: 35.sp,
-                  fontWeight: FontWeight.w300,
-                ),
-              ),
-              _getQrCode('vechaixanh.hotro@gmail.com')
-            ],
-          ),
+            ),
+            _getQrCode('vechaixanh.hotro@gmail.com')
+          ],
+        ),
       ),
     );
   }
