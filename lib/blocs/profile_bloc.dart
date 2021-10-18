@@ -68,6 +68,10 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
                 var profileImage = await updateImage(newState.image!);
                 yield state.copyWith(imageProfile: profileImage);
               }
+            } else if (newState.image == null) {
+              yield newState.copyWith(
+                status: FormzStatus.submissionSuccess,
+              );
             }
           } else {
             throw Exception('New Sate is null');
