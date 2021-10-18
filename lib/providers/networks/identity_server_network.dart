@@ -8,6 +8,7 @@ import 'package:collector_app/providers/networks/models/request/connect_revocati
 import 'package:collector_app/providers/networks/models/request/connect_token_request_model.dart';
 import 'package:collector_app/providers/networks/models/response/base_response_model.dart';
 import 'package:collector_app/providers/networks/models/response/connect_token_response_model.dart';
+import 'package:collector_app/providers/networks/models/response/profile_info_response_model.dart';
 import 'package:collector_app/providers/networks/models/response/refresh_token_response_model.dart';
 import 'package:collector_app/utils/common_utils.dart';
 import 'package:collector_app/utils/env_util.dart';
@@ -33,6 +34,8 @@ abstract class IdentityServerNetwork {
     ConnectRevocationRequestModel requestModel,
     Client client,
   );
+
+  Future<ProfileInfoResponseModel> getAccountInfo(Client client);
 }
 
 class IdentityServerNetworkImpl implements IdentityServerNetwork {
@@ -111,7 +114,7 @@ class IdentityServerNetworkImpl implements IdentityServerNetwork {
       baseResponseModelFromJson,
     );
 
-    return responseModel.isSuccess!;
+    return responseModel.isSuccess;
   }
 
   @override
@@ -169,6 +172,21 @@ class IdentityServerNetworkImpl implements IdentityServerNetwork {
     if (response.statusCode == NetworkConstants.ok200) {
       responseModel = true;
     }
+    return responseModel;
+  }
+
+  @override
+  Future<ProfileInfoResponseModel> getAccountInfo(Client client) async {
+    var response = await NetworkUtils.getNetworkWithBearer(
+      uri: APIServiceURI.accountCollectorInfo,
+      client: client,
+    );
+    // get model
+    var responseModel = await NetworkUtils
+        .checkSuccessStatusCodeAPIMainResponseModel<ProfileInfoResponseModel>(
+      response,
+      profileInfoResponseModelFromJson,
+    );
     return responseModel;
   }
 }
