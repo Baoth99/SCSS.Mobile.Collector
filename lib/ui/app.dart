@@ -1,9 +1,8 @@
 import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/ui/layouts/account_qr_layout.dart';
+import 'package:collector_app/ui/layouts/login_layout.dart';
 import 'package:collector_app/ui/layouts/main_layout.dart';
-import 'package:collector_app/ui/layouts/pending_request_layout.dart';
-import 'package:collector_app/ui/widgets/map_widget.dart';
-import 'package:collector_app/utils/env_util.dart';
+// import 'package:collector_app/ui/layouts/pending_request_layout.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,13 +17,18 @@ class CollectorApp extends StatelessWidget {
       builder: () => MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: Colors.green,
+          primaryColor: AppConstants.primaryColor,
+          accentColor: AppConstants.accentColor,
         ),
-        home: MainLayout(),
+        initialRoute: Routes.initial,
         routes: {
-          Routes.accountQRCode: (_) => const AccountQRLayout(),
-          Routes.pendingRequests: (_) => const PendingRequestLayout(),
+          Routes.login: (_) => const LoginLayout(),
 
+          Routes.main: (_) => const MainLayout(),
+
+          Routes.accountQRCode: (_) => const AccountQRLayout(),
+          // Routes.pendingRequests: (_) => const PendingRequestLayout(),
         },
       ),
     );

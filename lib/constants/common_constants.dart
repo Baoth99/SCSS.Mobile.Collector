@@ -24,7 +24,7 @@ class AppIcons {
 
 class ImagesPaths {
   static const String imagePath = 'assets/images';
-  static const String loginLogo = '$imagePath/seller_login_logo.png';
+  static const String loginLogo = '$imagePath/collector_login_logo.png';
   static const String markerPoint = '$imagePath/marker_point.png';
   static const String notBulky = '$imagePath/not_bulky.png';
   static const String bulky = '$imagePath/bulky.png';
@@ -80,13 +80,17 @@ class CompareConstants {
 
 class NetworkConstants {
   static const urlencoded = 'application/x-www-form-urlencoded';
+  static const applicationJson = 'application/json';
   static const postType = 'POST';
 
   // status code
   static const ok200 = 200;
   static const badRequest400 = 400;
+  static const unauthorized401 = 401;
 
   // pattern
+  static const bearerPattern = 'Bearer $data';
+  static const data = '{data}';
   static const base64Data = '{base64Data}';
   static const basicAuth = 'Basic $base64Data';
 }

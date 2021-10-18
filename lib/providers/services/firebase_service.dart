@@ -1,3 +1,7 @@
+import 'package:collector_app/log/logger.dart';
+import 'package:collector_app/providers/configs/injection_config.dart';
+import 'package:collector_app/providers/services/identity_server_service.dart';
+import 'package:collector_app/utils/common_function.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
@@ -55,6 +59,13 @@ Future<void> _firebaseLocalMessagingHandler() async {
 }
 
 class FirebaseNotification {
+  FirebaseNotification({IdentityServerService? identityServerService}) {
+    _identityServerService =
+        identityServerService ?? getIt.get<IdentityServerService>();
+  }
+
+  late IdentityServerService _identityServerService;
+
   initialize() async {
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp();
@@ -67,5 +78,21 @@ class FirebaseNotification {
   Future<String?> getToken() async {
     String? token = await FirebaseMessaging.instance.getToken();
     return token;
+  }
+
+  Future<void> updateToken() async {
+    futureAppDuration(getToken().then((deviceID) async {
+      if (deviceID != null && deviceID.isNotEmpty) {
+        var result = await _identityServerService.updateDeviceId(deviceID);
+        AppLog.info('Update token $result');
+        if (!result) {
+          throw Exception();
+        }
+      } else {
+        throw Exception();
+      }
+    }).catchError((e) {
+      AppLog.error(e);
+    }));
   }
 }

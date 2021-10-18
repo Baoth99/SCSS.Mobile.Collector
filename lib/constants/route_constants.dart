@@ -1,7 +1,17 @@
 part of 'constants.dart';
 
 class Routes {
+  //initial
+  static const initial = login;
 
+  //main
+  static const main = 'main';
+
+  //login
+  static const login = Symbols.forwardSlash + 'loginRoute';
+
+  //signup
+  static const signupPhoneNumber = Symbols.forwardSlash + 'signupPhoneNumber';
 
   //Account
   static const profileEdit = 'profileEdit';
@@ -25,5 +35,4 @@ class Routes {
 
   //QR Code
   static const accountQRCode = 'accountQRCode';
-
 }
