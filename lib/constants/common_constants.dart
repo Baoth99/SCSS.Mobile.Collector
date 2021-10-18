@@ -35,6 +35,7 @@ class ImagesPaths {
   static const String dealerIcon = '$imagePath/dealerIcon.png';
   static const String noRequestAvailable = '$imagePath/noRequestAvailable.png';
   static const String qrcode = '$imagePath/qrcode.png';
+  static const String splashScreen = '$imagePath/splash_screen.png';
 }
 
 class Symbols {

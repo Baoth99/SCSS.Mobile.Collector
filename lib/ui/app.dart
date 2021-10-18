@@ -2,6 +2,7 @@ import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/ui/layouts/account_qr_layout.dart';
 import 'package:collector_app/ui/layouts/login_layout.dart';
 import 'package:collector_app/ui/layouts/main_layout.dart';
+import 'package:collector_app/ui/layouts/splash_screen_layout.dart';
 // import 'package:collector_app/ui/layouts/pending_request_layout.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,9 @@ class CollectorApp extends StatelessWidget {
         ),
         initialRoute: Routes.initial,
         routes: {
+          //Splash screen
+          Routes.splashScreen: (_) => SplashScreenLayout(),
+
           Routes.login: (_) => const LoginLayout(),
 
           Routes.main: (_) => const MainLayout(),
