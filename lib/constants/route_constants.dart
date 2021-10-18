@@ -2,7 +2,7 @@ part of 'constants.dart';
 
 class Routes {
   //initial
-  static const initial = login;
+  static const initial = splashScreen;
 
   //main
   static const main = 'main';
@@ -35,4 +35,7 @@ class Routes {
 
   //QR Code
   static const accountQRCode = 'accountQRCode';
+
+  //splash screen
+  static const splashScreen = 'splashScreen';
 }

@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:collector_app/constants/api_constants.dart';
 import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/exceptions/custom_exceptions.dart';
 import 'package:collector_app/providers/networks/models/response/base_response_model.dart';
+import 'package:collector_app/utils/env_util.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -30,9 +32,21 @@ class CommonUtils {
       [String seperator = Symbols.space]) {
     return strs.join(seperator);
   }
+
+  static String convertToBase64(String str) {
+    return base64Encode(utf8.encode(str));
+  }
 }
 
 class NetworkUtils {
+  static String getBasicAuth() {
+    return NetworkConstants.basicAuth.replaceFirst(
+      NetworkConstants.data,
+      CommonUtils.convertToBase64(
+          '${EnvID4AppSettingValue.clientId}:${EnvID4AppSettingValue.clientSeret}'),
+    );
+  }
+
   static Future<Response> putBodyWithBearerAuth({
     required String uri,
     Map<String, String>? headers,
