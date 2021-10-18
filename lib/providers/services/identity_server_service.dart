@@ -107,9 +107,9 @@ class IdentityServerServiceImpl implements IdentityServerService {
             client,
           );
         }
-      }).catchError((error, stackTrace) {
-        AppLog.error(error);
-      });
+      }).whenComplete(
+        () => SharedPreferenceUtils.remove(APIKeyConstants.accessToken),
+      );
 
       //get refresh Token
       var fGetStringRefreshToken =
@@ -118,7 +118,9 @@ class IdentityServerServiceImpl implements IdentityServerService {
         if (value != null && value.isNotEmpty) {
           return await _identityServerNetwork.refreshToken(value, client);
         }
-      });
+      }).whenComplete(
+        () => SharedPreferenceUtils.remove(APIKeyConstants.refreshToken),
+      );
 
       //wait till two of this success
       // ignore: unused_local_variable
