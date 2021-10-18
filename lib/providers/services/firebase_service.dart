@@ -95,4 +95,8 @@ class FirebaseNotification {
       AppLog.error(e);
     }));
   }
+
+  static Future<void> removeMessagingHandler() async {
+    FirebaseMessaging.instance.deleteToken();
+  }
 }

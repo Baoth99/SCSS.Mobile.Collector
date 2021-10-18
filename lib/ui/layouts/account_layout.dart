@@ -1,19 +1,56 @@
+import 'package:collector_app/blocs/account_bloc.dart';
+import 'package:collector_app/ui/widgets/custom_progress_indicator_dialog_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/ui/widgets/avartar_widget.dart';
 import 'package:collector_app/ui/widgets/custom_text_widget.dart';
+import 'package:formz/formz.dart';
 
 class AccountLayout extends StatelessWidget {
   const AccountLayout({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: Color(0XFFF8F8F8),
-      body: AccountBody(),
+    return BlocProvider<AccountBloc>(
+      create: (context) => AccountBloc(),
+      child: BlocListener<AccountBloc, AccountState>(
+        listener: (context, state) {
+          if (state.status.isSubmissionInProgress) {
+            showDialog(
+              context: context,
+              builder: (context) => const CustomProgressIndicatorDialog(
+                text: 'Xin vui lòng đợi',
+              ),
+            );
+          }
+          if (state.status.isSubmissionFailure) {
+            // Navigator.of(context).popUntil(
+            //   ModalRoute.withName(Routes.main),
+            // );
+
+            //in case of fail
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                Routes.login, (Route<dynamic> route) => false);
+          }
+
+          if (state.status.isSubmissionSuccess) {
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                Routes.login, (Route<dynamic> route) => false);
+          }
+        },
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          backgroundColor: Color(0XFFF8F8F8),
+          body: Scaffold(
+            resizeToAvoidBottomInset: false,
+            backgroundColor: Color(0XFFF8F8F8),
+            body: AccountBody(),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -52,7 +89,7 @@ class AccountBody extends StatelessWidget {
           Container(
             child: AvatarWidget(
               imagePath:
-              'https://cdn2.iconfinder.com/data/icons/flatfaces-everyday-people-square/128/beard_male_man_face_avatar-512.png',
+                  'https://cdn2.iconfinder.com/data/icons/flatfaces-everyday-people-square/128/beard_male_man_face_avatar-512.png',
               isMale: false,
               width: 250,
             ),
@@ -114,8 +151,7 @@ class AccountBody extends StatelessWidget {
                 child: Image.asset(
                   ImagesPaths.qrcode,
                   width: 100.w,
-                )
-            ),
+                )),
           )
         ],
       ),
@@ -136,7 +172,7 @@ class AccountBody extends StatelessWidget {
         children: [
           option(
             'Thông tin tài khoản',
-                () {
+            () {
               Navigator.of(context).pushNamed(
                 Routes.profileEdit,
               );
@@ -146,7 +182,7 @@ class AccountBody extends StatelessWidget {
           ),
           option(
             'Đổi mật khẩu',
-                () {
+            () {
               Navigator.of(context).pushNamed(
                 Routes.profilePasswordEdit,
               );
@@ -156,7 +192,7 @@ class AccountBody extends StatelessWidget {
           ),
           option(
             'Liên hệ và góp ý',
-                () {
+            () {
               Navigator.of(context).pushNamed(
                 Routes.contact,
               );
@@ -166,8 +202,8 @@ class AccountBody extends StatelessWidget {
           ),
           option(
             'Đăng xuất',
-                () {
-              // context.read<AccountBloc>().add(LogoutEvent());
+            () {
+              context.read<AccountBloc>().add(LogoutEvent());
             },
             Colors.red,
             Icons.logout_outlined,

@@ -18,6 +18,8 @@ abstract class IdentityServerService {
   Future<bool> updateDeviceId(String deviceId);
 
   Future<bool> refreshToken();
+
+  Future<bool> connectRevocation();
 }
 
 class IdentityServerServiceImpl implements IdentityServerService {
@@ -110,6 +112,7 @@ class IdentityServerServiceImpl implements IdentityServerService {
       });
 
       //wait till two of this success
+      // ignore: unused_local_variable
       var getStringAccessToken = await fGetStringAccessToken;
 
       var responseModle = await fGetStringRefreshToken;
@@ -133,5 +136,49 @@ class IdentityServerServiceImpl implements IdentityServerService {
       client.close();
     }
     return false;
+  }
+
+  @override
+  Future<bool> connectRevocation() async {
+    Client client = Client();
+    var result = false;
+    try {
+      // revoke future access toekn;
+      var resultRevokeAccessToken =
+          SharedPreferenceUtils.getString(APIKeyConstants.accessToken)
+              .then((value) async {
+        if (value != null && value.isNotEmpty) {
+          return await _identityServerNetwork.connectRevocation(
+            ConnectRevocationRequestModel(
+              token: value,
+              tokenTypeHint: IdentityAPIConstants.accessToken,
+            ),
+            client,
+          );
+        }
+      }).onError((error, stackTrace) => false);
+
+      // revoke future refresh toekn;
+      var resultRevokeRefreshToken =
+          SharedPreferenceUtils.getString(APIKeyConstants.refreshToken)
+              .then((value) async {
+        if (value != null && value.isNotEmpty) {
+          return await _identityServerNetwork.connectRevocation(
+            ConnectRevocationRequestModel(
+              token: value,
+              tokenTypeHint: IdentityAPIConstants.refreshToken,
+            ),
+            client,
+          );
+        }
+      }).onError((error, stackTrace) => false);
+
+      // result
+      result = (await resultRevokeAccessToken ?? false) &&
+          (await resultRevokeRefreshToken ?? false);
+    } finally {
+      client.close();
+    }
+    return result;
   }
 }

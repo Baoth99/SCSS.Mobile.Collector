@@ -92,6 +92,5 @@ class NetworkConstants {
   // pattern
   static const bearerPattern = 'Bearer $data';
   static const data = '{data}';
-  static const base64Data = '{base64Data}';
-  static const basicAuth = 'Basic $base64Data';
+  static const basicAuth = 'Basic $data';
 }
