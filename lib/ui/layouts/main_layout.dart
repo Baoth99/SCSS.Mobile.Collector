@@ -34,12 +34,14 @@ class _MainLayoutState extends State<MainLayout> {
     //profile
     context.read<ProfileBloc>().add(ProfileClear());
     context.read<ProfileBloc>().add(ProfileInitial());
+    context.read<ProfileBloc>().add(UpdateCoordinate());
     try {
       _timer = Timer.periodic(
         const Duration(minutes: 1),
         (timer) {
           try {
             context.read<ProfileBloc>().add(ProfileInitial());
+            context.read<ProfileBloc>().add(UpdateCoordinate());
           } catch (e) {
             AppLog.error(e);
           }

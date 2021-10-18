@@ -11,6 +11,8 @@ class APIServiceURI {
   static final imageGet = '${EnvBaseAppSettingValue.baseApiUrl}image/get';
   static final accountCollectorInfo =
       '${EnvBaseAppSettingValue.baseApiUrl}collector/account/collector-info';
+  static final accountCoordinate =
+      '${EnvBaseAppSettingValue.baseApiUrl}collector/account/coordinate';
 }
 
 class IdentityAPIConstants {

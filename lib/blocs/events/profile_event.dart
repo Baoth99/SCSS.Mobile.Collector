@@ -7,3 +7,5 @@ abstract class ProfileEvent extends AbstractEvent {
 class ProfileInitial extends ProfileEvent {}
 
 class ProfileClear extends ProfileEvent {}
+
+class UpdateCoordinate extends ProfileEvent {}

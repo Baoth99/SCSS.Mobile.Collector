@@ -89,6 +89,15 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       } catch (e) {
         AppLog.error(e);
       }
+    } else if (event is UpdateCoordinate) {
+      try {
+        var result = await _identityServerService.updateCooridnate();
+        if (!result) {
+          throw Exception('Can\' update coordinate!');
+        }
+      } catch (e) {
+        AppLog.error(e);
+      }
     }
   }
 
