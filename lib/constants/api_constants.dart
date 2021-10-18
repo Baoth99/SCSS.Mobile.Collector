@@ -1,8 +1,8 @@
 import 'package:collector_app/utils/env_util.dart';
 
 class APIKeyConstants {
-  static const accessToken = 'vechaixanh_seller_access_token';
-  static const refreshToken = 'vechaixanh_seller_refresh_token';
+  static const accessToken = 'vechaixanh_collector_access_token';
+  static const refreshToken = 'vechaixanh_collector_refresh_token';
 }
 
 class APIServiceURI {

@@ -6,7 +6,7 @@ class DeviceConstants {
 }
 
 class AppConstants {
-  static const String appTitle = "Seller";
+  static const String appTitle = "Collector";
   static const Color primaryColor = AppColors.greenFF61C53D;
   static const Color accentColor = AppColors.greenFF61C53D;
   static const double horizontalScaffoldMargin = 48.0;
