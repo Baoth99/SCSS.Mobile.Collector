@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:collector_app/constants/api_constants.dart';
 import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/exceptions/custom_exceptions.dart';
+import 'package:collector_app/providers/networks/models/request/account_coordinate_request_model.dart';
 import 'package:collector_app/providers/networks/models/request/account_device_id_request_model.dart';
 import 'package:collector_app/providers/networks/models/request/connect_revocation_request_model.dart';
 import 'package:collector_app/providers/networks/models/request/connect_token_request_model.dart';
@@ -36,6 +37,11 @@ abstract class IdentityServerNetwork {
   );
 
   Future<ProfileInfoResponseModel> getAccountInfo(Client client);
+
+  Future<BaseResponseModel> updateCoordibate(
+    AccountCoordinateRequestModel requestModel,
+    Client client,
+  );
 }
 
 class IdentityServerNetworkImpl implements IdentityServerNetwork {
@@ -187,6 +193,28 @@ class IdentityServerNetworkImpl implements IdentityServerNetwork {
       response,
       profileInfoResponseModelFromJson,
     );
+    return responseModel;
+  }
+
+  @override
+  Future<BaseResponseModel> updateCoordibate(
+      AccountCoordinateRequestModel requestModel, Client client) async {
+    var response = await NetworkUtils.putBodyWithBearerAuth(
+      uri: APIServiceURI.accountCoordinate,
+      headers: {
+        HttpHeaders.contentTypeHeader: NetworkConstants.applicationJson,
+      },
+      body: accountCoordinateRequestModelToJson(requestModel),
+      client: client,
+    );
+
+    // get model
+    var responseModel = await NetworkUtils
+        .checkSuccessStatusCodeAPIMainResponseModel<BaseResponseModel>(
+      response,
+      baseResponseModelFromJson,
+    );
+
     return responseModel;
   }
 }

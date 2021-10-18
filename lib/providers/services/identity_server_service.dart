@@ -5,12 +5,15 @@ import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/log/logger.dart';
 import 'package:collector_app/providers/configs/injection_config.dart';
 import 'package:collector_app/providers/networks/identity_server_network.dart';
+import 'package:collector_app/providers/networks/models/request/account_coordinate_request_model.dart';
 import 'package:collector_app/providers/networks/models/request/connect_revocation_request_model.dart';
 import 'package:collector_app/providers/networks/models/request/connect_token_request_model.dart';
 import 'package:collector_app/providers/networks/models/response/connect_token_response_model.dart';
+import 'package:collector_app/providers/services/map_service.dart';
 import 'package:collector_app/providers/services/models/get_token_service_model.dart';
 import 'package:collector_app/utils/common_utils.dart';
 import 'package:http/http.dart';
+import 'package:mapbox_gl/mapbox_gl.dart';
 
 abstract class IdentityServerService {
   Future<GetTokenServiceModel> getToken(
@@ -24,6 +27,8 @@ abstract class IdentityServerService {
   Future<bool> connectRevocation();
 
   Future<ProfileState?> getProfile();
+
+  Future<bool> updateCooridnate();
 }
 
 class IdentityServerServiceImpl implements IdentityServerService {
@@ -213,5 +218,26 @@ class IdentityServerServiceImpl implements IdentityServerService {
     }
 
     return result;
+  }
+
+  @override
+  Future<bool> updateCooridnate() async {
+    Client client = Client();
+    final latLng = await acquireCurrentLocation();
+    if (latLng != null) {
+      var resonseModle = await _identityServerNetwork
+          .updateCoordibate(
+            AccountCoordinateRequestModel(
+                latitude: latLng.latitude, longitude: latLng.longitude),
+            client,
+          )
+          .whenComplete(
+            () => client.close(),
+          );
+      return resonseModle.isSuccess &&
+          resonseModle.statusCode == NetworkConstants.ok200;
+    }
+
+    return false;
   }
 }
