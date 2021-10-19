@@ -30,12 +30,12 @@ class Routes {
   //Scrap Categories
   static const categories = 'categories';
 
-  //Dealers
-  static const dealers = 'dealers';
-
   //QR Code
   static const accountQRCode = 'accountQRCode';
 
   //splash screen
   static const splashScreen = 'splashScreen';
+
+  //dealer
+  static const dealerSearch = 'dealerSearch';
 }

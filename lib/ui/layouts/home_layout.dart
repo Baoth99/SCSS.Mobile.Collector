@@ -13,7 +13,10 @@ class HomeLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: AccountBody());
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: AccountBody(),
+    );
   }
 }
 
@@ -286,7 +289,7 @@ class AccountBody extends StatelessWidget {
             'Danh sách vựa xung quanh',
             () {
               Navigator.of(context).pushNamed(
-                Routes.dealers,
+                Routes.dealerSearch,
               );
             },
             AppColors.white,

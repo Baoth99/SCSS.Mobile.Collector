@@ -1,6 +1,7 @@
 import 'package:collector_app/blocs/profile_bloc.dart';
 import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/ui/layouts/account_qr_layout.dart';
+import 'package:collector_app/ui/layouts/dealer_search_layout.dart';
 import 'package:collector_app/ui/layouts/login_layout.dart';
 import 'package:collector_app/ui/layouts/main_layout.dart';
 import 'package:collector_app/ui/layouts/splash_screen_layout.dart';
@@ -40,7 +41,8 @@ class CollectorApp extends StatelessWidget {
             Routes.main: (_) => const MainLayout(),
 
             Routes.accountQRCode: (_) => const AccountQRLayout(),
-            // Routes.pendingRequests: (_) => const PendingRequestLayout(),
+
+            Routes.dealerSearch: (_) => const DealerSearchLayout(),
           },
         ),
       ),
