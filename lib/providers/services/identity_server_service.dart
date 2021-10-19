@@ -227,6 +227,10 @@ class IdentityServerServiceImpl implements IdentityServerService {
     Client client = Client();
     final latLng = await acquireCurrentLocation();
     if (latLng != null) {
+      // update current position
+      currentLatitude = latLng.latitude;
+      currentLongitude = latLng.longitude;
+
       var resonseModle = await _identityServerNetwork
           .updateCoordibate(
             AccountCoordinateRequestModel(

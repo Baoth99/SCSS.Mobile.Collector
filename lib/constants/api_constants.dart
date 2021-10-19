@@ -13,6 +13,8 @@ class APIServiceURI {
       '${EnvBaseAppSettingValue.baseApiUrl}collector/account/collector-info';
   static final accountCoordinate =
       '${EnvBaseAppSettingValue.baseApiUrl}collector/account/coordinate';
+  static final dealerSearch =
+      '${EnvBaseAppSettingValue.baseApiUrl}dealer-info/search';
 }
 
 class IdentityAPIConstants {
