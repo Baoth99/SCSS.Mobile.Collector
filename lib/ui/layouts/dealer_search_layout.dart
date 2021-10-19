@@ -208,74 +208,80 @@ class DealerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      constraints: BoxConstraints(
-        minHeight: 200.h,
-        maxHeight: 500.h,
-      ),
-      padding: EdgeInsets.symmetric(
-        horizontal: 30.w,
-        vertical: 30.h,
-      ),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(
-            Radius.circular(30.0.r) //                 <--- border radius here
-            ),
-      ),
-      child: IntrinsicHeight(
-        child: Row(
-          children: [
-            Container(
-              height: 230.r,
-              width: 230.r,
-              child: CachedNetworkImage(
-                httpHeaders: {HttpHeaders.authorizationHeader: bearerToken},
-                imageUrl: urlImage,
-                imageBuilder: (context, imageProvider) => Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: imageProvider,
-                      fit: BoxFit.cover,
+    return InkWell(
+      onTap: () {
+        //detail
+      },
+      child: Container(
+        constraints: BoxConstraints(
+          minHeight: 200.h,
+          maxHeight: 500.h,
+        ),
+        padding: EdgeInsets.symmetric(
+          horizontal: 30.w,
+          vertical: 30.h,
+        ),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(
+              Radius.circular(30.0.r) //                 <--- border radius here
+              ),
+        ),
+        child: IntrinsicHeight(
+          child: Row(
+            children: [
+              Container(
+                height: 230.r,
+                width: 230.r,
+                child: CachedNetworkImage(
+                  httpHeaders: {HttpHeaders.authorizationHeader: bearerToken},
+                  imageUrl: urlImage,
+                  imageBuilder: (context, imageProvider) => Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
-                ),
-                placeholder: (context, url) => Container(
-                  child: Center(
-                    child: FunctionalWidgets.getLoadingCircle(),
+                  placeholder: (context, url) => Container(
+                    child: Center(
+                      child: FunctionalWidgets.getLoadingCircle(),
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => Icon(
+                    Icons.error,
+                    color: AppColors.orangeFFE4625D,
                   ),
                 ),
-                errorWidget: (context, url, error) => Icon(
-                  Icons.error,
-                  color: AppColors.orangeFFE4625D,
+              ),
+              SizedBox(
+                width: 20.w,
+              ),
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    CustomText(text: name),
+                    CustomText(text: address),
+                    Row(
+                      children: [
+                        Expanded(
+                          child:
+                              CustomText(text: 'Mở cửa: $fromTime - $toTime'),
+                        ),
+                        CustomText(
+                          text: distance,
+                        )
+                      ],
+                    )
+                  ],
                 ),
               ),
-            ),
-            SizedBox(
-              width: 20.w,
-            ),
-            Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  CustomText(text: name),
-                  CustomText(text: address),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: CustomText(text: 'Mở cửa: $fromTime - $toTime'),
-                      ),
-                      CustomText(
-                        text: distance,
-                      )
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
