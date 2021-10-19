@@ -1,5 +1,9 @@
 part of 'constants.dart';
 
+double currentLatitude = 10.7756587;
+double currentLongitude = 106.6808529;
+String bearerToken = Symbols.empty;
+
 class DeviceConstants {
   static const double logicalWidth = 1080;
   static const double logicalHeight = 2220;

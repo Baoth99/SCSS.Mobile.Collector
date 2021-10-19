@@ -1,25 +1,34 @@
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:collector_app/blocs/dealer_search_bloc.dart';
 import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/ui/widgets/common_margin_container.dart';
 import 'package:collector_app/ui/widgets/custom_text_widget.dart';
 import 'package:collector_app/ui/widgets/function_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:formz/formz.dart';
 
 class DealerSearchLayout extends StatelessWidget {
   const DealerSearchLayout({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[200],
-      appBar: FunctionalWidgets.buildAppBar(
-        context: context,
-        color: AppColors.greyFFB5B5B5,
-        title: CustomText(text: 'Vựa thu gom'),
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        elevation: 0,
+    return BlocProvider(
+      create: (context) => DealerSearchBloc()..add(DealerSearchInitialEvent()),
+      child: Scaffold(
+        backgroundColor: Colors.grey[200],
+        appBar: FunctionalWidgets.buildAppBar(
+          context: context,
+          color: AppColors.greyFFB5B5B5,
+          title: CustomText(text: 'Vựa thu gom'),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          elevation: 0,
+        ),
+        body: _body(context),
       ),
-      body: _body(context),
     );
   }
 
@@ -37,11 +46,28 @@ class DealerSearchLayout extends StatelessWidget {
         ),
         Expanded(
           child: CommonMarginContainer(
-            child: mainResults(),
+            child: BlocBuilder<DealerSearchBloc, DealerSearchState>(
+              builder: (context, state) {
+                return mainResult(state.status);
+              },
+            ),
           ),
         ),
       ],
     );
+  }
+
+  Widget mainResult(FormzStatus status) {
+    switch (status) {
+      case FormzStatus.submissionSuccess:
+        return mainResults();
+      case FormzStatus.submissionInProgress:
+        return FunctionalWidgets.getLoadingAnimation();
+      case FormzStatus.submissionFailure:
+        return FunctionalWidgets.getErrorIcon();
+      default:
+        return Container();
+    }
   }
 
   Widget mainResults() {
@@ -58,22 +84,27 @@ class DealerSearchLayout extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: ListView.separated(
-              itemBuilder: (context, index) => DealerWidget(
-                id: 'fsfsdf',
-                distance: '2.1km',
-                fromTime: '08:00',
-                toTime: '17:00',
-                name: 'Thu mua phế liệu Bảo Minh',
-                urlImage:
-                    'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg',
-                address:
-                    '589 Đường số 18, Bình Hưng Hoà, Bình Tân, Thành phố Hồ Chí Minh, Việt Nam',
-              ),
-              separatorBuilder: (context, index) => SizedBox(
-                height: 20.h,
-              ),
-              itemCount: 10,
+            child: BlocBuilder<DealerSearchBloc, DealerSearchState>(
+              builder: (context, state) {
+                return ListView.separated(
+                  itemBuilder: (context, index) {
+                    var d = state.listDealers[index];
+                    return DealerWidget(
+                      id: d.dealerId,
+                      distance: d.distanceText,
+                      fromTime: d.openTime,
+                      toTime: d.closeTime,
+                      name: d.dealerName,
+                      urlImage: d.dealerImageUrl,
+                      address: d.dealerAddress,
+                    );
+                  },
+                  separatorBuilder: (context, index) => SizedBox(
+                    height: 20.h,
+                  ),
+                  itemCount: state.listDealers.length,
+                );
+              },
             ),
           ),
         ],
@@ -163,9 +194,26 @@ class DealerWidget extends StatelessWidget {
             Container(
               height: 230.r,
               width: 230.r,
-              child: Image.network(
-                urlImage,
-                fit: BoxFit.cover,
+              child: CachedNetworkImage(
+                httpHeaders: {HttpHeaders.authorizationHeader: bearerToken},
+                imageUrl: urlImage,
+                imageBuilder: (context, imageProvider) => Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                placeholder: (context, url) => Container(
+                  child: Center(
+                    child: FunctionalWidgets.getLoadingCircle(),
+                  ),
+                ),
+                errorWidget: (context, url, error) => Icon(
+                  Icons.error,
+                  color: AppColors.orangeFFE4625D,
+                ),
               ),
             ),
             SizedBox(

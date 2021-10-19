@@ -9,6 +9,7 @@ import 'package:collector_app/ui/layouts/activity_layout.dart';
 import 'package:collector_app/ui/layouts/home_layout.dart';
 import 'package:collector_app/ui/layouts/notification_layout.dart';
 import 'package:collector_app/ui/layouts/statistic_layout.dart';
+import 'package:collector_app/utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -28,6 +29,11 @@ class _MainLayoutState extends State<MainLayout> {
     super.initState();
 
     initProfileBloc();
+    setBearerToken();
+  }
+
+  void setBearerToken() async {
+    NetworkUtils.getBearerToken().then((value) => bearerToken = value);
   }
 
   void initProfileBloc() {
