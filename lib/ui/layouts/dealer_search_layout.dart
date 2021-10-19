@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -40,7 +41,7 @@ class DealerSearchLayout extends StatelessWidget {
             vertical: 50.h,
           ),
           child: CommonMarginContainer(
-            child: searchBar(),
+            child: SearchWidget(),
           ),
           color: Theme.of(context).scaffoldBackgroundColor,
         ),
@@ -111,13 +112,47 @@ class DealerSearchLayout extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget searchBar() {
+class SearchWidget extends StatefulWidget {
+  const SearchWidget({Key? key}) : super(key: key);
+
+  @override
+  _SearchWidgetState createState() => _SearchWidgetState();
+}
+
+class _SearchWidgetState extends State<SearchWidget> {
+  Timer? _debounce;
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
+  }
+
+  Function(String)? _onChanged(BuildContext context) {
+    return (value) {
+      // check if _debounce exist
+      if (_debounce?.isActive ?? false) _debounce!.cancel();
+      _debounce = Timer(
+        const Duration(milliseconds: 1500),
+        () {
+          context.read<DealerSearchBloc>().add(
+                DealerSearch(value),
+              );
+        },
+      );
+    };
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       children: [
         Expanded(
           child: TextFormField(
-            textInputAction: TextInputAction.go,
+            onChanged: _onChanged(context),
+            textInputAction: TextInputAction.search,
             decoration: InputDecoration(
               contentPadding: EdgeInsets.symmetric(
                 horizontal: 50.h,
