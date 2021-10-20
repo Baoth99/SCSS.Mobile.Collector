@@ -40,6 +40,8 @@ class ImagesPaths {
   static const String noRequestAvailable = '$imagePath/noRequestAvailable.png';
   static const String qrcode = '$imagePath/qrcode.png';
   static const String splashScreen = '$imagePath/splash_screen.png';
+  static const String placeSymbol = '$imagePath/place_symbol.png';
+  static const String placeSymbolName = 'placeSymbol';
 }
 
 class Symbols {

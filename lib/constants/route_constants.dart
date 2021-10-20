@@ -38,4 +38,5 @@ class Routes {
 
   //dealer
   static const dealerSearch = 'dealerSearch';
+  static const dealerMap = 'dealerMap';
 }

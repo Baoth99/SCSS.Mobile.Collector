@@ -6,6 +6,7 @@ class DealerSearchState extends Equatable {
 
   DealerSearchState({
     List<DealerInfo>? listDealers,
+    List<DealerInfo>? fullListDealers,
     this.status = FormzStatus.pure,
   }) {
     this.listDealers = listDealers ?? [];

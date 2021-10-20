@@ -169,18 +169,23 @@ class _SearchWidgetState extends State<SearchWidget> {
             ),
           ),
         ),
-        Container(
-          padding: EdgeInsets.only(
-            left: 60.w,
+        InkWell(
+          child: Container(
+            padding: EdgeInsets.only(
+              left: 60.w,
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.map_outlined,
+                ),
+                CustomText(text: 'Bản đồ'),
+              ],
+            ),
           ),
-          child: Row(
-            children: [
-              Icon(
-                Icons.map_outlined,
-              ),
-              CustomText(text: 'Bản đồ'),
-            ],
-          ),
+          onTap: () {
+            Navigator.of(context).pushNamed(Routes.dealerMap);
+          },
         ),
       ],
     );
