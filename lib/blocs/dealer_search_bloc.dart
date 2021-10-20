@@ -1,10 +1,8 @@
 import 'package:collector_app/blocs/events/abstract_event.dart';
-import 'package:collector_app/constants/api_constants.dart';
 import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/log/logger.dart';
 import 'package:collector_app/providers/configs/injection_config.dart';
 import 'package:collector_app/providers/services/dealer_service.dart';
-import 'package:collector_app/utils/common_utils.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
