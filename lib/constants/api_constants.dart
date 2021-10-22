@@ -6,15 +6,18 @@ class APIKeyConstants {
 }
 
 class APIServiceURI {
-  static final accountDeviceID =
-      '${EnvBaseAppSettingValue.baseApiUrl}collector/account/device-id';
-  static final imageGet = '${EnvBaseAppSettingValue.baseApiUrl}image/get';
+  static final apiUrl = '${EnvBaseAppSettingValue.baseApiUrl}api/v4/';
+
+  static final accountDeviceID = '${apiUrl}collector/account/device-id';
+  static final imageGet = '${apiUrl}image/get';
   static final accountCollectorInfo =
-      '${EnvBaseAppSettingValue.baseApiUrl}collector/account/collector-info';
-  static final accountCoordinate =
-      '${EnvBaseAppSettingValue.baseApiUrl}collector/account/coordinate';
-  static final dealerSearch =
-      '${EnvBaseAppSettingValue.baseApiUrl}dealer-info/search';
+      '${apiUrl}collector/account/collector-info';
+  static final accountCoordinate = '${apiUrl}collector/account/coordinate';
+  static final dealerSearch = '${apiUrl}dealer-info/search';
+  static final hubColellectingRequest =
+      '${EnvBaseAppSettingValue.baseApiUrl}hubs/collector/collecting-request';
+  static final appointments = '${apiUrl}collecting-request/appointments';
+  static final currentRequest = '${apiUrl}collecting-request/current-requests';
 }
 
 class IdentityAPIConstants {
