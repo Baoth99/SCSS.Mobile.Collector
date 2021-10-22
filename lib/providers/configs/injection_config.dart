@@ -1,5 +1,7 @@
 import 'package:collector_app/providers/networks/dealer_network.dart';
 import 'package:collector_app/providers/networks/identity_server_network.dart';
+import 'package:collector_app/providers/networks/request_network.dart';
+import 'package:collector_app/providers/services/collecting_request_service.dart';
 import 'package:collector_app/providers/services/dealer_service.dart';
 import 'package:collector_app/providers/services/firebase_service.dart';
 import 'package:collector_app/providers/services/identity_server_service.dart';
@@ -15,6 +17,9 @@ void configureDependencies() async {
   getIt.registerLazySingleton<DealerNetwork>(
     () => DealerNetworkImpl(),
   );
+  getIt.registerLazySingleton<CollectingRequestNetwork>(
+    () => CollectingRequestNetworkImpl(),
+  );
 
   // Service
   getIt.registerLazySingleton<IdentityServerService>(
@@ -23,6 +28,9 @@ void configureDependencies() async {
 
   getIt.registerLazySingleton<DealerService>(
     () => DealerServiceImpl(),
+  );
+  getIt.registerLazySingleton<CollectingRequestService>(
+    () => CollectingRequestServiceImpl(),
   );
   getIt.registerSingleton<FirebaseNotification>(FirebaseNotification());
 }

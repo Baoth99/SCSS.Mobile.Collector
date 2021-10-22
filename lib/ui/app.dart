@@ -6,6 +6,7 @@ import 'package:collector_app/ui/layouts/dealer_map_layout.dart';
 import 'package:collector_app/ui/layouts/dealer_search_layout.dart';
 import 'package:collector_app/ui/layouts/login_layout.dart';
 import 'package:collector_app/ui/layouts/main_layout.dart';
+import 'package:collector_app/ui/layouts/pending_request_layout.dart';
 import 'package:collector_app/ui/layouts/splash_screen_layout.dart';
 // import 'package:collector_app/ui/layouts/pending_request_layout.dart';
 import 'package:flutter/cupertino.dart';
@@ -46,6 +47,7 @@ class CollectorApp extends StatelessWidget {
 
             Routes.dealerSearch: (_) => const DealerSearchLayout(),
             Routes.dealerMap: (_) => const DealerMapLayout(),
+            Routes.pendingRequests: (_) => const PendingRequestLayout(),
           },
         ),
       ),

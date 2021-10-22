@@ -52,6 +52,11 @@ class CommonUtils {
 }
 
 class NetworkUtils {
+  static Future<String> getBearer() async {
+    return await SharedPreferenceUtils.getString(APIKeyConstants.accessToken) ??
+        Symbols.empty;
+  }
+
   static String getBasicAuth() {
     return NetworkConstants.basicAuth.replaceFirst(
       NetworkConstants.data,

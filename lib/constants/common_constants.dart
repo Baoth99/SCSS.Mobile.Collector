@@ -42,6 +42,7 @@ class ImagesPaths {
   static const String splashScreen = '$imagePath/splash_screen.png';
   static const String placeSymbol = '$imagePath/place_symbol.png';
   static const String placeSymbolName = 'placeSymbol';
+  static const String emptyActivityList = '$imagePath/empty_activity_list.png';
 }
 
 class Symbols {
@@ -78,6 +79,15 @@ class VietnameseDate {
     DateTime.friday: 'Th 6',
     DateTime.saturday: 'Th 7',
     DateTime.sunday: 'CN',
+  };
+  static const weekdayServer = <int, String>{
+    0: 'CN',
+    1: 'Th 2',
+    2: 'Th 3',
+    3: 'Th 4',
+    4: 'Th 5',
+    5: 'Th 6',
+    6: 'Th 7',
   };
 }
 
