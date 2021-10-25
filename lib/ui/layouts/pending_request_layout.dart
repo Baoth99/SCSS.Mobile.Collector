@@ -373,7 +373,7 @@ class _PendingRequestLayoutState extends State<PendingRequestMain> {
         ),
         Container(
           child: CustomText(
-            text: 'Chưa có yêu cầu',
+            text: 'Không có yêu cầu nào xung quanh',
             fontSize: 40.sp,
             fontWeight: FontWeight.w400,
             color: Colors.grey[600],

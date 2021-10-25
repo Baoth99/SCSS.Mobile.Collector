@@ -1,6 +1,7 @@
 import 'package:collector_app/constants/api_constants.dart';
 import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/exceptions/custom_exceptions.dart';
+import 'package:collector_app/providers/networks/models/response/approve_request_detail_response_mode.dart';
 import 'package:collector_app/providers/networks/models/response/approve_response_model.dart';
 import 'package:collector_app/providers/networks/models/response/base_response_model.dart';
 import 'package:collector_app/providers/networks/models/response/collecting_request_detail_response_model.dart';
@@ -27,6 +28,8 @@ abstract class CollectingRequestNetwork {
   Future<CollectingRequestDetailResponseModel> getCollectingRequestDetail(
       String id, Client client);
   Future<ApproveResponseModel> approveRequest(String id, Client client);
+  Future<ApproveRequestDetailResponseModel> getApprovedRequestDetail(
+      String id, Client client);
 }
 
 class CollectingRequestNetworkImpl implements CollectingRequestNetwork {
@@ -125,6 +128,33 @@ class CollectingRequestNetworkImpl implements CollectingRequestNetwork {
       return responseModel;
     } else {
       throw Exception('Exception approveRequest');
+    }
+  }
+
+  @override
+  Future<ApproveRequestDetailResponseModel> getApprovedRequestDetail(
+      String id, Client client) async {
+    var response = await NetworkUtils.getNetworkWithBearer(
+      uri: APIServiceURI.collectingRequestReceiveDetail,
+      client: client,
+      queries: {
+        'id': id,
+      },
+    );
+
+    if (response.statusCode == NetworkConstants.ok200) {
+      // get model
+      var responseModel =
+          await NetworkUtils.checkSuccessStatusCodeAPIMainResponseModel<
+              ApproveRequestDetailResponseModel>(
+        response,
+        approveRequestDetailResponseModelFromJson,
+      );
+      return responseModel;
+    } else if (response.statusCode == NetworkConstants.notFound) {
+      throw NotFoundException();
+    } else {
+      throw Exception('Exception getApprovedRequestDetail');
     }
   }
 }
