@@ -9,3 +9,13 @@ class UnauthorizedException implements Exception {
   final String cause;
   UnauthorizedException([this.cause = Symbols.empty]);
 }
+
+class NotFoundException implements Exception {
+  final String cause;
+  NotFoundException([this.cause = Symbols.empty]);
+}
+
+class ApprovedByOtherCollectorException implements Exception {
+  final String cause;
+  ApprovedByOtherCollectorException([this.cause = Symbols.empty]);
+}

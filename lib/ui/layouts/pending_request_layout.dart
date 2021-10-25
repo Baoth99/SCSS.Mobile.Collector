@@ -1,9 +1,10 @@
-import 'package:collector_app/blocs/models/request_model.dart';
+import 'package:collector_app/blocs/collecting_request_detail_bloc.dart';
 import 'package:collector_app/blocs/request_book_list_bloc.dart';
 import 'package:collector_app/blocs/request_now_list_bloc.dart';
 import 'package:collector_app/constants/api_constants.dart';
 import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/log/logger.dart';
+import 'package:collector_app/ui/layouts/pending_request_detail_layout.dart';
 import 'package:collector_app/ui/widgets/custom_text_widget.dart';
 import 'package:collector_app/ui/widgets/function_widgets.dart';
 import 'package:collector_app/utils/common_utils.dart';
@@ -441,7 +442,13 @@ class CollectingRequest extends StatelessWidget {
           InkWell(
             onTap: isActive
                 ? () {
-                    print('print');
+                    Navigator.of(context).pushNamed(
+                      Routes.pendingRequestDetail,
+                      arguments: PendingRequestDetailArgs(
+                        bookingId,
+                        CollectingRequestDetailStatus.pending,
+                      ),
+                    );
                   }
                 : null,
             child: ClipRRect(

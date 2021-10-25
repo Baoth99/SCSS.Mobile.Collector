@@ -18,6 +18,8 @@ class APIServiceURI {
       '${EnvBaseAppSettingValue.baseApiUrl}hubs/collector/collecting-request';
   static final appointments = '${apiUrl}collecting-request/appointments';
   static final currentRequest = '${apiUrl}collecting-request/current-requests';
+  static final collectingRequestDetail = '${apiUrl}collecting-request/detail';
+  static final collectingRequestReceive = '${apiUrl}collecting-request/receive';
 }
 
 class IdentityAPIConstants {
@@ -40,6 +42,7 @@ class IdentityAPIConstants {
   static const refreshToken = 'refresh_token';
 
   static const notApprovedAccountCode = 'ANA0001';
+  static const isApprovedBuOtherCollector = 'ICR0001';
 }
 
 class CommonApiConstants {

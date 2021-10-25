@@ -52,6 +52,11 @@ class CommonUtils {
 }
 
 class NetworkUtils {
+  static String toStringUrl(String uri, Map<String, dynamic>? queries) {
+    var uRI = Uri.parse(uri).replace(queryParameters: queries);
+    return uRI.toString();
+  }
+
   static Future<String> getBearer() async {
     return await SharedPreferenceUtils.getString(APIKeyConstants.accessToken) ??
         Symbols.empty;
