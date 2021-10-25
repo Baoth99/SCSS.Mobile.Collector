@@ -118,12 +118,6 @@ class _PendingRequestLayoutState extends State<PendingRequestMain> {
         title: CustomText(text: 'Yêu cầu thu gom mới'),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
-        action: [
-          Icon(Icons.map_outlined),
-          SizedBox(
-            width: 70.w,
-          ),
-        ],
       ),
       body: body(context),
     );
