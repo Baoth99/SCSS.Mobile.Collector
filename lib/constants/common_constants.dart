@@ -43,6 +43,13 @@ class ImagesPaths {
   static const String placeSymbol = '$imagePath/place_symbol.png';
   static const String placeSymbolName = 'placeSymbol';
   static const String emptyActivityList = '$imagePath/empty_activity_list.png';
+  static const String sellerLogo = '$imagePath/seller_logo.png';
+  static const String sellerLogoName = 'sellerLogoName';
+}
+
+class SvgIcons {
+  static const image =
+      '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none"><path d="M2 6a4 4 0 0 1 4-4h12a4 4 0 0 1 4 4v12a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V6z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8.5" cy="8.5" r="2.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14.526 12.621L6 22h12.133A3.867 3.867 0 0 0 22 18.133V18c0-.466-.175-.645-.49-.99l-4.03-4.395a2 2 0 0 0-2.954.006z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g></svg>';
 }
 
 class Symbols {
@@ -106,6 +113,7 @@ class NetworkConstants {
   static const ok200 = 200;
   static const badRequest400 = 400;
   static const unauthorized401 = 401;
+  static const notFound = 404;
 
   // pattern
   static const bearerPattern = 'Bearer $data';

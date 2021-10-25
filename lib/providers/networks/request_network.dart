@@ -1,4 +1,9 @@
 import 'package:collector_app/constants/api_constants.dart';
+import 'package:collector_app/constants/constants.dart';
+import 'package:collector_app/exceptions/custom_exceptions.dart';
+import 'package:collector_app/providers/networks/models/response/approve_response_model.dart';
+import 'package:collector_app/providers/networks/models/response/base_response_model.dart';
+import 'package:collector_app/providers/networks/models/response/collecting_request_detail_response_model.dart';
 import 'package:collector_app/providers/networks/models/response/collecting_request_response_model.dart';
 import 'package:collector_app/utils/common_utils.dart';
 import 'package:http/http.dart';
@@ -18,6 +23,10 @@ abstract class CollectingRequestNetwork {
     int pageSize,
     Client client,
   );
+
+  Future<CollectingRequestDetailResponseModel> getCollectingRequestDetail(
+      String id, Client client);
+  Future<ApproveResponseModel> approveRequest(String id, Client client);
 }
 
 class CollectingRequestNetworkImpl implements CollectingRequestNetwork {
@@ -72,5 +81,50 @@ class CollectingRequestNetworkImpl implements CollectingRequestNetwork {
       collectingRequestResponseModelFromJson,
     );
     return responseModel;
+  }
+
+  @override
+  Future<CollectingRequestDetailResponseModel> getCollectingRequestDetail(
+      String id, Client client) async {
+    var response = await NetworkUtils.getNetworkWithBearer(
+      uri: APIServiceURI.collectingRequestDetail,
+      client: client,
+      queries: {
+        'id': id,
+      },
+    );
+
+    if (response.statusCode == NetworkConstants.ok200) {
+      // get model
+      var responseModel =
+          await NetworkUtils.checkSuccessStatusCodeAPIMainResponseModel<
+              CollectingRequestDetailResponseModel>(
+        response,
+        collectingRequestDetailResponseModelFromJson,
+      );
+      return responseModel;
+    } else if (response.statusCode == NetworkConstants.notFound) {
+      throw NotFoundException();
+    } else {
+      throw Exception('Exception getCollectingRequestDetail');
+    }
+  }
+
+  @override
+  Future<ApproveResponseModel> approveRequest(String id, Client client) async {
+    String url = NetworkUtils.toStringUrl(
+        APIServiceURI.collectingRequestReceive, {"id": id});
+    var response = await NetworkUtils.putBodyWithBearerAuth(
+      uri: url,
+      client: client,
+    );
+
+    if (response.statusCode == NetworkConstants.ok200) {
+      // get model
+      var responseModel = approveResponseModelFromJson(response.body);
+      return responseModel;
+    } else {
+      throw Exception('Exception approveRequest');
+    }
   }
 }

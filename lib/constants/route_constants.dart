@@ -26,6 +26,7 @@ class Routes {
 
   //PendingRequests
   static const pendingRequests = 'pendingRequests';
+  static const pendingRequestDetail = 'pendingRequestDetail';
 
   //Scrap Categories
   static const categories = 'categories';
@@ -39,4 +40,6 @@ class Routes {
   //dealer
   static const dealerSearch = 'dealerSearch';
   static const dealerMap = 'dealerMap';
+
+  static const viewImage = 'viewImage';
 }

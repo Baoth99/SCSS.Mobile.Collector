@@ -1,4 +1,5 @@
 import 'package:collector_app/blocs/login_bloc.dart';
+import 'package:collector_app/constants/api_constants.dart';
 import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/ui/widgets/common_margin_container.dart';
 import 'package:collector_app/ui/widgets/custom_border_text_form_field_widget.dart';
@@ -7,7 +8,7 @@ import 'package:collector_app/ui/widgets/custom_text_button_widget.dart';
 import 'package:collector_app/ui/widgets/custom_text_widget.dart';
 import 'package:collector_app/ui/widgets/function_widgets.dart';
 // ignore: import_of_legacy_library_into_null_safe
-import 'package:cool_alert/cool_alert.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -52,13 +53,8 @@ class LoginLayout extends StatelessWidget {
 
             if (state.status.isSubmissionFailure) {
               Navigator.popUntil(context, ModalRoute.withName(Routes.login));
-              CoolAlert.show(
-                context: context,
-                type: CoolAlertType.error,
-                title: 'Thông báo',
-                text: 'Có lỗi đến từ hệ thống',
-                confirmBtnColor: AppColors.greenFF61C53D,
-                confirmBtnText: 'Đóng',
+              FunctionalWidgets.showErrorSystemRouteButton(
+                context,
               );
             }
 
@@ -70,14 +66,13 @@ class LoginLayout extends StatelessWidget {
                 );
               } else if (state.loginStatus == LoginStatus.notApproved) {
                 Navigator.popUntil(context, ModalRoute.withName(Routes.login));
-                CoolAlert.show(
-                  context: context,
-                  type: CoolAlertType.info,
-                  title: 'Tài khoản của bạn chưa được xác nhận',
-                  text:
+
+                FunctionalWidgets.showDialogCloseRouteButton(
+                  context,
+                  'Tài khoản của bạn chưa được xác nhận',
+                  desc:
                       'Tài khoản của bạn cần phải được xác nhận, xin vui lòng liên hệ với ban quản trị để hoàn thiện hồ sơ tài khoản',
-                  confirmBtnColor: AppColors.greenFF61C53D,
-                  confirmBtnText: 'Đóng',
+                  alertType: AlertType.info,
                 );
               }
             }
