@@ -25,8 +25,11 @@ class CollectingRequestDetailState extends Equatable {
     this.sellerAvatarUrl = Symbols.empty,
     this.gender = Gender.male,
     this.scrapImageUrl = Symbols.empty,
+    this.sellerPhone = Symbols.empty,
     this.time = Symbols.empty,
     this.area = Symbols.empty,
+    this.collectingAddressName = Symbols.empty,
+    this.collectingAddress = Symbols.empty,
     this.latitude = 0,
     this.longtitude = 0,
     this.isBulky = false,
@@ -44,8 +47,11 @@ class CollectingRequestDetailState extends Equatable {
   final String sellerAvatarUrl;
   final Gender gender;
   final String scrapImageUrl;
+  final String sellerPhone;
   final String time;
   final String area;
+  final String collectingAddressName;
+  final String collectingAddress;
   final double latitude;
   final double longtitude;
   final bool isBulky;
@@ -63,8 +69,11 @@ class CollectingRequestDetailState extends Equatable {
     String? sellerAvatarUrl,
     Gender? gender,
     String? scrapImageUrl,
+    String? sellerPhone,
     String? time,
     String? area,
+    String? collectingAddressName,
+    String? collectingAddress,
     double? latitude,
     double? longtitude,
     bool? isBulky,
@@ -72,6 +81,7 @@ class CollectingRequestDetailState extends Equatable {
     int? requestType,
     bool? isAllowedToApprove,
     FormzStatus? status,
+    CollectingRequestDetailStatus? collectingRequestDetailStatus,
     ApproveEventStatus? approveEventStatus,
   }) {
     return CollectingRequestDetailState(
@@ -82,8 +92,12 @@ class CollectingRequestDetailState extends Equatable {
       sellerAvatarUrl: sellerAvatarUrl ?? this.sellerAvatarUrl,
       gender: gender ?? this.gender,
       scrapImageUrl: scrapImageUrl ?? this.scrapImageUrl,
+      sellerPhone: sellerPhone ?? this.sellerPhone,
       time: time ?? this.time,
       area: area ?? this.area,
+      collectingAddressName:
+          collectingAddressName ?? this.collectingAddressName,
+      collectingAddress: collectingAddress ?? this.collectingAddress,
       latitude: latitude ?? this.latitude,
       longtitude: longtitude ?? this.longtitude,
       isBulky: isBulky ?? this.isBulky,
@@ -91,7 +105,8 @@ class CollectingRequestDetailState extends Equatable {
       requestType: requestType ?? this.requestType,
       isAllowedToApprove: isAllowedToApprove ?? this.isAllowedToApprove,
       status: status ?? this.status,
-      collectingRequestDetailStatus: this.collectingRequestDetailStatus,
+      collectingRequestDetailStatus:
+          collectingRequestDetailStatus ?? this.collectingRequestDetailStatus,
       approveEventStatus: approveEventStatus ?? this.approveEventStatus,
     );
   }
@@ -104,8 +119,11 @@ class CollectingRequestDetailState extends Equatable {
         sellerAvatarUrl,
         gender,
         scrapImageUrl,
+        sellerPhone,
         time,
         area,
+        collectingAddressName,
+        collectingAddress,
         latitude,
         longtitude,
         isBulky,

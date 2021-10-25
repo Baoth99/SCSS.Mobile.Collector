@@ -25,6 +25,7 @@ abstract class CollectingRequestService {
   );
 
   Future<CollectingRequestDetailState> getCollectingRequest(String id);
+  Future<CollectingRequestDetailState> getApprovedRequest(String id);
   Future<bool> approveRequest(String id);
 }
 
@@ -198,5 +199,51 @@ class CollectingRequestServiceImpl implements CollectingRequestService {
     } else {
       throw Exception('Exception: approveRequest');
     }
+  }
+
+  @override
+  Future<CollectingRequestDetailState> getApprovedRequest(String id) async {
+    http.Client client = http.Client();
+    var responseModel = await _collectingRequestNetwork
+        .getApprovedRequestDetail(
+          id,
+          client,
+        )
+        .whenComplete(() => client.close());
+    var data = responseModel.resData;
+    if (data != null) {
+      String dayOfWeek = VietnameseDate.weekdayServer[data.dayOfWeek] ??
+          (throw Exception('Day of week is not proper'));
+      String scrapImageUrl = Symbols.empty;
+      if (data.scrapImgUrl != null && data.scrapImgUrl!.isNotEmpty) {
+        scrapImageUrl = NetworkUtils.getUrlWithQueryString(
+            APIServiceURI.imageGet, {'imageUrl': data.scrapImgUrl!});
+      }
+      String sellerImageUrl = Symbols.empty;
+      if (data.sellerImgUrl != null && data.sellerImgUrl!.isNotEmpty) {
+        sellerImageUrl = NetworkUtils.getUrlWithQueryString(
+            APIServiceURI.imageGet, {'imageUrl': data.sellerImgUrl!});
+      }
+      CollectingRequestDetailState result = CollectingRequestDetailState(
+        id: data.id,
+        collectingAddress: data.collectingAddress,
+        collectingAddressName: data.collectingAddressName,
+        collectingRequestCode: data.collectingRequestCode,
+        isBulky: data.isBulky,
+        latitude: data.latitude,
+        longtitude: data.longtitude,
+        sellerName: data.sellerName,
+        note: data.note,
+        scrapImageUrl: scrapImageUrl,
+        time:
+            '$dayOfWeek, ${data.collectingRequestDate}, ${data.fromTime} - ${data.toTime}',
+        collectingRequestDetailStatus: CollectingRequestDetailStatus.pending,
+        gender: data.sellerGender == 1 ? Gender.male : Gender.female,
+        sellerAvatarUrl: sellerImageUrl,
+        sellerPhone: data.sellerPhone,
+      );
+      return result;
+    }
+    throw Exception(CommonApiConstants.errorSystem);
   }
 }

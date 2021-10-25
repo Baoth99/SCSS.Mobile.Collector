@@ -10,6 +10,7 @@ import 'package:collector_app/utils/env_util.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SharedPreferenceUtils {
   static Future<bool> setString(String key, String value) async {
@@ -30,6 +31,15 @@ class SharedPreferenceUtils {
 }
 
 class CommonUtils {
+  static void launchTelephone(String phone) async {
+    var url = "tel:$phone";
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      AppLog.error('Could not launch $url');
+    }
+  }
+
   static DateTime? convertDDMMYYYToDateTime(String date) {
     DateTime? result;
     try {

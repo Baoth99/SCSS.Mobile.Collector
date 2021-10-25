@@ -88,6 +88,42 @@ class CollectingRequestDetailBloc
           status: FormzStatus.submissionFailure,
         );
       }
+    } else if (event is ConvertPendingIntoApproved) {
+      try {
+        yield CollectingRequestDetailState(
+          id: state.id,
+          status: FormzStatus.submissionInProgress,
+          collectingRequestDetailStatus: CollectingRequestDetailStatus.approved,
+        );
+
+        var result = await futureAppDuration(
+          _collectingRequestService.getApprovedRequest(state.id),
+        );
+
+        yield state.copyWith(
+          id: result.id,
+          gender: result.gender,
+          isBulky: result.isBulky,
+          latitude: result.latitude,
+          longtitude: result.longtitude,
+          note: result.note,
+          scrapImageUrl: result.scrapImageUrl,
+          time: result.time,
+          sellerAvatarUrl: result.sellerAvatarUrl,
+          sellerName: result.sellerName,
+          collectingRequestCode: result.collectingRequestCode,
+          status: FormzStatus.submissionSuccess,
+          sellerPhone: result.sellerPhone,
+          collectingRequestDetailStatus: CollectingRequestDetailStatus.approved,
+          collectingAddress: result.collectingAddress,
+          collectingAddressName: result.collectingAddressName,
+        );
+      } catch (e) {
+        AppLog.error(e);
+        yield state.copyWith(
+          status: FormzStatus.submissionFailure,
+        );
+      }
     }
   }
 }

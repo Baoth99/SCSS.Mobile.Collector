@@ -5,8 +5,12 @@ class CollectingRequestDetailEvent extends AbstractEvent {
 }
 
 class CollectingRequestDetailInitial extends CollectingRequestDetailEvent {
-  CollectingRequestDetailInitial(this.id);
+  CollectingRequestDetailInitial(
+    this.id,
+  );
   final String id;
 }
 
 class ApproveRequestEvent extends CollectingRequestDetailEvent {}
+
+class ConvertPendingIntoApproved extends CollectingRequestDetailEvent {}

@@ -9,6 +9,7 @@ import 'package:collector_app/ui/widgets/common_margin_container.dart';
 import 'package:collector_app/ui/widgets/custom_button.dart';
 import 'package:collector_app/ui/widgets/custom_text_widget.dart';
 import 'package:collector_app/ui/widgets/function_widgets.dart';
+import 'package:collector_app/utils/common_utils.dart';
 import 'package:collector_app/utils/env_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -46,13 +47,24 @@ class PendingRequestDetailLayout extends StatelessWidget {
           listener: (context, state) {
             if (state.status.isSubmissionSuccess) {
               if (state.approveEventStatus == ApproveEventStatus.success) {
-                FunctionalWidgets.showDialogCloseRouteButton(
+                FunctionalWidgets.showDialogCloseButton(
                   context,
                   'Nhận yêu cầu thành công',
                   alertType: AlertType.success,
-                  route: Routes.pendingRequests,
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
                   onWillPopActive: true,
-                );
+                ).then((value) {
+                  if (value != null && value) {
+                    context
+                        .read<CollectingRequestDetailBloc>()
+                        .add(ConvertPendingIntoApproved());
+                  } else {
+                    Navigator.of(context)
+                        .popUntil(ModalRoute.withName(Routes.pendingRequests));
+                  }
+                });
               } else if (state.approveEventStatus ==
                   ApproveEventStatus.approvedByOther) {
                 FunctionalWidgets.showDialogCloseRouteButton(
@@ -61,8 +73,8 @@ class PendingRequestDetailLayout extends StatelessWidget {
                   desc:
                       'Yêu cầu thu gom đã được xác nhận bởi một người thu gom khác',
                   alertType: AlertType.warning,
-                  route: Routes.pendingRequests,
                   onWillPopActive: true,
+                  route: Routes.pendingRequests,
                 );
               }
             } else if (state.status.isSubmissionFailure) {
@@ -148,11 +160,32 @@ class PendingRequestDetailBody extends StatelessWidget {
                 RequestDetailElementPattern(
                   icon: Icons.place,
                   title: 'Địa chỉ thu gom',
-                  child: CustomText(
-                    text: state.area,
-                    fontSize: 47.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  child: state.collectingRequestDetailStatus ==
+                          CollectingRequestDetailStatus.pending
+                      ? CustomText(
+                          text: state.area,
+                          fontSize: 47.sp,
+                          fontWeight: FontWeight.w500,
+                        )
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomText(
+                              fontSize: 47.sp,
+                              text: state.collectingAddressName,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(
+                                top: 12.h,
+                              ),
+                              child: CustomText(
+                                text: state.collectingAddress,
+                                fontSize: 39.sp,
+                              ),
+                            ),
+                          ],
+                        ),
                 ),
                 RequestDetailElementPattern(
                   icon: AppIcons.event,
@@ -183,7 +216,10 @@ class PendingRequestDetailBody extends StatelessWidget {
                         ),
                       )
                     : SizedBox.shrink(),
-                getSubmitButton(context),
+                state.collectingRequestDetailStatus ==
+                        CollectingRequestDetailStatus.pending
+                    ? getApproveButton(context)
+                    : SizedBox.shrink(),
               ],
             ),
           ),
@@ -192,7 +228,7 @@ class PendingRequestDetailBody extends StatelessWidget {
     );
   }
 
-  Widget getSubmitButton(BuildContext context) {
+  Widget getApproveButton(BuildContext context) {
     return CustomButton(
       onPressed: () {
         FunctionalWidgets.showDialogTwoButton(
@@ -235,9 +271,12 @@ class PendingRequestDetailBody extends StatelessWidget {
                   context: context,
                   builder: (context) {
                     return SellerInforatmionDialog(
+                      collectingRequestDetailStatus:
+                          state.collectingRequestDetailStatus,
                       name: state.sellerName,
                       gender: state.gender,
                       urlProfile: state.sellerAvatarUrl,
+                      sellerPhoneNumber: state.sellerPhone,
                     );
                   },
                 );
@@ -264,7 +303,9 @@ class PendingRequestDetailBody extends StatelessWidget {
                     'Gọi',
                     Icons.call,
                     commonColor,
-                    onPressed: () {},
+                    onPressed: () {
+                      CommonUtils.launchTelephone(state.sellerPhone);
+                    },
                   )
                 : SizedBox.shrink(),
           ],
@@ -474,23 +515,35 @@ class RequestDetailElementPattern extends StatelessWidget {
 class SellerInforatmionDialog extends StatelessWidget {
   const SellerInforatmionDialog({
     Key? key,
+    required this.collectingRequestDetailStatus,
     required this.name,
     required this.urlProfile,
     required this.gender,
+    required this.sellerPhoneNumber,
   }) : super(key: key);
+  final CollectingRequestDetailStatus collectingRequestDetailStatus;
   final String name;
   final String urlProfile;
   final Gender gender;
+  final String sellerPhoneNumber;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      contentPadding: EdgeInsets.symmetric(
+        horizontal: 0,
+        vertical: 50.h,
+      ),
       title: title(),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           avatar(),
           getName(),
+          collectingRequestDetailStatus ==
+                  CollectingRequestDetailStatus.approved
+              ? phone()
+              : SizedBox.shrink(),
         ],
       ),
       actions: [
@@ -514,6 +567,39 @@ class SellerInforatmionDialog extends StatelessWidget {
       isMale: gender == Gender.male,
       width: 500.w,
       path: urlProfile,
+    );
+  }
+
+  Widget phone() {
+    return InkWell(
+      onTap: () {
+        CommonUtils.launchTelephone(sellerPhoneNumber);
+      },
+      child: Container(
+        width: double.infinity,
+        color: Colors.grey.withOpacity(0.3),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              margin: EdgeInsets.all(
+                20.r,
+              ),
+              padding: EdgeInsets.all(
+                20.r,
+              ),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.r),
+                color: Colors.grey,
+              ),
+              child: Icon(
+                Icons.phone,
+              ),
+            ),
+            CustomText(text: sellerPhoneNumber),
+          ],
+        ),
+      ),
     );
   }
 
