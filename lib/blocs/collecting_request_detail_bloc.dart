@@ -35,27 +35,54 @@ class CollectingRequestDetailBloc
           status: FormzStatus.submissionInProgress,
         );
 
-        var result = await futureAppDuration(
-          _collectingRequestService.getCollectingRequest(event.id),
-        );
+        if (state.collectingRequestDetailStatus ==
+            CollectingRequestDetailStatus.pending) {
+          var result = await futureAppDuration(
+            _collectingRequestService.getCollectingRequest(event.id),
+          );
 
-        yield state.copyWith(
-          id: result.id,
-          gender: result.gender,
-          isAllowedToApprove: result.isAllowedToApprove,
-          isBulky: result.isBulky,
-          latitude: result.latitude,
-          longtitude: result.longtitude,
-          note: result.note,
-          requestType: result.requestType,
-          scrapImageUrl: result.scrapImageUrl,
-          time: result.time,
-          sellerAvatarUrl: result.sellerAvatarUrl,
-          sellerName: result.sellerName,
-          area: result.area,
-          collectingRequestCode: result.collectingRequestCode,
-          status: FormzStatus.submissionSuccess,
-        );
+          yield state.copyWith(
+            id: result.id,
+            gender: result.gender,
+            isAllowedToApprove: result.isAllowedToApprove,
+            isBulky: result.isBulky,
+            latitude: result.latitude,
+            longtitude: result.longtitude,
+            note: result.note,
+            requestType: result.requestType,
+            scrapImageUrl: result.scrapImageUrl,
+            time: result.time,
+            sellerAvatarUrl: result.sellerAvatarUrl,
+            sellerName: result.sellerName,
+            area: result.area,
+            collectingRequestCode: result.collectingRequestCode,
+            status: FormzStatus.submissionSuccess,
+          );
+        } else {
+          var result = await futureAppDuration(
+            _collectingRequestService.getApprovedRequest(state.id),
+          );
+
+          yield state.copyWith(
+            id: result.id,
+            gender: result.gender,
+            isBulky: result.isBulky,
+            latitude: result.latitude,
+            longtitude: result.longtitude,
+            note: result.note,
+            scrapImageUrl: result.scrapImageUrl,
+            time: result.time,
+            sellerAvatarUrl: result.sellerAvatarUrl,
+            sellerName: result.sellerName,
+            collectingRequestCode: result.collectingRequestCode,
+            status: FormzStatus.submissionSuccess,
+            sellerPhone: result.sellerPhone,
+            collectingRequestDetailStatus:
+                CollectingRequestDetailStatus.approved,
+            collectingAddress: result.collectingAddress,
+            collectingAddressName: result.collectingAddressName,
+          );
+        }
       } catch (e) {
         AppLog.error(e);
         yield state.copyWith(

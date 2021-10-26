@@ -29,6 +29,13 @@ class SplashScreenLayout extends StatelessWidget {
       AppLog.info('Not provide location service');
       exit(0);
     }
+    final latLng = await acquireCurrentLocation();
+    if (latLng != null) {
+      // update current position
+      currentLatitude = latLng.latitude;
+      currentLongitude = latLng.longitude;
+    }
+
     try {
       if (await checkLogin()) {
         route = Routes.main;

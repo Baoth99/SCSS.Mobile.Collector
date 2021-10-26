@@ -22,6 +22,8 @@ class APIServiceURI {
   static final collectingRequestReceive = '${apiUrl}collecting-request/receive';
   static final collectingRequestReceiveDetail =
       '${apiUrl}collecting-request/receive/detail';
+  static final collectingRequestReceiveGet =
+      '${apiUrl}collecting-request/receive/get';
 }
 
 class IdentityAPIConstants {
