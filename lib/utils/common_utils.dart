@@ -31,6 +31,12 @@ class SharedPreferenceUtils {
 }
 
 class CommonUtils {
+  static String combineTimeToDateString(
+      int dayOfWeek, String date, String fromTime, String toTime) {
+    var dayOfWeekString = VietnameseDate.weekdayServer[dayOfWeek];
+    return '$dayOfWeekString, $date, $fromTime - $toTime';
+  }
+
   static void launchTelephone(String phone) async {
     var url = "tel:$phone";
     if (await canLaunch(url)) {

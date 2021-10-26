@@ -1,11 +1,18 @@
+import 'package:collector_app/blocs/collecting_request_detail_bloc.dart';
+import 'package:collector_app/blocs/home_bloc.dart';
 import 'package:collector_app/blocs/models/gender_model.dart';
 import 'package:collector_app/blocs/profile_bloc.dart';
 import 'package:collector_app/constants/constants.dart';
+import 'package:collector_app/log/logger.dart';
+import 'package:collector_app/ui/layouts/pending_request_detail_layout.dart';
 import 'package:collector_app/ui/widgets/avartar_widget.dart';
 import 'package:collector_app/ui/widgets/custom_text_widget.dart';
+import 'package:collector_app/ui/widgets/function_widgets.dart';
+import 'package:collector_app/utils/common_utils.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
+import 'package:formz/formz.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class HomeLayout extends StatelessWidget {
@@ -13,9 +20,12 @@ class HomeLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: AccountBody(),
+    return BlocProvider(
+      create: (context) => HomeBloc()..add(HomeInitial()),
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: AccountBody(),
+      ),
     );
   }
 }
@@ -28,9 +38,12 @@ class AccountBody extends StatelessWidget {
     return Column(
       children: [
         avatar(context),
-        waitToCollect(context, '8'),
+        waitToCollect(context)
         // waitToCollectEmpty(),
-        options(context)
+        ,
+        Expanded(
+          child: options(context),
+        ),
       ],
     );
   }
@@ -135,67 +148,98 @@ class AccountBody extends StatelessWidget {
     );
   }
 
-  Widget waitToCollect(BuildContext context, String totalRequest) {
-    return Material(
-      elevation: 1,
-      child: Container(
-          decoration: BoxDecoration(
-            color: AppColors.white,
-          ),
-          child: Column(children: [
-            Row(children: [
-              Container(
-                padding: EdgeInsets.only(top: 30.h, left: 45.w),
-                child: CustomText(
-                  text: 'Yêu cầu chờ thu gom',
-                  fontSize: 45.sp,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ]),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: CollectingRequest(
-                    bookingId: 'SC00000001',
-                    distance: '2.1',
-                    bulky: false,
-                    cusName: 'Phạm Trung Hiếu',
-                    time: 'Th 4, 25/08/2021  10:00 - 12:00',
-                    placeTitle: 'EJ Sporting House',
-                    placeName: 'Lô D chung cư Nguyễn Trãi, phường 8, quận 5',
+  Widget waitToCollect(BuildContext context) {
+    return BlocBuilder<HomeBloc, HomeState>(
+      builder: (context, state) {
+        try {
+          var r = state.collectingRequestModel;
+          return state.totalRequest > 0
+              ? Material(
+                  elevation: 1,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.white,
+                    ),
+                    child: Column(
+                      children: [
+                        Row(children: [
+                          Container(
+                            padding: EdgeInsets.only(top: 30.h, left: 45.w),
+                            child: CustomText(
+                              text: 'Yêu cầu chờ thu gom',
+                              fontSize: 45.sp,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ]),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: CollectingRequest(
+                                bookingId: r!.id,
+                                distance: r.distanceText,
+                                bulky: r.isBulky,
+                                cusName: r.sellerName,
+                                time: CommonUtils.combineTimeToDateString(
+                                    r.dayOfWeek,
+                                    r.collectingRequestDate,
+                                    r.fromTime,
+                                    r.toTime),
+                                placeTitle: r.collectingAddressName,
+                                placeName: r.collectingAddress,
+                              ),
+                            ),
+                          ],
+                        ),
+                        state.totalRequest > 1
+                            ? InkWell(
+                                onTap: _onTapGetAllNotCollectedRequest(context),
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 30.h,
+                                    horizontal: 200.w,
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      SizedBox(
+                                        width: 70.w,
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.only(bottom: 20.h),
+                                        child: CustomText(
+                                          text: 'Xem tất cả',
+                                          fontSize: 45.sp,
+                                          fontWeight: FontWeight.w500,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.only(
+                                            right: 30.w, bottom: 20.h),
+                                        child: Icon(
+                                          Icons.chevron_right,
+                                          color: AppColors.greyFF9098B1,
+                                          size: 80.sp,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              )
+                            : SizedBox.shrink(),
+                      ],
+                    ),
                   ),
                 )
-              ],
-            ),
-            InkWell(
-              onTap: _onTapGetAllNotCollectedRequest(context),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      margin: EdgeInsets.only(bottom: 20.h),
-                      child: CustomText(
-                        text: 'Xem tất cả ' + totalRequest + ' yêu cầu',
-                        fontSize: 45.sp,
-                        fontWeight: FontWeight.w500,
-                        textAlign: TextAlign.right,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(right: 30.w, bottom: 20.h),
-                    child: Icon(
-                      Icons.chevron_right,
-                      color: AppColors.greyFF9098B1,
-                      size: 80.sp,
-                    ),
-                  )
-                ],
-              ),
-            )
-          ])),
+              : waitToCollectEmpty();
+        } catch (e) {
+          AppLog.error(e);
+          return waitToCollectEmpty();
+        }
+      },
     );
   }
 
@@ -203,10 +247,11 @@ class AccountBody extends StatelessWidget {
     return Material(
       elevation: 1,
       child: Container(
-          decoration: BoxDecoration(
-            color: AppColors.white,
-          ),
-          child: Column(children: [
+        decoration: BoxDecoration(
+          color: AppColors.white,
+        ),
+        child: Column(
+          children: [
             Row(children: [
               Container(
                 padding: EdgeInsets.only(top: 30.h, left: 45.w),
@@ -233,15 +278,18 @@ class AccountBody extends StatelessWidget {
                 color: AppColors.greyFF939393.withOpacity(1),
               ),
             )
-          ])),
+          ],
+        ),
+      ),
     );
   }
 
   void Function() _onTapGetAllNotCollectedRequest(BuildContext context) {
     return () {
-      Navigator.of(context).pushNamed(
-        Routes.requestsWaitToCollect,
-      );
+      // Navigator.of(context).pushNamed(
+      //   Routes.requestsWaitToCollect,
+      // );
+      print('fsdfsdf');
     };
   }
 
@@ -254,50 +302,54 @@ class AccountBody extends StatelessWidget {
   }
 
   Widget options(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(top: 30.h),
-      child: Column(
-        children: [
-          option(
-            'Yêu cầu thu gom mới',
-            'Các yêu cầu thu gom xung quanh bạn',
-            () {
-              Navigator.of(context).pushNamed(
-                Routes.pendingRequests,
-              );
-            },
-            AppColors.white,
-            AppColors.greenFF39AC8F,
-            AppColors.greenFF61C53D,
-            ImagesPaths.createNewIcon,
-          ),
-          option(
-            'Bảng giá phế liệu',
-            'Danh mục các loại phế liệu của bạn',
-            () {
-              Navigator.of(context).pushNamed(
-                Routes.categories,
-              );
-            },
-            AppColors.white,
-            AppColors.blueFF4F94E8,
-            AppColors.blueFF35C0EA,
-            ImagesPaths.categoriesIcon,
-          ),
-          option(
-            'Vựa hoạt động',
-            'Danh sách vựa xung quanh',
-            () {
-              Navigator.of(context).pushNamed(
-                Routes.dealerSearch,
-              );
-            },
-            AppColors.white,
-            AppColors.orangeFFE4625D,
-            AppColors.orangeFFFECA23,
-            ImagesPaths.dealerIcon,
-          ),
-        ],
+    return SingleChildScrollView(
+      child: Container(
+        margin: EdgeInsets.only(
+          top: 30.h,
+        ),
+        child: Column(
+          children: [
+            option(
+              'Yêu cầu thu gom mới',
+              'Các yêu cầu thu gom xung quanh bạn',
+              () {
+                Navigator.of(context).pushNamed(
+                  Routes.pendingRequests,
+                );
+              },
+              AppColors.white,
+              AppColors.greenFF39AC8F,
+              AppColors.greenFF61C53D,
+              ImagesPaths.createNewIcon,
+            ),
+            option(
+              'Bảng giá phế liệu',
+              'Danh mục các loại phế liệu của bạn',
+              () {
+                Navigator.of(context).pushNamed(
+                  Routes.categories,
+                );
+              },
+              AppColors.white,
+              AppColors.blueFF4F94E8,
+              AppColors.blueFF35C0EA,
+              ImagesPaths.categoriesIcon,
+            ),
+            option(
+              'Vựa hoạt động',
+              'Danh sách vựa xung quanh',
+              () {
+                Navigator.of(context).pushNamed(
+                  Routes.dealerSearch,
+                );
+              },
+              AppColors.white,
+              AppColors.orangeFFE4625D,
+              AppColors.orangeFFFECA23,
+              ImagesPaths.dealerIcon,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -415,7 +467,7 @@ class CollectingRequest extends StatelessWidget {
             )
           ]),
       child: InkWell(
-        onTap: _onTapRequestWaitToCollect(context),
+        onTap: _onTapRequestWaitToCollect(context, bookingId),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(30.0.r),
           child: IntrinsicHeight(
@@ -443,7 +495,7 @@ class CollectingRequest extends StatelessWidget {
                       Container(
                         margin: EdgeInsets.only(top: 40.h),
                         child: CustomText(
-                          text: distance + 'km',
+                          text: distance,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -520,10 +572,15 @@ class CollectingRequest extends StatelessWidget {
     );
   }
 
-  void Function() _onTapRequestWaitToCollect(BuildContext context) {
+  void Function() _onTapRequestWaitToCollect(
+    BuildContext context,
+    String id,
+  ) {
     return () {
       Navigator.of(context).pushNamed(
-        Routes.requestDetail,
+        Routes.pendingRequestDetail,
+        arguments: PendingRequestDetailArgs(
+            id, CollectingRequestDetailStatus.approved),
       );
     };
   }

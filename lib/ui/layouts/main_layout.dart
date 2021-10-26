@@ -69,7 +69,6 @@ class _MainLayoutState extends State<MainLayout> {
     return BlocProvider<MainBloc>(
       create: (context) => MainBloc()..add(MainInitial()),
       child: Scaffold(
-        extendBody: true,
         resizeToAvoidBottomInset: false,
         bottomNavigationBar: BottomAppBar(
           shape: const CircularNotchedRectangle(),

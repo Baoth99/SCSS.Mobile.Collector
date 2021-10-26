@@ -6,6 +6,7 @@ import 'package:collector_app/providers/networks/models/response/approve_respons
 import 'package:collector_app/providers/networks/models/response/base_response_model.dart';
 import 'package:collector_app/providers/networks/models/response/collecting_request_detail_response_model.dart';
 import 'package:collector_app/providers/networks/models/response/collecting_request_response_model.dart';
+import 'package:collector_app/providers/networks/models/response/receive_get_response_model.dart';
 import 'package:collector_app/utils/common_utils.dart';
 import 'package:http/http.dart';
 
@@ -30,6 +31,15 @@ abstract class CollectingRequestNetwork {
   Future<ApproveResponseModel> approveRequest(String id, Client client);
   Future<ApproveRequestDetailResponseModel> getApprovedRequestDetail(
       String id, Client client);
+
+  Future<ReceiveGetResponseModel> getReceiveRequets(
+    String sellerPhone,
+    double lat,
+    double lag,
+    int page,
+    int pageSize,
+    Client client,
+  );
 }
 
 class CollectingRequestNetworkImpl implements CollectingRequestNetwork {
@@ -156,5 +166,35 @@ class CollectingRequestNetworkImpl implements CollectingRequestNetwork {
     } else {
       throw Exception('Exception getApprovedRequestDetail');
     }
+  }
+
+  @override
+  Future<ReceiveGetResponseModel> getReceiveRequets(
+    String sellerPhone,
+    double lat,
+    double lag,
+    int page,
+    int pageSize,
+    Client client,
+  ) async {
+    var response = await NetworkUtils.getNetworkWithBearer(
+      uri: APIServiceURI.collectingRequestReceiveGet,
+      client: client,
+      queries: {
+        'SellerPhone': sellerPhone,
+        'OriginLatitude': lat.toString(),
+        'OriginLongtitude': lag.toString(),
+        'Page': page.toString(),
+        'PageSize': pageSize.toString(),
+      },
+    );
+
+    // get model
+    var responseModel = await NetworkUtils
+        .checkSuccessStatusCodeAPIMainResponseModel<ReceiveGetResponseModel>(
+      response,
+      receiveGetResponseModelFromJson,
+    );
+    return responseModel;
   }
 }

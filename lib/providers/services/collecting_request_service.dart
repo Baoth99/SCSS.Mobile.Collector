@@ -1,12 +1,13 @@
 import 'package:collector_app/blocs/collecting_request_detail_bloc.dart';
+import 'package:collector_app/blocs/models/collecting_request_model.dart';
 import 'package:collector_app/blocs/models/gender_model.dart';
 import 'package:collector_app/blocs/models/request_model.dart';
 import 'package:collector_app/constants/api_constants.dart';
 import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/exceptions/custom_exceptions.dart';
 import 'package:collector_app/providers/configs/injection_config.dart';
-import 'package:collector_app/providers/networks/models/response/base_response_model.dart';
 import 'package:collector_app/providers/networks/request_network.dart';
+import 'package:collector_app/providers/services/models/get_receive_request_model.dart';
 import 'package:collector_app/utils/common_utils.dart';
 import 'package:http/http.dart' as http;
 
@@ -27,6 +28,13 @@ abstract class CollectingRequestService {
   Future<CollectingRequestDetailState> getCollectingRequest(String id);
   Future<CollectingRequestDetailState> getApprovedRequest(String id);
   Future<bool> approveRequest(String id);
+  Future<GetReceiveRequestModel> getReceiveRequest(
+    String sellerPhone,
+    double lat,
+    double lag,
+    int page,
+    int size,
+  );
 }
 
 class CollectingRequestServiceImpl implements CollectingRequestService {
@@ -245,5 +253,61 @@ class CollectingRequestServiceImpl implements CollectingRequestService {
       return result;
     }
     throw Exception(CommonApiConstants.errorSystem);
+  }
+
+  @override
+  Future<GetReceiveRequestModel> getReceiveRequest(
+    String sellerPhone,
+    double lat,
+    double lag,
+    int page,
+    int size,
+  ) async {
+    http.Client client = http.Client();
+    var responseModel = await _collectingRequestNetwork
+        .getReceiveRequets(
+          sellerPhone,
+          lat,
+          lag,
+          page,
+          size,
+          client,
+        )
+        .whenComplete(
+          () => client.close(),
+        );
+
+    var result = GetReceiveRequestModel(
+      collectingRequestModel: null,
+      total: 0,
+    );
+
+    var resData = responseModel.resData;
+    if (resData != null && resData.isNotEmpty) {
+      var f = resData.first;
+      var collecingRequestModel = CollectingRequestModel(
+        id: f.id,
+        collectingRequestCode: f.collectingRequestCode,
+        sellerName: f.sellerName,
+        dayOfWeek: f.dayOfWeek,
+        collectingRequestDate: f.collectingRequestDate,
+        fromTime: f.fromTime,
+        toTime: f.toTime,
+        collectingAddressName: f.collectingAddressName,
+        collectingAddress: f.collectingAddress,
+        isBulky: f.isBulky,
+        requestType: f.requestType,
+        distance: f.distance,
+        distanceText: f.distanceText,
+        durationTimeText: f.durationTimeText,
+        durationTimeVal: f.durationTimeVal,
+      );
+      result = GetReceiveRequestModel(
+        collectingRequestModel: collecingRequestModel,
+        total: responseModel.total,
+      );
+    }
+
+    return result;
   }
 }
