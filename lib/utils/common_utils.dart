@@ -73,6 +73,11 @@ class NetworkUtils {
     return uRI.toString();
   }
 
+  static Future<Map<String, dynamic>> getMapFromResponse(
+      Response response) async {
+    return jsonDecode(response.body);
+  }
+
   static Future<String> getBearer() async {
     return await SharedPreferenceUtils.getString(APIKeyConstants.accessToken) ??
         Symbols.empty;

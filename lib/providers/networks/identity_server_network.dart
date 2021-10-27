@@ -42,6 +42,13 @@ abstract class IdentityServerNetwork {
     AccountCoordinateRequestModel requestModel,
     Client client,
   );
+
+  Future<int?> updatePassword(
+    String id,
+    String oldPassword,
+    String newPassword,
+    Client client,
+  );
 }
 
 class IdentityServerNetworkImpl implements IdentityServerNetwork {
@@ -216,5 +223,44 @@ class IdentityServerNetworkImpl implements IdentityServerNetwork {
     );
 
     return responseModel;
+  }
+
+  @override
+  Future<int?> updatePassword(
+    String id,
+    String oldPassword,
+    String newPassword,
+    Client client,
+  ) async {
+    var body = <String, String>{
+      'Id': id,
+      'OldPassword': oldPassword,
+      'NewPassword': newPassword,
+    };
+    //send request
+    var response = await NetworkUtils.postBody(
+      uri: IdentityAPIConstants.urlChangePassword,
+      headers: {
+        IdentityAPIConstants.clientIdParamName: EnvID4AppSettingValue.clientId,
+      },
+      body: body,
+      client: client,
+    );
+
+    // convert
+    // ignore: prefer_typing_uninitialized_variables
+    BaseResponseModel responseModel;
+    if (response.statusCode == NetworkConstants.ok200) {
+      responseModel = BaseResponseModel.fromJson(
+        await NetworkUtils.getMapFromResponse(response),
+      );
+      if (responseModel.isSuccess) {
+        return NetworkConstants.ok200;
+      } else {
+        return NetworkConstants.badRequest400;
+      }
+    }
+
+    return null;
   }
 }

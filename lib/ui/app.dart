@@ -9,6 +9,7 @@ import 'package:collector_app/ui/layouts/login_layout.dart';
 import 'package:collector_app/ui/layouts/main_layout.dart';
 import 'package:collector_app/ui/layouts/pending_request_detail_layout.dart';
 import 'package:collector_app/ui/layouts/pending_request_layout.dart';
+import 'package:collector_app/ui/layouts/profile_password_edit_layout.dart';
 import 'package:collector_app/ui/layouts/splash_screen_layout.dart';
 import 'package:collector_app/ui/layouts/view_image_layout.dart';
 // import 'package:collector_app/ui/layouts/pending_request_layout.dart';
@@ -61,6 +62,8 @@ class CollectorApp extends StatelessWidget {
                 const PendingRequestDetailLayout(),
             Routes.viewImage: (_) => const ViewImageLayout(),
             Routes.approvedRequests: (_) => const ApprovedRequestLayout(),
+            Routes.profilePasswordEdit: (_) =>
+                const ProfilePasswordEditLayout(),
           },
         ),
       ),

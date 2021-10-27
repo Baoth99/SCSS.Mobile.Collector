@@ -27,6 +27,8 @@ abstract class IdentityServerService {
   Future<ProfileState?> getProfile();
 
   Future<bool> updateCooridnate();
+  Future<int?> updatePassword(
+      String id, String oldPassword, String newPassword);
 }
 
 class IdentityServerServiceImpl implements IdentityServerService {
@@ -243,5 +245,22 @@ class IdentityServerServiceImpl implements IdentityServerService {
     }
 
     return false;
+  }
+
+  @override
+  Future<int?> updatePassword(
+      String id, String oldPassword, String newPassword) async {
+    Client client = Client();
+
+    var result = await _identityServerNetwork
+        .updatePassword(
+          id,
+          oldPassword,
+          newPassword,
+          client,
+        )
+        .whenComplete(() => client.close());
+
+    return result;
   }
 }

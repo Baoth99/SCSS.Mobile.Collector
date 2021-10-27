@@ -30,6 +30,8 @@ class IdentityAPIConstants {
   static final urlConnectToken = '${EnvID4AppSettingValue.apiUrl}connect/token';
   static final urlConnectRevocation =
       '${EnvID4AppSettingValue.apiUrl}connect/revocation';
+  static final urlChangePassword =
+      '${EnvID4AppSettingValue.apiUrl}api/identity/account/change-password';
 
   //Query parameter name
   static const clientIdParamName = 'client_id';
