@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:collector_app/blocs/home_bloc.dart';
 import 'package:collector_app/blocs/main_bloc.dart';
 import 'package:collector_app/blocs/profile_bloc.dart';
 import 'package:collector_app/constants/constants.dart';
@@ -41,6 +42,9 @@ class _MainLayoutState extends State<MainLayout> {
     context.read<ProfileBloc>().add(ProfileClear());
     context.read<ProfileBloc>().add(ProfileInitial());
     context.read<ProfileBloc>().add(UpdateCoordinate());
+
+    //home
+    context.read<HomeBloc>().add(HomeInitial());
     try {
       _timer = Timer.periodic(
         const Duration(minutes: 1),

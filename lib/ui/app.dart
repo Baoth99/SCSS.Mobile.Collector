@@ -1,7 +1,8 @@
-import 'package:collector_app/blocs/dealer_search_bloc.dart';
+import 'package:collector_app/blocs/home_bloc.dart';
 import 'package:collector_app/blocs/profile_bloc.dart';
 import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/ui/layouts/account_qr_layout.dart';
+import 'package:collector_app/ui/layouts/approved_requests_layout.dart';
 import 'package:collector_app/ui/layouts/dealer_map_layout.dart';
 import 'package:collector_app/ui/layouts/dealer_search_layout.dart';
 import 'package:collector_app/ui/layouts/login_layout.dart';
@@ -17,7 +18,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CollectorApp extends StatelessWidget {
+  static final navigatorKey = GlobalKey<NavigatorState>();
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -28,8 +31,12 @@ class CollectorApp extends StatelessWidget {
           BlocProvider(
             create: (context) => ProfileBloc(),
           ),
+          BlocProvider(
+            create: (context) => HomeBloc(),
+          ),
         ],
         child: MaterialApp(
+          navigatorKey: navigatorKey,
           title: 'Flutter Demo',
           theme: ThemeData(
             primarySwatch: Colors.green,
@@ -53,6 +60,7 @@ class CollectorApp extends StatelessWidget {
             Routes.pendingRequestDetail: (_) =>
                 const PendingRequestDetailLayout(),
             Routes.viewImage: (_) => const ViewImageLayout(),
+            Routes.approvedRequests: (_) => const ApprovedRequestLayout(),
           },
         ),
       ),

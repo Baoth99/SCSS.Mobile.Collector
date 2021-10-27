@@ -40,6 +40,7 @@ class ResDatum {
     required this.id,
     required this.collectingRequestCode,
     required this.sellerName,
+    required this.sellerPhone,
     required this.dayOfWeek,
     required this.collectingRequestDate,
     required this.fromTime,
@@ -57,6 +58,7 @@ class ResDatum {
   String id;
   String collectingRequestCode;
   String sellerName;
+  String sellerPhone;
   int dayOfWeek;
   String collectingRequestDate;
   String fromTime;
@@ -74,6 +76,7 @@ class ResDatum {
         id: json["id"],
         collectingRequestCode: json["collectingRequestCode"],
         sellerName: json["sellerName"],
+        sellerPhone: json["sellerPhone"],
         dayOfWeek: json["dayOfWeek"],
         collectingRequestDate: json["collectingRequestDate"],
         fromTime: json["fromTime"],
