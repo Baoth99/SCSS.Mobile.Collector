@@ -1,8 +1,11 @@
-class CollectingRequestModel {
+import 'package:equatable/equatable.dart';
+
+class CollectingRequestModel extends Equatable {
   CollectingRequestModel({
     required this.id,
     required this.collectingRequestCode,
     required this.sellerName,
+    required this.sellerPhone,
     required this.dayOfWeek,
     required this.collectingRequestDate,
     required this.fromTime,
@@ -20,6 +23,7 @@ class CollectingRequestModel {
   final String id;
   final String collectingRequestCode;
   final String sellerName;
+  final String sellerPhone;
   final int dayOfWeek;
   final String collectingRequestDate;
   final String fromTime;
@@ -32,4 +36,24 @@ class CollectingRequestModel {
   final String distanceText;
   final String durationTimeText;
   final int durationTimeVal;
+
+  @override
+  List<Object> get props => [
+        id,
+        collectingRequestCode,
+        sellerName,
+        sellerPhone,
+        dayOfWeek,
+        collectingRequestDate,
+        fromTime,
+        toTime,
+        collectingAddressName,
+        collectingAddress,
+        isBulky,
+        requestType,
+        distance,
+        distanceText,
+        durationTimeText,
+        durationTimeVal,
+      ];
 }

@@ -1,11 +1,14 @@
+import 'package:collector_app/blocs/home_bloc.dart';
 import 'package:collector_app/log/logger.dart';
 import 'package:collector_app/providers/configs/injection_config.dart';
 import 'package:collector_app/providers/services/identity_server_service.dart';
+import 'package:collector_app/ui/app.dart';
 import 'package:collector_app/utils/common_function.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("Handling a background message : ${message.messageId}");
@@ -71,7 +74,8 @@ class FirebaseNotification {
     await Firebase.initializeApp();
 
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
+    // add listner to notification service
+    await FirebaseNotification.addMessagingHandler();
     await _firebaseLocalMessagingHandler();
   }
 
@@ -96,7 +100,20 @@ class FirebaseNotification {
     }));
   }
 
+  static Future<void> addMessagingHandler() async {
+    firebaseForegroundMessagingHandler();
+  }
+
   static Future<void> removeMessagingHandler() async {
     FirebaseMessaging.instance.deleteToken();
+  }
+
+  static Future<void> firebaseForegroundMessagingHandler() async {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      //update pending list
+      CollectorApp.navigatorKey.currentContext
+          ?.read<HomeBloc>()
+          .add(HomeInitial());
+    });
   }
 }

@@ -2,7 +2,6 @@ import 'package:collector_app/blocs/models/gender_model.dart';
 import 'package:collector_app/blocs/profile_bloc.dart';
 import 'package:collector_app/constants/api_constants.dart';
 import 'package:collector_app/constants/constants.dart';
-import 'package:collector_app/log/logger.dart';
 import 'package:collector_app/providers/configs/injection_config.dart';
 import 'package:collector_app/providers/networks/identity_server_network.dart';
 import 'package:collector_app/providers/networks/models/request/account_coordinate_request_model.dart';
@@ -13,7 +12,6 @@ import 'package:collector_app/providers/services/map_service.dart';
 import 'package:collector_app/providers/services/models/get_token_service_model.dart';
 import 'package:collector_app/utils/common_utils.dart';
 import 'package:http/http.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
 
 abstract class IdentityServerService {
   Future<GetTokenServiceModel> getToken(

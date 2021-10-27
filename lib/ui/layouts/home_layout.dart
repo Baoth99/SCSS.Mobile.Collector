@@ -13,19 +13,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 
 class HomeLayout extends StatelessWidget {
   const HomeLayout({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => HomeBloc()..add(HomeInitial()),
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: AccountBody(),
-      ),
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: AccountBody(),
     );
   }
 }
@@ -38,9 +34,17 @@ class AccountBody extends StatelessWidget {
     return Column(
       children: [
         avatar(context),
-        waitToCollect(context)
+        BlocBuilder<HomeBloc, HomeState>(
+          builder: (context, state) {
+            return state.status.isSubmissionSuccess
+                ? waitToCollect(context)
+                : (state.status.isSubmissionInProgress || state.status.isPure)
+                    ? FunctionalWidgets.getLoadingAnimation()
+                    : FunctionalWidgets.getErrorIcon();
+          },
+        ),
         // waitToCollectEmpty(),
-        ,
+
         Expanded(
           child: options(context),
         ),
@@ -152,7 +156,7 @@ class AccountBody extends StatelessWidget {
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (context, state) {
         try {
-          var r = state.collectingRequestModel;
+          var r = state.listCollectingRequestModel.first;
           return state.totalRequest > 0
               ? Material(
                   elevation: 1,
@@ -177,7 +181,7 @@ class AccountBody extends StatelessWidget {
                           children: [
                             Expanded(
                               child: CollectingRequest(
-                                bookingId: r!.id,
+                                bookingId: r.id,
                                 distance: r.distanceText,
                                 bulky: r.isBulky,
                                 cusName: r.sellerName,
@@ -286,10 +290,9 @@ class AccountBody extends StatelessWidget {
 
   void Function() _onTapGetAllNotCollectedRequest(BuildContext context) {
     return () {
-      // Navigator.of(context).pushNamed(
-      //   Routes.requestsWaitToCollect,
-      // );
-      print('fsdfsdf');
+      Navigator.of(context).pushNamed(
+        Routes.approvedRequests,
+      );
     };
   }
 

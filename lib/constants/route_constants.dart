@@ -42,4 +42,6 @@ class Routes {
   static const dealerMap = 'dealerMap';
 
   static const viewImage = 'viewImage';
+
+  static const approvedRequests = 'approvedRequests';
 }

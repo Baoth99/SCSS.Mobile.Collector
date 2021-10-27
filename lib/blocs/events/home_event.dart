@@ -7,3 +7,8 @@ class HomeEvent extends AbstractEvent {
 class HomeInitial extends HomeEvent {}
 
 class HomeFetch extends HomeEvent {}
+
+class HomeSearch extends HomeEvent {
+  final String searchValue;
+  HomeSearch(this.searchValue);
+}

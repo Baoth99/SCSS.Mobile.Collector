@@ -3,7 +3,6 @@ import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/exceptions/custom_exceptions.dart';
 import 'package:collector_app/providers/networks/models/response/approve_request_detail_response_mode.dart';
 import 'package:collector_app/providers/networks/models/response/approve_response_model.dart';
-import 'package:collector_app/providers/networks/models/response/base_response_model.dart';
 import 'package:collector_app/providers/networks/models/response/collecting_request_detail_response_model.dart';
 import 'package:collector_app/providers/networks/models/response/collecting_request_response_model.dart';
 import 'package:collector_app/providers/networks/models/response/receive_get_response_model.dart';

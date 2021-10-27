@@ -28,7 +28,7 @@ abstract class CollectingRequestService {
   Future<CollectingRequestDetailState> getCollectingRequest(String id);
   Future<CollectingRequestDetailState> getApprovedRequest(String id);
   Future<bool> approveRequest(String id);
-  Future<GetReceiveRequestModel> getReceiveRequest(
+  Future<List<CollectingRequestModel>> getReceiveRequest(
     String sellerPhone,
     double lat,
     double lag,
@@ -256,7 +256,7 @@ class CollectingRequestServiceImpl implements CollectingRequestService {
   }
 
   @override
-  Future<GetReceiveRequestModel> getReceiveRequest(
+  Future<List<CollectingRequestModel>> getReceiveRequest(
     String sellerPhone,
     double lat,
     double lag,
@@ -277,37 +277,32 @@ class CollectingRequestServiceImpl implements CollectingRequestService {
           () => client.close(),
         );
 
-    var result = GetReceiveRequestModel(
-      collectingRequestModel: null,
-      total: 0,
-    );
-
     var resData = responseModel.resData;
     if (resData != null && resData.isNotEmpty) {
-      var f = resData.first;
-      var collecingRequestModel = CollectingRequestModel(
-        id: f.id,
-        collectingRequestCode: f.collectingRequestCode,
-        sellerName: f.sellerName,
-        dayOfWeek: f.dayOfWeek,
-        collectingRequestDate: f.collectingRequestDate,
-        fromTime: f.fromTime,
-        toTime: f.toTime,
-        collectingAddressName: f.collectingAddressName,
-        collectingAddress: f.collectingAddress,
-        isBulky: f.isBulky,
-        requestType: f.requestType,
-        distance: f.distance,
-        distanceText: f.distanceText,
-        durationTimeText: f.durationTimeText,
-        durationTimeVal: f.durationTimeVal,
-      );
-      result = GetReceiveRequestModel(
-        collectingRequestModel: collecingRequestModel,
-        total: responseModel.total,
-      );
+      var result = resData.map((f) {
+        CollectingRequestModel collecingRequestModel = CollectingRequestModel(
+          id: f.id,
+          collectingRequestCode: f.collectingRequestCode,
+          sellerName: f.sellerName,
+          sellerPhone: f.sellerPhone,
+          dayOfWeek: f.dayOfWeek,
+          collectingRequestDate: f.collectingRequestDate,
+          fromTime: f.fromTime,
+          toTime: f.toTime,
+          collectingAddressName: f.collectingAddressName,
+          collectingAddress: f.collectingAddress,
+          isBulky: f.isBulky,
+          requestType: f.requestType,
+          distance: f.distance,
+          distanceText: f.distanceText,
+          durationTimeText: f.durationTimeText,
+          durationTimeVal: f.durationTimeVal,
+        );
+        return collecingRequestModel;
+      }).toList();
+      return result;
     }
 
-    return result;
+    return [];
   }
 }
