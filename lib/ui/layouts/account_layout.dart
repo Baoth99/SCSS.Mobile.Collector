@@ -1,6 +1,7 @@
 import 'package:collector_app/blocs/account_bloc.dart';
 import 'package:collector_app/blocs/models/gender_model.dart';
 import 'package:collector_app/blocs/profile_bloc.dart';
+import 'package:collector_app/ui/layouts/profile_password_edit_layout.dart';
 import 'package:collector_app/ui/widgets/custom_progress_indicator_dialog_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -192,15 +193,18 @@ class AccountBody extends StatelessWidget {
             Colors.black,
             Icons.arrow_forward_ios,
           ),
-          option(
-            'Đổi mật khẩu',
-            () {
-              Navigator.of(context).pushNamed(
-                Routes.profilePasswordEdit,
+          BlocBuilder<ProfileBloc, ProfileState>(
+            builder: (context, state) {
+              return option(
+                'Đổi mật khẩu',
+                () {
+                  Navigator.of(context).pushNamed(Routes.profilePasswordEdit,
+                      arguments: ProfilePasswordEditArgs(state.id));
+                },
+                Colors.black,
+                Icons.arrow_forward_ios,
               );
             },
-            Colors.black,
-            Icons.arrow_forward_ios,
           ),
           option(
             'Liên hệ và góp ý',
