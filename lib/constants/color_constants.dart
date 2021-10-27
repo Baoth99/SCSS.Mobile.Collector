@@ -36,4 +36,6 @@ class AppColors {
 
   //Yellow
   static const Color yellowFFF3F09A = Color(0xFFF3F09A);
+  static const Color errorButtonBorder = greyFFB5B5B5;
+  static final Color errorButtonText = Colors.grey[700]!;
 }

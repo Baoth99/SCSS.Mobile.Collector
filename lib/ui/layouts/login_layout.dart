@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:collector_app/blocs/login_bloc.dart';
 import 'package:collector_app/constants/api_constants.dart';
 import 'package:collector_app/constants/constants.dart';
@@ -52,7 +53,6 @@ class LoginLayout extends StatelessWidget {
             }
 
             if (state.status.isSubmissionFailure) {
-              Navigator.popUntil(context, ModalRoute.withName(Routes.login));
               FunctionalWidgets.showErrorSystemRouteButton(
                 context,
               );
@@ -67,12 +67,17 @@ class LoginLayout extends StatelessWidget {
               } else if (state.loginStatus == LoginStatus.notApproved) {
                 Navigator.popUntil(context, ModalRoute.withName(Routes.login));
 
-                FunctionalWidgets.showDialogCloseRouteButton(
+                FunctionalWidgets.showAwesomeDialog(
                   context,
-                  'Tài khoản của bạn chưa được xác nhận',
+                  dialogType: DialogType.INFO,
+                  title: 'Tài khoản của bạn chưa được xác nhận',
                   desc:
                       'Tài khoản của bạn cần phải được xác nhận, xin vui lòng liên hệ với ban quản trị để hoàn thiện hồ sơ tài khoản',
-                  alertType: AlertType.info,
+                  btnOkText: 'Đóng',
+                  isOkBorder: true,
+                  btnOkColor: AppColors.errorButtonBorder,
+                  textOkColor: AppColors.errorButtonText,
+                  okRoutePress: Routes.login,
                 );
               }
             }

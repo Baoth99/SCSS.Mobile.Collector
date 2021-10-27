@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:collector_app/blocs/collecting_request_detail_bloc.dart';
 import 'package:collector_app/blocs/models/gender_model.dart';
 import 'package:collector_app/constants/constants.dart';
@@ -18,7 +19,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:formz/formz.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 
 class PendingRequestDetailArgs {
   final String id;
@@ -47,41 +47,39 @@ class PendingRequestDetailLayout extends StatelessWidget {
           listener: (context, state) {
             if (state.status.isSubmissionSuccess) {
               if (state.approveEventStatus == ApproveEventStatus.success) {
-                FunctionalWidgets.showDialogCloseButton(
+                FunctionalWidgets.showAwesomeDialog(
                   context,
-                  'Nhận yêu cầu thành công',
-                  alertType: AlertType.success,
-                  onPressed: () {
-                    Navigator.of(context).pop(true);
-                  },
-                  onWillPopActive: true,
-                ).then((value) {
-                  if (value != null && value) {
+                  dialogType: DialogType.SUCCES,
+                  title: 'Nhận yêu cầu thành công',
+                  btnOkOnpress: () {
                     context
                         .read<CollectingRequestDetailBloc>()
                         .add(ConvertPendingIntoApproved());
-                  } else {
-                    Navigator.of(context)
-                        .popUntil(ModalRoute.withName(Routes.pendingRequests));
-                  }
-                });
+                    Navigator.of(context).popUntil(
+                        ModalRoute.withName(Routes.pendingRequestDetail));
+                  },
+                  desc: 'Bạn đã nhận yêu cầu thành công',
+                  btnOkText: 'Đóng',
+                );
               } else if (state.approveEventStatus ==
                   ApproveEventStatus.approvedByOther) {
-                FunctionalWidgets.showDialogCloseRouteButton(
+                FunctionalWidgets.showAwesomeDialog(
                   context,
-                  'Không thể nhận yêu cầu',
+                  dialogType: DialogType.WARNING,
+                  title: 'Không thể nhận yêu cầu',
                   desc:
                       'Yêu cầu thu gom đã được xác nhận bởi một người thu gom khác',
-                  alertType: AlertType.warning,
-                  onWillPopActive: true,
-                  route: Routes.pendingRequests,
+                  btnOkText: 'Đóng',
+                  isOkBorder: true,
+                  btnOkColor: AppColors.errorButtonBorder,
+                  textOkColor: AppColors.errorButtonText,
+                  okRoutePress: Routes.pendingRequests,
                 );
               }
             } else if (state.status.isSubmissionFailure) {
               FunctionalWidgets.showErrorSystemRouteButton(
                 context,
                 route: Routes.pendingRequests,
-                onWillPopActive: true,
               );
             }
           },
@@ -231,18 +229,24 @@ class PendingRequestDetailBody extends StatelessWidget {
   Widget getApproveButton(BuildContext context) {
     return CustomButton(
       onPressed: () {
-        FunctionalWidgets.showDialogTwoButton(
+        FunctionalWidgets.showAwesomeDialog(
           context,
-          'Bạn chắc chắn nhận đơn hàng này?',
-          'Đồng ý',
-          'Không',
-        ).then((value) {
-          if (value != null && value) {
+          dialogType: DialogType.WARNING,
+          title: 'Bạn chắc chắn nhận đơn hàng này?',
+          desc: Symbols.empty,
+          btnOkText: 'Đồng ý',
+          btnOkOnpress: () {
+            Navigator.of(context)
+                .popUntil(ModalRoute.withName(Routes.pendingRequestDetail));
             context
                 .read<CollectingRequestDetailBloc>()
                 .add(ApproveRequestEvent());
-          }
-        });
+          },
+          isCancelBorder: true,
+          btnCancelColor: AppColors.errorButtonBorder,
+          textCancelColor: AppColors.errorButtonText,
+          btnCancelText: 'Hủy',
+        );
       },
       title: 'Nhận đơn',
     );
