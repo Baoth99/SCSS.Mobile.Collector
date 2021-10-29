@@ -63,6 +63,81 @@ class FunctionalWidgets {
     );
   }
 
+  static Future<T?> showCustomModalBottomSheet<T>({
+    required BuildContext context,
+    String? title,
+    required Widget child,
+    required String routeClosed,
+  }) {
+    return showModalBottomSheet<T>(
+      context: context,
+      builder: (context) => SingleChildScrollView(
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(50.0.r),
+              topRight: Radius.circular(50.0.r),
+            ),
+          ),
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          constraints: BoxConstraints(
+            minHeight: 600.h,
+          ),
+          child: Container(
+            margin: EdgeInsets.only(
+              top: 100.h,
+            ),
+            height: 1700.h,
+            child: Stack(
+              alignment: Alignment.topRight,
+              children: [
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Container(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        title != null
+                            ? Container(
+                                padding: EdgeInsets.only(
+                                  top: 20.h,
+                                ),
+                                child: CustomText(
+                                  text: title,
+                                  fontSize: 58.sp,
+                                  color: Colors.grey[700],
+                                ),
+                              )
+                            : const SizedBox.shrink(),
+                        child,
+                      ],
+                    ),
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    Navigator.popUntil(
+                      context,
+                      ModalRoute.withName(routeClosed),
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.close,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+    );
+  }
+
   static AppBar buildAppBar({
     required BuildContext context,
     Color? color,

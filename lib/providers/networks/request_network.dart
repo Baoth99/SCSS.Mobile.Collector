@@ -1,8 +1,14 @@
+import 'dart:io';
+
+import 'package:collector_app/blocs/models/cancel_reason_model.dart';
 import 'package:collector_app/constants/api_constants.dart';
 import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/exceptions/custom_exceptions.dart';
+import 'package:collector_app/providers/networks/models/request/cancel_request_request_model.dart';
 import 'package:collector_app/providers/networks/models/response/approve_request_detail_response_mode.dart';
 import 'package:collector_app/providers/networks/models/response/approve_response_model.dart';
+import 'package:collector_app/providers/networks/models/response/base_response_model.dart';
+import 'package:collector_app/providers/networks/models/response/cancel_reason_response_mode.dart';
 import 'package:collector_app/providers/networks/models/response/collecting_request_detail_response_model.dart';
 import 'package:collector_app/providers/networks/models/response/collecting_request_response_model.dart';
 import 'package:collector_app/providers/networks/models/response/receive_get_response_model.dart';
@@ -39,6 +45,10 @@ abstract class CollectingRequestNetwork {
     int pageSize,
     Client client,
   );
+
+  Future<CancelReasonResponseModel> getCancelReason(Client client);
+  Future<BaseResponseModel> cancelRequest(
+      CancelRequestRequestModel requestModel, Client client);
 }
 
 class CollectingRequestNetworkImpl implements CollectingRequestNetwork {
@@ -194,6 +204,43 @@ class CollectingRequestNetworkImpl implements CollectingRequestNetwork {
       response,
       receiveGetResponseModelFromJson,
     );
+    return responseModel;
+  }
+
+  @override
+  Future<CancelReasonResponseModel> getCancelReason(Client client) async {
+    var response = await NetworkUtils.getNetworkWithBearer(
+      uri: APIServiceURI.cancelReasons,
+      client: client,
+    );
+
+    // get model
+    var responseModel = await NetworkUtils
+        .checkSuccessStatusCodeAPIMainResponseModel<CancelReasonResponseModel>(
+      response,
+      cancelReasonResponseModelFromJson,
+    );
+    return responseModel;
+  }
+
+  @override
+  Future<BaseResponseModel> cancelRequest(
+      CancelRequestRequestModel requestModel, Client client) async {
+    var response = await NetworkUtils.putBodyWithBearerAuth(
+      uri: APIServiceURI.cancelRequest,
+      client: client,
+      headers: {
+        HttpHeaders.contentTypeHeader: NetworkConstants.applicationJson,
+      },
+      body: cancelRequestRequestModelToJson(requestModel),
+    );
+
+    var responseModel = await NetworkUtils
+        .checkSuccessStatusCodeAPIMainResponseModel<BaseResponseModel>(
+      response,
+      baseResponseModelFromJson,
+    );
+
     return responseModel;
   }
 }

@@ -24,6 +24,8 @@ class APIServiceURI {
       '${apiUrl}collecting-request/receive/detail';
   static final collectingRequestReceiveGet =
       '${apiUrl}collecting-request/receive/get';
+  static final cancelReasons = '${apiUrl}collecting-request/cancel-reasons';
+  static final cancelRequest = '${apiUrl}collecting-request/cancel';
 }
 
 class IdentityAPIConstants {
