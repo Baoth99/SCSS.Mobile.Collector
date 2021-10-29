@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:collector_app/blocs/cancel_request_bloc.dart';
 import 'package:collector_app/blocs/collecting_request_detail_bloc.dart';
 import 'package:collector_app/blocs/models/gender_model.dart';
 import 'package:collector_app/constants/constants.dart';
@@ -8,6 +9,7 @@ import 'package:collector_app/ui/layouts/view_image_layout.dart';
 import 'package:collector_app/ui/widgets/cached_avatar_widget.dart';
 import 'package:collector_app/ui/widgets/common_margin_container.dart';
 import 'package:collector_app/ui/widgets/custom_button.dart';
+import 'package:collector_app/ui/widgets/custom_progress_indicator_dialog_widget.dart';
 import 'package:collector_app/ui/widgets/custom_text_widget.dart';
 import 'package:collector_app/ui/widgets/function_widgets.dart';
 import 'package:collector_app/utils/common_utils.dart';
@@ -79,7 +81,7 @@ class PendingRequestDetailLayout extends StatelessWidget {
             } else if (state.status.isSubmissionFailure) {
               FunctionalWidgets.showErrorSystemRouteButton(
                 context,
-                route: Routes.pendingRequests,
+                route: Routes.main,
               );
             }
           },
@@ -217,12 +219,46 @@ class PendingRequestDetailBody extends StatelessWidget {
                 state.collectingRequestDetailStatus ==
                         CollectingRequestDetailStatus.pending
                     ? getApproveButton(context)
-                    : SizedBox.shrink(),
+                    : getCancelAndCreateTransactionButton(context, state.id),
               ],
             ),
           ),
         );
       },
+    );
+  }
+
+  Widget getCancelAndCreateTransactionButton(
+      BuildContext context, String requestId) {
+    return Row(
+      children: [
+        CustomButton(
+          title: 'Hủy',
+          onPressed: () {
+            FunctionalWidgets.showCustomModalBottomSheet(
+              context: context,
+              child: BlocProvider(
+                create: (context) => CancelRequestBloc(requestId: requestId)
+                  ..add(CancelRequestIntial()),
+                child: CancelRequestWidget(),
+              ),
+              title: 'Hủy Đơn Hẹn',
+              routeClosed: Routes.pendingRequestDetail,
+            );
+          },
+          width: 300.w,
+          color: Colors.red,
+        ),
+        SizedBox(
+          width: 40.w,
+        ),
+        Expanded(
+          child: CustomButton(
+            title: 'Tạo giao dịch',
+            onPressed: () {},
+          ),
+        ),
+      ],
     );
   }
 
@@ -626,6 +662,169 @@ class SellerInforatmionDialog extends StatelessWidget {
       onPressed: () {
         Navigator.of(context).pop();
       },
+    );
+  }
+}
+
+class CancelRequestWidget extends StatelessWidget {
+  const CancelRequestWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<CancelRequestBloc, CancelRequestState>(
+      listener: (context, state) {
+        if (state.status.isSubmissionInProgress) {
+          FunctionalWidgets.showCustomDialog(context);
+        }
+
+        if (state.status.isSubmissionSuccess) {
+          FunctionalWidgets.showAwesomeDialog(
+            context,
+            dialogType: DialogType.SUCCES,
+            title: 'Hủy yêu cầu thu gom thành công',
+            desc: 'Bạn đã hủy yêu cầu thu gom thành công',
+            btnOkText: 'Đóng',
+            btnOkOnpress: () {
+              Navigator.pop(context);
+              Navigator.of(context).pop();
+              Navigator.of(context).pop(true);
+            },
+          );
+        }
+        if (state.status.isSubmissionFailure) {
+          Navigator.pop(context);
+
+          FunctionalWidgets.showAwesomeDialog(
+            context,
+            dialogType: DialogType.WARNING,
+            title: 'Hủy yêu cầu thu gom thất bại',
+            desc: 'Bạn không thể hủy yêu cầu thu gom',
+            btnOkText: 'Đóng',
+            isOkBorder: true,
+            btnOkColor: AppColors.errorButtonBorder,
+            textOkColor: AppColors.errorButtonText,
+            btnOkOnpress: () {
+              Navigator.pop(context);
+              Navigator.of(context).pop();
+              Navigator.of(context).pop(false);
+            },
+          );
+        }
+      },
+      child: BlocBuilder<CancelRequestBloc, CancelRequestState>(
+        builder: (context, state) {
+          return _buildBody(context, state.dataIntial);
+        },
+      ),
+    );
+  }
+
+  Widget _buildBody(
+      BuildContext context, CancelRequestDataIntial dataIntialState) {
+    switch (dataIntialState) {
+      case CancelRequestDataIntial.pure:
+      case CancelRequestDataIntial.procerss:
+        return Center(
+          child: FunctionalWidgets.getLoadingAnimation(),
+        );
+      case CancelRequestDataIntial.done:
+        return _body(context);
+      default:
+        return FunctionalWidgets.getErrorIcon();
+    }
+  }
+
+  Widget _body(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: AppConstants.horizontalScaffoldMargin.w,
+            vertical: 20.h,
+          ),
+          margin: EdgeInsets.symmetric(
+            vertical: 50.h,
+          ),
+          color: Colors.orange[900]!.withOpacity(0.2),
+          child: Row(
+            children: [
+              const Icon(
+                Icons.error,
+                color: AppColors.orangeFFF5670A,
+              ),
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.only(
+                    left: 40.w,
+                  ),
+                  child: CustomText(
+                    text:
+                        'Vui lòng chọn lí do hủy đơn hẹn. Lưu ý: thao tác này sẽ không thể hoàn tác',
+                    color: AppColors.orangeFFF5670A,
+                    fontSize: 40.sp,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          height: 950.h,
+          child: CommonMarginContainer(
+            child: BlocBuilder<CancelRequestBloc, CancelRequestState>(
+              builder: (context, state) {
+                return ListView.separated(
+                  itemBuilder: (context, index) {
+                    return RadioListTile<String>(
+                      value: state.cancelReasons[index],
+                      groupValue: state.cancelReason.value,
+                      title: CustomText(
+                        text: state.cancelReasons[index],
+                      ),
+                      onChanged: (value) {
+                        context.read<CancelRequestBloc>().add(
+                              CancelReasonChanged(value ?? Symbols.empty),
+                            );
+                      },
+                    );
+                  },
+                  separatorBuilder: (context, index) => SizedBox(
+                    height: 10.h,
+                  ),
+                  itemCount: state.cancelReasons.length,
+                );
+              },
+            ),
+          ),
+        ),
+        CommonMarginContainer(
+          child: BlocBuilder<CancelRequestBloc, CancelRequestState>(
+            builder: (context, state) {
+              return ElevatedButton(
+                onPressed: state.status.isValid
+                    ? () {
+                        context.read<CancelRequestBloc>().add(
+                              CancelRequestSubmmited(),
+                            );
+                      }
+                    : null,
+                child: CustomText(
+                  text: 'Đồng ý',
+                  fontSize: WidgetConstants.buttonCommonFrontSize.sp,
+                  fontWeight: WidgetConstants.buttonCommonFrontWeight,
+                ),
+                style: ElevatedButton.styleFrom(
+                  minimumSize: Size(
+                    double.infinity,
+                    WidgetConstants.buttonCommonHeight.h,
+                  ),
+                  primary: AppColors.greenFF61C53D,
+                ),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }
