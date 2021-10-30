@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:collector_app/blocs/dealer_transaction_bloc.dart';
 import 'package:collector_app/blocs/seller_transaction_bloc.dart';
 import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/log/logger.dart';
@@ -349,8 +353,285 @@ class DealerActivityLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text('Dealer'),
+    return BlocProvider(
+      create: (context) => DealerTransactionBloc()
+        ..add(
+          DealerTransactionInitial(),
+        ),
+      child: Scaffold(
+        body: CommonMarginContainer(
+          child: body(),
+        ),
+        backgroundColor: Colors.grey[200],
+      ),
+    );
+  }
+
+  Widget body() {
+    return BlocBuilder<DealerTransactionBloc, DealerTransactionState>(
+      builder: (context, state) => buildBody(context, state),
+    );
+  }
+
+  Widget buildBody(
+    BuildContext context,
+    DealerTransactionState state,
+  ) {
+    try {
+      switch (state.status) {
+        case DealerTransactionStatus.completed:
+          return DealerTransactionList();
+        case DealerTransactionStatus.progress:
+          return FunctionalWidgets.getLoadingAnimation();
+        case DealerTransactionStatus.error:
+          return FunctionalWidgets.getErrorIcon();
+        default:
+          return const SizedBox.shrink();
+      }
+    } catch (e) {
+      AppLog.error(e);
+      return FunctionalWidgets.getErrorIcon();
+    }
+  }
+}
+
+class DealerTransactionList extends StatefulWidget {
+  const DealerTransactionList({Key? key}) : super(key: key);
+
+  @override
+  _DealerTransactionListState createState() => _DealerTransactionListState();
+}
+
+class _DealerTransactionListState extends State<DealerTransactionList> {
+  late final RefreshController _refreshController;
+  @override
+  void initState() {
+    super.initState();
+    _refreshController = RefreshController(initialRefresh: false);
+  }
+
+  @override
+  void dispose() {
+    _refreshController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<DealerTransactionBloc, DealerTransactionState>(
+      builder: (context, state) =>
+          BlocListener<DealerTransactionBloc, DealerTransactionState>(
+        listener: (context, state) {
+          if (state.refreshStatus == RefreshStatus.completed) {
+            _refreshController.refreshCompleted();
+          }
+          if (state.loadStatus == LoadStatus.idle) {
+            _refreshController.loadComplete();
+          }
+        },
+        child: _buildCommonPullToResfresh(
+            context, state, state.listDealerTransaction.isNotEmpty),
+      ),
+    );
+  }
+
+  Widget _buildCommonPullToResfresh(
+      BuildContext context, DealerTransactionState state, bool isNotEmpty) {
+    return SmartRefresher(
+      enablePullDown: true,
+      enablePullUp: true,
+      header: const WaterDropHeader(
+        waterDropColor: AppColors.greenFF61C53D,
+        failed: SizedBox.shrink(),
+        complete: SizedBox.shrink(),
+      ),
+      footer: CustomFooter(
+        builder: (context, mode) {
+          Widget body;
+          if (mode == LoadStatus.idle) {
+            body = Text("");
+          } else if (mode == LoadStatus.loading) {
+            body = const CupertinoActivityIndicator();
+          } else if (mode == LoadStatus.failed) {
+            body = Text("");
+          } else if (mode == LoadStatus.canLoading) {
+            body = Text("");
+          } else {
+            body = Text("");
+          }
+          return Container(
+            height: 55.0,
+            child: Center(child: body),
+          );
+        },
+      ),
+      controller: _refreshController,
+      onRefresh: _onRefresh(context),
+      onLoading: _onLoading(context),
+      child: isNotEmpty
+          ? ListView.separated(
+              padding: EdgeInsets.only(
+                top: kFloatingActionButtonMargin + 5.h,
+                bottom: kFloatingActionButtonMargin + 48.h,
+              ),
+              itemBuilder: (context, index) => _buildActivity(
+                state,
+                index,
+              ),
+              separatorBuilder: (context, index) => const SizedBox.shrink(),
+              itemCount: state.listDealerTransaction.length,
+            )
+          : _emptyList(),
+    );
+  }
+
+  Widget _buildActivity(
+    DealerTransactionState state,
+    int index,
+  ) {
+    var a = state.listDealerTransaction[index];
+    return DealerActivity(
+      id: a.id,
+      dealerName: a.dealerName,
+      dealerUrl: a.dealerImage,
+      price: a.price,
+      time: a.time,
+    );
+  }
+
+  void Function() _onLoading(BuildContext context) {
+    return () {
+      context.read<DealerTransactionBloc>().add(DealerTransactionLoading());
+    };
+  }
+
+  void Function() _onRefresh(BuildContext context) {
+    return () {
+      context.read<DealerTransactionBloc>().add(DealerTransactionRefresh());
+    };
+  }
+
+  Widget _emptyList() {
+    return Column(
+      children: [
+        SizedBox(
+          height: 200.h,
+        ),
+        Image.asset(
+          ImagesPaths.emptyActivityList,
+          height: 200.h,
+        ),
+        Container(
+          child: CustomText(
+            text: 'Chưa có yêu cầu',
+            fontSize: 40.sp,
+            fontWeight: FontWeight.w400,
+            color: Colors.grey[600],
+            textAlign: TextAlign.center,
+          ),
+          padding: EdgeInsets.symmetric(
+            horizontal: 100.w,
+            vertical: 50.w,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class DealerActivity extends StatelessWidget {
+  const DealerActivity({
+    Key? key,
+    required this.id,
+    required this.dealerName,
+    required this.dealerUrl,
+    required this.time,
+    required this.price,
+  }) : super(key: key);
+
+  final String id;
+  final String dealerName;
+  final String dealerUrl;
+  final String time;
+  final int price;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        //detail
+      },
+      child: Container(
+        constraints: BoxConstraints(
+          minHeight: 200.h,
+          maxHeight: 500.h,
+        ),
+        margin: EdgeInsets.symmetric(
+          vertical: 20.h,
+        ),
+        padding: EdgeInsets.symmetric(
+          horizontal: 30.w,
+          vertical: 30.h,
+        ),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(
+              Radius.circular(30.0.r) //                 <--- border radius here
+              ),
+        ),
+        child: IntrinsicHeight(
+          child: Row(
+            children: [
+              Container(
+                height: 230.r,
+                width: 230.r,
+                child: CachedNetworkImage(
+                  httpHeaders: {HttpHeaders.authorizationHeader: bearerToken},
+                  imageUrl: dealerUrl,
+                  imageBuilder: (context, imageProvider) => Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  placeholder: (context, url) => Container(
+                    child: Center(
+                      child: FunctionalWidgets.getLoadingCircle(),
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => Icon(
+                    Icons.error,
+                    color: AppColors.orangeFFE4625D,
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 20.w,
+              ),
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    CustomText(text: dealerName),
+                    CustomText(text: time),
+                    Container(
+                      child: CustomText(
+                        text: price.toAppPrice(),
+                        textAlign: TextAlign.right,
+                      ),
+                      width: double.infinity,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
