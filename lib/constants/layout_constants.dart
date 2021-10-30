@@ -25,4 +25,10 @@ class MainLayoutConstants {
 class ActivityLayoutConstants {
   static const bulkyImage = ImagesPaths.bulky;
   static const notBulkyImage = ImagesPaths.notBulky;
+
+  static const cancelBySeller = 2;
+  static const cancelByCollect = 3;
+  static const approved = 4;
+  static const completed = 5;
+  static const cancelBySystem = 6;
 }

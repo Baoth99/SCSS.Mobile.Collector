@@ -37,6 +37,11 @@ class CommonUtils {
     return '$dayOfWeekString, $date, $fromTime - $toTime';
   }
 
+  static String combineTime(int dayOfWeek, String date, String time) {
+    var dayOfWeekString = VietnameseDate.weekdayServer[dayOfWeek];
+    return '$dayOfWeekString, $date, $time';
+  }
+
   static void launchTelephone(String phone) async {
     var url = "tel:$phone";
     if (await canLaunch(url)) {

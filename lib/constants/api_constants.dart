@@ -26,6 +26,8 @@ class APIServiceURI {
       '${apiUrl}collecting-request/receive/get';
   static final cancelReasons = '${apiUrl}collecting-request/cancel-reasons';
   static final cancelRequest = '${apiUrl}collecting-request/cancel';
+  static final sellerActivityHistory =
+      '${apiUrl}transaction/sell-colect/histories';
 }
 
 class IdentityAPIConstants {
