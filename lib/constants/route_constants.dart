@@ -44,4 +44,9 @@ class Routes {
   static const viewImage = 'viewImage';
 
   static const approvedRequests = 'approvedRequests';
+
+  //edit password
+  static const forgetPasswordPhoneNumber = 'editPasswordPhoneNumber';
+  static const forgetPasswordOTP = 'forgetPasswordOTP';
+  static const forgetPasswordNewPassword = 'forgetPasswordNewPassword';
 }
