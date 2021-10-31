@@ -1,5 +1,6 @@
 import 'package:collector_app/blocs/dealer_transaction_bloc.dart';
 import 'package:collector_app/blocs/seller_transaction_bloc.dart';
+import 'package:collector_app/blocs/seller_transaction_detail_bloc.dart';
 import 'package:collector_app/constants/api_constants.dart';
 import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/providers/configs/injection_config.dart';
@@ -16,6 +17,7 @@ abstract class TransactionService {
     int page,
     int size,
   );
+  Future<SellerTransactionDetailState?> getSellerTransactionDetail(String id);
 }
 
 class TransactionServiceImpl implements TransactionService {
@@ -100,5 +102,43 @@ class TransactionServiceImpl implements TransactionService {
     }
 
     return result;
+  }
+
+  @override
+  Future<SellerTransactionDetailState?> getSellerTransactionDetail(
+      String id) async {
+    Client client = Client();
+    var responseModel = await _transactionNetwork
+        .getSellerTransactionDetail(
+          id,
+          client,
+        )
+        .whenComplete(
+          () => client.close(),
+        );
+    var d = responseModel.resData;
+    if (d != null) {
+      var result = SellerTransactionDetailState(
+        collectingRequestCode: d.collectingRequestCode,
+        serviceFee: d.transactionFee ?? 0,
+        billTotal: d.total ?? 0,
+        itemTotal: d.total ?? 0 - (d.transactionFee ?? 0),
+        doneActivityTime: CommonUtils.combineTime(d.dayOfWeek, d.date, d.time),
+        sellerName: d.sellerName,
+        transaction: d.items
+            ?.map(
+              (e) => TransactionItem(
+                name: e.scrapCategoryName ?? Symbols.empty,
+                unitInfo: e.unit ?? Symbols.empty,
+                quantity: e.quantity ?? 0,
+                total: e.total,
+              ),
+            )
+            .toList(),
+        status: d.status,
+      );
+      return result;
+    }
+    return null;
   }
 }

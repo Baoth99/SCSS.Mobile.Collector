@@ -13,6 +13,7 @@ import 'package:collector_app/ui/layouts/main_layout.dart';
 import 'package:collector_app/ui/layouts/pending_request_detail_layout.dart';
 import 'package:collector_app/ui/layouts/pending_request_layout.dart';
 import 'package:collector_app/ui/layouts/profile_password_edit_layout.dart';
+import 'package:collector_app/ui/layouts/seller_transaction_detail_layout.dart';
 import 'package:collector_app/ui/layouts/splash_screen_layout.dart';
 import 'package:collector_app/ui/layouts/view_image_layout.dart';
 // import 'package:collector_app/ui/layouts/pending_request_layout.dart';
@@ -72,6 +73,8 @@ class CollectorApp extends StatelessWidget {
             Routes.forgetPasswordOTP: (_) => const ForgetPasswordOTPLayout(),
             Routes.forgetPasswordNewPassword: (_) =>
                 const ForgetPasswordNewPasswordLayout(),
+            Routes.sellerTransactionDetail: (_) =>
+                const SellerTransactionDetailLayout(),
           },
         ),
       ),
