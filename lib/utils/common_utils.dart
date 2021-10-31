@@ -31,6 +31,18 @@ class SharedPreferenceUtils {
 }
 
 class CommonUtils {
+  static String toStringPadleft(int number, int width) {
+    return number.toString().padLeft(width, '0');
+  }
+
+  static String addZeroBeforePhoneNumber(String phoneNumber) {
+    if (phoneNumber.length == 9) {
+      phoneNumber = '0$phoneNumber';
+    }
+
+    return phoneNumber;
+  }
+
   static String combineTimeToDateString(
       int dayOfWeek, String date, String fromTime, String toTime) {
     var dayOfWeekString = VietnameseDate.weekdayServer[dayOfWeek];

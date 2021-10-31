@@ -124,7 +124,10 @@ class _Body extends StatelessWidget {
               children: [
                 CustomTextButton(
                   text: 'Quên mật khẩu',
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context)
+                        .pushNamed(Routes.forgetPasswordPhoneNumber);
+                  },
                   color: AppColors.black,
                   fontSize: 45.sp,
                   fontWeight: FontWeight.w500,

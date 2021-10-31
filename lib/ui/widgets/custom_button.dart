@@ -18,7 +18,7 @@ class CustomButton extends StatelessWidget {
   }
 
   final String title;
-  final void Function() onPressed;
+  final void Function()? onPressed;
   late final double fontSize;
   late final double height;
   late final double width;

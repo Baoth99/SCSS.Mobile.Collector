@@ -30,6 +30,12 @@ class APIServiceURI {
       '${apiUrl}transaction/sell-colect/histories';
   static final dealerActivityHistory =
       '${apiUrl}transaction/collect-deal/histories';
+
+  static final restorePassOTP = '${apiUrl}collector/account/restore-pass-otp';
+  static final confirmRestorePassOTP =
+      '${EnvID4AppSettingValue.apiUrl}api/identity/account/confirm-otp';
+  static final restorePassword =
+      '${EnvID4AppSettingValue.apiUrl}api/identity/account/restore-password';
 }
 
 class IdentityAPIConstants {
