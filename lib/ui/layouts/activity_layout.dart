@@ -5,6 +5,7 @@ import 'package:collector_app/blocs/dealer_transaction_bloc.dart';
 import 'package:collector_app/blocs/seller_transaction_bloc.dart';
 import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/log/logger.dart';
+import 'package:collector_app/ui/layouts/seller_transaction_detail_layout.dart';
 import 'package:collector_app/ui/widgets/common_margin_container.dart';
 import 'package:collector_app/ui/widgets/common_scaffold_title.dart';
 import 'package:collector_app/ui/widgets/custom_text_widget.dart';
@@ -266,16 +267,24 @@ class SellerActivity extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: main(context),
-      margin: EdgeInsets.symmetric(
-        vertical: 20.h,
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).pushNamed(
+          Routes.sellerTransactionDetail,
+          arguments: SellerTransctionDetailArgs(id),
+        );
+      },
+      child: Container(
+        child: main(context),
+        margin: EdgeInsets.symmetric(
+          vertical: 20.h,
+        ),
+        padding: EdgeInsets.symmetric(
+          vertical: 40.h,
+          horizontal: 30.w,
+        ),
+        color: Colors.white,
       ),
-      padding: EdgeInsets.symmetric(
-        vertical: 40.h,
-        horizontal: 30.w,
-      ),
-      color: Colors.white,
     );
   }
 

@@ -28,6 +28,8 @@ class APIServiceURI {
   static final cancelRequest = '${apiUrl}collecting-request/cancel';
   static final sellerActivityHistory =
       '${apiUrl}transaction/sell-colect/histories';
+  static final sellerTransactionDetail =
+      '${apiUrl}transaction/sell-colect/history-detail';
   static final dealerActivityHistory =
       '${apiUrl}transaction/collect-deal/histories';
 

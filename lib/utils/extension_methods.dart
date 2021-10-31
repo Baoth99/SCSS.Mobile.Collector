@@ -6,3 +6,13 @@ extension IntExtension on int {
     return f.format(this);
   }
 }
+
+extension DoubleExtension on double {
+  String toStringAndRemoveFractionalIfCan() {
+    var value = toInt();
+    if (value == this) {
+      return value.toString();
+    }
+    return toString();
+  }
+}
