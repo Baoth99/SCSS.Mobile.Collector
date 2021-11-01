@@ -1,4 +1,5 @@
 import 'package:collector_app/constants/api_constants.dart';
+import 'package:collector_app/providers/networks/models/response/dealer_transaction_detail_response_model.dart';
 import 'package:collector_app/providers/networks/models/response/dealer_transaction_response_model.dart';
 import 'package:collector_app/providers/networks/models/response/seller_transaction_detail_response_model.dart';
 import 'package:collector_app/providers/networks/models/response/seller_transaction_response_model.dart';
@@ -18,6 +19,10 @@ abstract class TransactionNetwork {
   );
 
   Future<SellerTransactionDetailResponseModel> getSellerTransactionDetail(
+    String id,
+    Client client,
+  );
+  Future<DealerTransactionDetailResponseModel> getDealerTransactionDetail(
     String id,
     Client client,
   );
@@ -82,6 +87,26 @@ class TransactionNetworkImpl implements TransactionNetwork {
             SellerTransactionDetailResponseModel>(
       response,
       sellerTransactionDetailResponseModelFromJson,
+    );
+    return responseModel;
+  }
+
+  @override
+  Future<DealerTransactionDetailResponseModel> getDealerTransactionDetail(
+      String id, Client client) async {
+    var response = await NetworkUtils.getNetworkWithBearer(
+      uri: APIServiceURI.dealerTransactionDetail,
+      client: client,
+      queries: {
+        'transId': id,
+      },
+    );
+    // get model
+    var responseModel =
+        await NetworkUtils.checkSuccessStatusCodeAPIMainResponseModel<
+            DealerTransactionDetailResponseModel>(
+      response,
+      dealerTransactionDetailResponseModelFromJson,
     );
     return responseModel;
   }

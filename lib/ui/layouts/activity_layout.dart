@@ -5,6 +5,7 @@ import 'package:collector_app/blocs/dealer_transaction_bloc.dart';
 import 'package:collector_app/blocs/seller_transaction_bloc.dart';
 import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/log/logger.dart';
+import 'package:collector_app/ui/layouts/dealer_transaction_detail_layout.dart';
 import 'package:collector_app/ui/layouts/seller_transaction_detail_layout.dart';
 import 'package:collector_app/ui/widgets/common_margin_container.dart';
 import 'package:collector_app/ui/widgets/common_scaffold_title.dart';
@@ -94,7 +95,9 @@ class SellerActivityLayout extends StatelessWidget {
         case SellerTransactionStatus.progress:
           return FunctionalWidgets.getLoadingAnimation();
         case SellerTransactionStatus.error:
-          return FunctionalWidgets.getErrorIcon();
+          return Center(
+            child: FunctionalWidgets.getErrorIcon(),
+          );
         default:
           return const SizedBox.shrink();
       }
@@ -393,7 +396,9 @@ class DealerActivityLayout extends StatelessWidget {
         case DealerTransactionStatus.progress:
           return FunctionalWidgets.getLoadingAnimation();
         case DealerTransactionStatus.error:
-          return FunctionalWidgets.getErrorIcon();
+          return Center(
+            child: FunctionalWidgets.getErrorIcon(),
+          );
         default:
           return const SizedBox.shrink();
       }
@@ -568,7 +573,10 @@ class DealerActivity extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        //detail
+        Navigator.of(context).pushNamed(
+          Routes.dealerTransactionDetail,
+          arguments: DealerTransctionDetailArgs(id),
+        );
       },
       child: Container(
         constraints: BoxConstraints(

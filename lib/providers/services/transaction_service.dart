@@ -1,4 +1,5 @@
 import 'package:collector_app/blocs/dealer_transaction_bloc.dart';
+import 'package:collector_app/blocs/dealer_transaction_detail_bloc.dart';
 import 'package:collector_app/blocs/seller_transaction_bloc.dart';
 import 'package:collector_app/blocs/seller_transaction_detail_bloc.dart';
 import 'package:collector_app/constants/api_constants.dart';
@@ -18,6 +19,7 @@ abstract class TransactionService {
     int size,
   );
   Future<SellerTransactionDetailState?> getSellerTransactionDetail(String id);
+  Future<DealerTransactionDetailState?> getDealerTransactionDetail(String id);
 }
 
 class TransactionServiceImpl implements TransactionService {
@@ -136,6 +138,58 @@ class TransactionServiceImpl implements TransactionService {
             )
             .toList(),
         status: d.status,
+      );
+      return result;
+    }
+    return null;
+  }
+
+  @override
+  Future<DealerTransactionDetailState?> getDealerTransactionDetail(
+      String id) async {
+    Client client = Client();
+    var responseModel = await _transactionNetwork
+        .getDealerTransactionDetail(
+          id,
+          client,
+        )
+        .whenComplete(
+          () => client.close(),
+        );
+    var d = responseModel.resData;
+    if (d != null) {
+      String dealerImageUrl = Symbols.empty;
+      if (d.dealerInfo.dealerImageUrl != null &&
+          d.dealerInfo.dealerImageUrl!.isNotEmpty) {
+        dealerImageUrl = NetworkUtils.getUrlWithQueryString(
+            APIServiceURI.imageGet, {'imageUrl': d.dealerInfo.dealerImageUrl!});
+      }
+
+      var result = DealerTransactionDetailState(
+        id: d.transId,
+        code: d.transactionCode,
+        transactionTime: d.trasactionDateTime,
+        dealerName: d.dealerInfo.dealerName,
+        dealerPhone: d.dealerInfo.dealerPhone,
+        dealerImageUrl: dealerImageUrl,
+        feedbackStatus: d.feedback.feedbackStatus,
+        ratingFeedback: d.feedback.ratingFeedback ?? 0,
+        transaction: d.itemDetails
+            .map(
+              (e) => Item(
+                name: e.scrapCategoryName ?? Symbols.empty,
+                unitInfo: e.unit ?? Symbols.empty,
+                quantity: e.quantity,
+                total: e.total,
+                isBonus: e.isBonus,
+                bonusAmount: e.bonusAmount,
+              ),
+            )
+            .toList(),
+        itemTotal: d.total,
+        awardPoint: d.awardPoint,
+        totalBonus: d.totalBonus,
+        billTotal: d.total + d.totalBonus,
       );
       return result;
     }

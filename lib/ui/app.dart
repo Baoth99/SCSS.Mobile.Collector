@@ -5,6 +5,7 @@ import 'package:collector_app/ui/layouts/account_qr_layout.dart';
 import 'package:collector_app/ui/layouts/approved_requests_layout.dart';
 import 'package:collector_app/ui/layouts/dealer_map_layout.dart';
 import 'package:collector_app/ui/layouts/dealer_search_layout.dart';
+import 'package:collector_app/ui/layouts/dealer_transaction_detail_layout.dart';
 import 'package:collector_app/ui/layouts/forget_password_new_password_layout.dart';
 import 'package:collector_app/ui/layouts/forget_password_otp_layout.dart';
 import 'package:collector_app/ui/layouts/forget_password_phone_number_layout.dart';
@@ -75,6 +76,8 @@ class CollectorApp extends StatelessWidget {
                 const ForgetPasswordNewPasswordLayout(),
             Routes.sellerTransactionDetail: (_) =>
                 const SellerTransactionDetailLayout(),
+            Routes.dealerTransactionDetail: (_) =>
+                const DealerTransactionDetailLayout(),
           },
         ),
       ),
