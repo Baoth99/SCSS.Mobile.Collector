@@ -5,6 +5,7 @@ import 'package:collector_app/blocs/seller_transaction_detail_bloc.dart';
 import 'package:collector_app/constants/api_constants.dart';
 import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/providers/configs/injection_config.dart';
+import 'package:collector_app/providers/networks/models/request/feedback_dealer_transaction_request_model.dart';
 import 'package:collector_app/providers/networks/transaction_network.dart';
 import 'package:collector_app/utils/common_utils.dart';
 import 'package:http/http.dart';
@@ -20,6 +21,8 @@ abstract class TransactionService {
   );
   Future<SellerTransactionDetailState?> getSellerTransactionDetail(String id);
   Future<DealerTransactionDetailState?> getDealerTransactionDetail(String id);
+  Future<bool> feedbackDealerTransaction(
+      String collectDealTransId, double rate, String sellingReview);
 }
 
 class TransactionServiceImpl implements TransactionService {
@@ -194,5 +197,24 @@ class TransactionServiceImpl implements TransactionService {
       return result;
     }
     return null;
+  }
+
+  @override
+  Future<bool> feedbackDealerTransaction(
+      String collectDealTransId, double rate, String sellingReview) async {
+    Client client = Client();
+    var responseModel = await _transactionNetwork
+        .feedbackDealerTransaction(
+          FeedbackDealerTransactionRequestModel(
+            collectDealTransId: collectDealTransId,
+            rate: rate,
+            review: sellingReview,
+          ),
+          client,
+        )
+        .whenComplete(() => client.close());
+
+    return responseModel.isSuccess &&
+        responseModel.statusCode == NetworkConstants.ok200;
   }
 }

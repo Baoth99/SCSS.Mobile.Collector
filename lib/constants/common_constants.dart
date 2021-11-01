@@ -120,3 +120,9 @@ class NetworkConstants {
   static const data = '{data}';
   static const basicAuth = 'Basic $data';
 }
+
+class FeedbackStatus {
+  static const int haveNotGivenFeedbackYet = 1;
+  static const int haveGivenFeedback = 2;
+  static const int timeUpToGiveFeedback = 3;
+}
