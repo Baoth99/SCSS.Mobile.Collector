@@ -51,4 +51,5 @@ class Routes {
   static const forgetPasswordNewPassword = 'forgetPasswordNewPassword';
 
   static const sellerTransactionDetail = 'sellerTransactionDetail';
+  static const dealerTransactionDetail = 'dealerTransactionDetail';
 }

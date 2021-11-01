@@ -32,6 +32,8 @@ class APIServiceURI {
       '${apiUrl}transaction/sell-colect/history-detail';
   static final dealerActivityHistory =
       '${apiUrl}transaction/collect-deal/histories';
+  static final dealerTransactionDetail =
+      '${apiUrl}transaction/collect-deal/history-detail';
 
   static final restorePassOTP = '${apiUrl}collector/account/restore-pass-otp';
   static final confirmRestorePassOTP =
