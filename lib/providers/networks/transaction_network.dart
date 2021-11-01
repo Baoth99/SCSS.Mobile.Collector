@@ -1,4 +1,9 @@
+import 'dart:io';
+
 import 'package:collector_app/constants/api_constants.dart';
+import 'package:collector_app/constants/constants.dart';
+import 'package:collector_app/providers/networks/models/request/feedback_dealer_transaction_request_model.dart';
+import 'package:collector_app/providers/networks/models/response/base_response_model.dart';
 import 'package:collector_app/providers/networks/models/response/dealer_transaction_detail_response_model.dart';
 import 'package:collector_app/providers/networks/models/response/dealer_transaction_response_model.dart';
 import 'package:collector_app/providers/networks/models/response/seller_transaction_detail_response_model.dart';
@@ -26,6 +31,8 @@ abstract class TransactionNetwork {
     String id,
     Client client,
   );
+  Future<BaseResponseModel> feedbackDealerTransaction(
+      FeedbackDealerTransactionRequestModel requestModel, Client client);
 }
 
 class TransactionNetworkImpl implements TransactionNetwork {
@@ -108,6 +115,27 @@ class TransactionNetworkImpl implements TransactionNetwork {
       response,
       dealerTransactionDetailResponseModelFromJson,
     );
+    return responseModel;
+  }
+
+  @override
+  Future<BaseResponseModel> feedbackDealerTransaction(
+      FeedbackDealerTransactionRequestModel requestModel, Client client) async {
+    var response = await NetworkUtils.postBodyWithBearerAuth(
+      uri: APIServiceURI.feedbackDealerTransaction,
+      headers: {
+        HttpHeaders.contentTypeHeader: NetworkConstants.applicationJson,
+      },
+      body: feedbackDealerTransactionRequestModelToJson(requestModel),
+      client: client,
+    );
+
+    var responseModel = await NetworkUtils
+        .checkSuccessStatusCodeAPIMainResponseModel<BaseResponseModel>(
+      response,
+      baseResponseModelFromJson,
+    );
+
     return responseModel;
   }
 }

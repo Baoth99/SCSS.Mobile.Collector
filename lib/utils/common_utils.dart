@@ -90,6 +90,28 @@ class NetworkUtils {
     return uRI.toString();
   }
 
+  static Future<Response> postBodyWithBearerAuth({
+    required String uri,
+    Map<String, String>? headers,
+    Object? body,
+    required Client client,
+  }) async {
+    var mainHeader = <String, String>{
+      HttpHeaders.authorizationHeader: await getBearerToken(),
+    };
+
+    if (headers != null) {
+      mainHeader.addAll(headers);
+    }
+
+    return await postBody(
+      uri: uri,
+      headers: mainHeader,
+      body: body,
+      client: client,
+    );
+  }
+
   static Future<Map<String, dynamic>> getMapFromResponse(
       Response response) async {
     return jsonDecode(response.body);
