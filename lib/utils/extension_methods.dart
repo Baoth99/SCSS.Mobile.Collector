@@ -29,4 +29,16 @@ extension DatetimeExtension on DateTime {
     String dayOfWeek = VietnameseDate.weekdayMap[weekday] ?? Symbols.empty;
     return '$dayOfWeek, ${day.toStringLeadingTwoZero()} thg $month $year, ${hour.toStringLeadingTwoZero()}:${minute.toStringLeadingTwoZero()}';
   }
+
+  DateTime onlyDate() {
+    return DateTime(year, month, day);
+  }
+
+  String toStatisticString() {
+    return '${day.toStringLeadingTwoZero()}/${month.toStringLeadingTwoZero()}/$year';
+  }
+
+  String toOnlyDateString() {
+    return '$year-$month-$day';
+  }
 }

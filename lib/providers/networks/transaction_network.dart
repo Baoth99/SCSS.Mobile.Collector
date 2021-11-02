@@ -6,10 +6,12 @@ import 'package:collector_app/providers/networks/models/request/feedback_dealer_
 import 'package:collector_app/providers/networks/models/response/base_response_model.dart';
 import 'package:collector_app/providers/networks/models/response/dealer_transaction_detail_response_model.dart';
 import 'package:collector_app/providers/networks/models/response/dealer_transaction_response_model.dart';
+import 'package:collector_app/providers/networks/models/response/get_statistic_response_model.dart';
 import 'package:collector_app/providers/networks/models/response/seller_transaction_detail_response_model.dart';
 import 'package:collector_app/providers/networks/models/response/seller_transaction_response_model.dart';
 import 'package:collector_app/utils/common_utils.dart';
 import 'package:http/http.dart';
+import 'package:collector_app/utils/extension_methods.dart';
 
 abstract class TransactionNetwork {
   Future<SellerTransactionResponseModel> getSellerTransaction(
@@ -33,6 +35,11 @@ abstract class TransactionNetwork {
   );
   Future<BaseResponseModel> feedbackDealerTransaction(
       FeedbackDealerTransactionRequestModel requestModel, Client client);
+  Future<GetStatisticResponseModel> getStatistic(
+    DateTime fromDate,
+    DateTime toDate,
+    Client client,
+  );
 }
 
 class TransactionNetworkImpl implements TransactionNetwork {
@@ -136,6 +143,29 @@ class TransactionNetworkImpl implements TransactionNetwork {
       baseResponseModelFromJson,
     );
 
+    return responseModel;
+  }
+
+  @override
+  Future<GetStatisticResponseModel> getStatistic(
+    DateTime fromDate,
+    DateTime toDate,
+    Client client,
+  ) async {
+    var response = await NetworkUtils.getNetworkWithBearer(
+      uri: APIServiceURI.getStatistic,
+      client: client,
+      queries: {
+        'FromDate': fromDate.toOnlyDateString(),
+        'ToDate': toDate.toOnlyDateString(),
+      },
+    );
+    // get model
+    var responseModel = await NetworkUtils
+        .checkSuccessStatusCodeAPIMainResponseModel<GetStatisticResponseModel>(
+      response,
+      getStatisticResponseModelFromJson,
+    );
     return responseModel;
   }
 }

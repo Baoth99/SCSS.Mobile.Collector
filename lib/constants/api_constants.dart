@@ -42,6 +42,8 @@ class APIServiceURI {
       '${EnvID4AppSettingValue.apiUrl}api/identity/account/confirm-otp';
   static final restorePassword =
       '${EnvID4AppSettingValue.apiUrl}api/identity/account/restore-password';
+
+  static final getStatistic = '${apiUrl}statistic/get';
 }
 
 class IdentityAPIConstants {

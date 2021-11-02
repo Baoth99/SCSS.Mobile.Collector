@@ -2,6 +2,7 @@ import 'package:collector_app/blocs/dealer_transaction_bloc.dart';
 import 'package:collector_app/blocs/dealer_transaction_detail_bloc.dart';
 import 'package:collector_app/blocs/seller_transaction_bloc.dart';
 import 'package:collector_app/blocs/seller_transaction_detail_bloc.dart';
+import 'package:collector_app/blocs/statistic_bloc.dart';
 import 'package:collector_app/constants/api_constants.dart';
 import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/providers/configs/injection_config.dart';
@@ -23,6 +24,7 @@ abstract class TransactionService {
   Future<DealerTransactionDetailState?> getDealerTransactionDetail(String id);
   Future<bool> feedbackDealerTransaction(
       String collectDealTransId, double rate, String sellingReview);
+  Future<StatisticData> getStatistic(DateTime fromDate, DateTime toDate);
 }
 
 class TransactionServiceImpl implements TransactionService {
@@ -216,5 +218,30 @@ class TransactionServiceImpl implements TransactionService {
 
     return responseModel.isSuccess &&
         responseModel.statusCode == NetworkConstants.ok200;
+  }
+
+  @override
+  Future<StatisticData> getStatistic(DateTime fromDate, DateTime toDate) async {
+    StatisticData reuslt = StatisticData();
+    Client client = Client();
+    var responseModel = await _transactionNetwork
+        .getStatistic(
+          fromDate,
+          toDate,
+          client,
+        )
+        .whenComplete(
+          () => client.close(),
+        );
+    var d = responseModel.resData;
+    if (d != null) {
+      reuslt = StatisticData(
+        collectingTotal: d.totalCollecting,
+        sellingTotal: d.totalSale,
+        completeRequest: d.totalCompletedCr,
+        cancelRequest: d.totalCancelCr,
+      );
+    }
+    return reuslt;
   }
 }
