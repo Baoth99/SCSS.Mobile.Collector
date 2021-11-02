@@ -22,6 +22,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 class CollectorApp extends StatelessWidget {
   static final navigatorKey = GlobalKey<NavigatorState>();
@@ -49,6 +50,14 @@ class CollectorApp extends StatelessWidget {
             primaryColor: AppConstants.primaryColor,
             accentColor: AppConstants.accentColor,
           ),
+          localizationsDelegates: [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: [
+            const Locale(Symbols.vietnamLanguageCode),
+          ],
           initialRoute: Routes.initial,
           routes: {
             //Splash screen
