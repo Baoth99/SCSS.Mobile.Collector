@@ -36,6 +36,8 @@ class APIServiceURI {
       '${apiUrl}transaction/collect-deal/history-detail';
   static final feedbackDealerTransaction =
       '${apiUrl}feedback/trans-feedback/create';
+  static final complainCollectDealTransaction =
+      '${apiUrl}complaint/colect-deal-trans';
 
   static final restorePassOTP = '${apiUrl}collector/account/restore-pass-otp';
   static final confirmRestorePassOTP =

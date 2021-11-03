@@ -44,6 +44,7 @@ class ResData {
     required this.trasactionDateTime,
     required this.dealerInfo,
     required this.feedback,
+    required this.complaint,
     required this.itemDetails,
     required this.total,
     required this.totalBonus,
@@ -55,6 +56,7 @@ class ResData {
   final DateTime trasactionDateTime;
   final DealerInfo dealerInfo;
   final Feedback feedback;
+  final Complaint complaint;
   final List<ItemDetail> itemDetails;
   final int total;
   final int totalBonus;
@@ -66,6 +68,7 @@ class ResData {
         trasactionDateTime: DateTime.parse(json["trasactionDateTime"]),
         dealerInfo: DealerInfo.fromJson(json["dealerInfo"]),
         feedback: Feedback.fromJson(json["feedback"]),
+        complaint: Complaint.fromJson(json["complaint"]),
         itemDetails: List<ItemDetail>.from(
             json["itemDetails"].map((x) => ItemDetail.fromJson(x))),
         total: json["total"],
@@ -137,5 +140,26 @@ class ItemDetail {
         bonusAmount: json["bonusAmount"],
         promotionCode: json["promotionCode"],
         promoAppliedBonus: json["promoAppliedBonus"],
+      );
+}
+
+class Complaint {
+  Complaint({
+    this.complaintId,
+    required this.complaintStatus,
+    this.complaintContent,
+    this.adminReply,
+  });
+
+  final String? complaintId;
+  final int complaintStatus;
+  final String? complaintContent;
+  final String? adminReply;
+
+  factory Complaint.fromJson(Map<String, dynamic> json) => Complaint(
+        complaintId: json["complaintId"],
+        complaintStatus: json["complaintStatus"],
+        complaintContent: json["complaintContent"],
+        adminReply: json["adminReply"],
       );
 }

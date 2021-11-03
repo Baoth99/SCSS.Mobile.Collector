@@ -15,6 +15,7 @@ class DealerTransactionDetailState extends Equatable {
     this.totalBonus = 0,
     this.awardPoint = 0,
     this.billTotal = 0,
+    this.complaint = const StateComplaint(),
     this.stateStatus = FormzStatus.pure,
   }) {
     this.transactionTime = transactionTime ?? DateTime.now();
@@ -34,6 +35,7 @@ class DealerTransactionDetailState extends Equatable {
   final int totalBonus;
   final int awardPoint;
   final int billTotal;
+  final StateComplaint complaint;
   final FormzStatus stateStatus;
 
   DealerTransactionDetailState copyWith({
@@ -49,6 +51,7 @@ class DealerTransactionDetailState extends Equatable {
     int? totalBonus,
     int? awardPoint,
     int? billTotal,
+    StateComplaint? complaint,
     FormzStatus? stateStatus,
   }) {
     var state = DealerTransactionDetailState(
@@ -65,6 +68,7 @@ class DealerTransactionDetailState extends Equatable {
       totalBonus: totalBonus ?? this.totalBonus,
       awardPoint: awardPoint ?? this.awardPoint,
       billTotal: billTotal ?? this.billTotal,
+      complaint: complaint ?? this.complaint,
       stateStatus: stateStatus ?? this.stateStatus,
     );
     return state;
@@ -84,6 +88,7 @@ class DealerTransactionDetailState extends Equatable {
         totalBonus,
         awardPoint,
         billTotal,
+        complaint,
         stateStatus,
       ];
 }
@@ -121,23 +126,23 @@ class Item extends Equatable {
       ];
 }
 
-class Complaint extends Equatable {
+class StateComplaint extends Equatable {
   final int complaintStatus;
   final String complaintContent;
   final String adminReply;
 
-  const Complaint({
+  const StateComplaint({
     this.complaintStatus = 0,
     this.complaintContent = Symbols.empty,
     this.adminReply = Symbols.empty,
   });
 
-  Complaint copyWith({
+  StateComplaint copyWith({
     int? complaintStatus,
     String? complaintContent,
     String? adminReply,
   }) {
-    return Complaint(
+    return StateComplaint(
       complaintStatus: complaintStatus ?? this.complaintStatus,
       complaintContent: complaintContent ?? this.complaintContent,
       adminReply: adminReply ?? this.adminReply,

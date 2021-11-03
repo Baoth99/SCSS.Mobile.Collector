@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:collector_app/constants/api_constants.dart';
 import 'package:collector_app/constants/constants.dart';
+import 'package:collector_app/providers/networks/models/request/create_collect_deal_transaction_request_model.dart.dart';
 import 'package:collector_app/providers/networks/models/request/feedback_dealer_transaction_request_model.dart';
 import 'package:collector_app/providers/networks/models/response/base_response_model.dart';
 import 'package:collector_app/providers/networks/models/response/dealer_transaction_detail_response_model.dart';
@@ -40,6 +41,8 @@ abstract class TransactionNetwork {
     DateTime toDate,
     Client client,
   );
+  Future<BaseResponseModel> createCollectDealComplaint(
+      CreateCollectDealTransactionRequestModel requestModel, Client client);
 }
 
 class TransactionNetworkImpl implements TransactionNetwork {
@@ -166,6 +169,28 @@ class TransactionNetworkImpl implements TransactionNetwork {
       response,
       getStatisticResponseModelFromJson,
     );
+    return responseModel;
+  }
+
+  @override
+  Future<BaseResponseModel> createCollectDealComplaint(
+      CreateCollectDealTransactionRequestModel requestModel,
+      Client client) async {
+    var response = await NetworkUtils.postBodyWithBearerAuth(
+      uri: APIServiceURI.complainCollectDealTransaction,
+      headers: {
+        HttpHeaders.contentTypeHeader: NetworkConstants.applicationJson,
+      },
+      body: createCollectDealTransactionRequestModelToJson(requestModel),
+      client: client,
+    );
+
+    var responseModel = await NetworkUtils
+        .checkSuccessStatusCodeAPIMainResponseModel<BaseResponseModel>(
+      response,
+      baseResponseModelFromJson,
+    );
+
     return responseModel;
   }
 }

@@ -6,6 +6,7 @@ import 'package:collector_app/blocs/statistic_bloc.dart';
 import 'package:collector_app/constants/api_constants.dart';
 import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/providers/configs/injection_config.dart';
+import 'package:collector_app/providers/networks/models/request/create_collect_deal_transaction_request_model.dart.dart';
 import 'package:collector_app/providers/networks/models/request/feedback_dealer_transaction_request_model.dart';
 import 'package:collector_app/providers/networks/transaction_network.dart';
 import 'package:collector_app/utils/common_utils.dart';
@@ -25,6 +26,8 @@ abstract class TransactionService {
   Future<bool> feedbackDealerTransaction(
       String collectDealTransId, double rate, String sellingReview);
   Future<StatisticData> getStatistic(DateTime fromDate, DateTime toDate);
+  Future<bool> complainDealerTransaction(
+      String collectDealTransactionId, String sellingFeedback);
 }
 
 class TransactionServiceImpl implements TransactionService {
@@ -197,6 +200,11 @@ class TransactionServiceImpl implements TransactionService {
         awardPoint: d.awardPoint,
         totalBonus: d.totalBonus,
         billTotal: d.total + d.totalBonus,
+        complaint: StateComplaint(
+          complaintStatus: d.complaint.complaintStatus,
+          adminReply: d.complaint.adminReply ?? Symbols.empty,
+          complaintContent: d.complaint.complaintContent ?? Symbols.empty,
+        ),
       );
       return result;
     }
@@ -245,5 +253,21 @@ class TransactionServiceImpl implements TransactionService {
       );
     }
     return reuslt;
+  }
+
+  @override
+  Future<bool> complainDealerTransaction(
+      String collectDealTransactionId, String complaint) async {
+    Client client = Client();
+    var result = await _transactionNetwork
+        .createCollectDealComplaint(
+            CreateCollectDealTransactionRequestModel(
+              collectDealTransactionId: collectDealTransactionId,
+              complaintContent: complaint,
+            ),
+            client)
+        .whenComplete(() => client.close());
+
+    return result.isSuccess && result.statusCode == NetworkConstants.ok200;
   }
 }

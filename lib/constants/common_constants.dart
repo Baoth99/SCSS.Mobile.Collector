@@ -126,3 +126,10 @@ class FeedbackStatus {
   static const int haveGivenFeedback = 2;
   static const int timeUpToGiveFeedback = 3;
 }
+
+class ComplaintStatus {
+  static const int canNotGiveFeedback = 1;
+  static const int canGiveFeedback = 2;
+  static const int haveGivenFeedback = 3;
+  static const int adminReplied = 4;
+}
