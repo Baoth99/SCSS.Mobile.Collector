@@ -115,6 +115,8 @@ class ItemDetail {
     required this.total,
     required this.isBonus,
     required this.bonusAmount,
+    this.promotionCode,
+    this.promoAppliedBonus,
   });
 
   final String? scrapCategoryName;
@@ -123,6 +125,8 @@ class ItemDetail {
   final int total;
   final bool isBonus;
   final int bonusAmount;
+  final String? promotionCode;
+  final int? promoAppliedBonus;
 
   factory ItemDetail.fromJson(Map<String, dynamic> json) => ItemDetail(
         scrapCategoryName: json["scrapCategoryName"],
@@ -131,5 +135,7 @@ class ItemDetail {
         total: json["total"],
         isBonus: json["isBonus"],
         bonusAmount: json["bonusAmount"],
+        promotionCode: json["promotionCode"],
+        promoAppliedBonus: json["promoAppliedBonus"],
       );
 }

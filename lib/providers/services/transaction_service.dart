@@ -188,6 +188,8 @@ class TransactionServiceImpl implements TransactionService {
                 total: e.total,
                 isBonus: e.isBonus,
                 bonusAmount: e.bonusAmount,
+                promoAppliedBonus: e.promoAppliedBonus ?? 0,
+                promotionCode: e.promotionCode ?? Symbols.empty,
               ),
             )
             .toList(),
