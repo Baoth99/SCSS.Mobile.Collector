@@ -9,6 +9,8 @@ class EnvAppSetting {
 class EnvBaseAppSettingValue {
   static String flavor = dotenv.env['FLAVOR'].toString();
   static String baseApiUrl = dotenv.env['BASE_API_URL'].toString();
+  static String baseApiUrlWithoutHttp =
+      dotenv.env['BASE_API_URL_WITHOUT_HTTP'].toString();
 }
 
 class EnvID4AppSettingValue {

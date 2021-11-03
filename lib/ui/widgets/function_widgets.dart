@@ -245,4 +245,23 @@ class FunctionalWidgets {
       width: width,
     );
   }
+
+  /* Thien */
+  static Widget customErrorWidget() {
+    return Container(
+      child: Center(
+        child: Wrap(
+          direction: Axis.vertical,
+          children: [
+            Icon(
+              Icons.error_outline,
+              color: Colors.red,
+            ),
+            Text('Đã có lỗi xảy ra'),
+          ],
+        ),
+      ),
+    );
+  }
+  /* Thien */
 }

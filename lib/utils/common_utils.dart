@@ -208,6 +208,15 @@ class NetworkUtils {
     return accessToken;
   }
 
+  /// Return accessToken only, without "Bearer " at the start of it
+  static Future<String> getBearerTokenPure() async {
+    String accessToken =
+        await SharedPreferenceUtils.getString(APIKeyConstants.accessToken) ??
+            Symbols.empty;
+
+    return accessToken;
+  }
+
   static Future<Response> putBody({
     required String uri,
     Map<String, String>? headers,
