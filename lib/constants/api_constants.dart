@@ -69,6 +69,9 @@ class APIServiceURI {
   static const String apiUrlDeleteScrapCategory =
       '/api/v4/scrap-category/remove';
   /* Thien */
+  static final notificationGet = '${apiUrl}notification/get';
+  static final notificationUnreadCount = '${apiUrl}notification/unread-count';
+  static final notificationRead = '${apiUrl}notification/read';
 }
 
 class IdentityAPIConstants {

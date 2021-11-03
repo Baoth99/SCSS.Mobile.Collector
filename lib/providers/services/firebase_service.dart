@@ -1,4 +1,5 @@
 import 'package:collector_app/blocs/home_bloc.dart';
+import 'package:collector_app/blocs/notification_bloc.dart';
 import 'package:collector_app/log/logger.dart';
 import 'package:collector_app/providers/configs/injection_config.dart';
 import 'package:collector_app/providers/services/identity_server_service.dart';
@@ -110,6 +111,14 @@ class FirebaseNotification {
 
   static Future<void> firebaseForegroundMessagingHandler() async {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      //get uncount
+      CollectorApp.navigatorKey.currentContext
+          ?.read<NotificationBloc>()
+          .add(NotificationUncountGet());
+      //get new messagelist
+      CollectorApp.navigatorKey.currentContext
+          ?.read<NotificationBloc>()
+          .add(NotificationGetFirst());
       //update pending list
       CollectorApp.navigatorKey.currentContext
           ?.read<HomeBloc>()

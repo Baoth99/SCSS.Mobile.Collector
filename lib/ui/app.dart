@@ -1,4 +1,5 @@
 import 'package:collector_app/blocs/home_bloc.dart';
+import 'package:collector_app/blocs/notification_bloc.dart';
 import 'package:collector_app/blocs/profile_bloc.dart';
 import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/ui/layouts/account_qr_layout.dart';
@@ -43,6 +44,9 @@ class CollectorApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => HomeBloc(),
+          ),
+          BlocProvider(
+            create: (context) => NotificationBloc(),
           ),
         ],
         child: MaterialApp(
