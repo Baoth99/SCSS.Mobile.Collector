@@ -21,8 +21,11 @@ import 'package:collector_app/ui/layouts/view_image_layout.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+
+import 'layouts/categories_layout.dart';
 
 class CollectorApp extends StatelessWidget {
   static final navigatorKey = GlobalKey<NavigatorState>();
@@ -87,7 +90,9 @@ class CollectorApp extends StatelessWidget {
                 const SellerTransactionDetailLayout(),
             Routes.dealerTransactionDetail: (_) =>
                 const DealerTransactionDetailLayout(),
+            Routes.categories: (_) => const CategoriesLayout(),
           },
+          builder: EasyLoading.init(),
         ),
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:collector_app/blocs/models/scrap_category_model.dart';
 import 'package:collector_app/utils/env_util.dart';
 
 class APIKeyConstants {
@@ -46,6 +47,26 @@ class APIServiceURI {
       '${EnvID4AppSettingValue.apiUrl}api/identity/account/restore-password';
 
   static final getStatistic = '${apiUrl}statistic/get';
+  /* Thien */
+  static const String apiUrlGetScrapCategoriesFromData =
+      '/api/v4/trans/scrap-categories';
+  static const String apiUrlGetScrapCategoryDetails =
+      '/api/v4/trans/scrap-category-detail';
+  static const String apiUrlGetCollectorPhones =
+      '/api/v4/auto-complete/collector-phone';
+  static const String apiUrlGetImage = '/api/v4/image/get';
+  static const String apiUrlPostImage = '/api/v4/scrap-category/upload-image';
+  static const String apiUrlGetCheckScrapCategoryName =
+      '/api/v4/scrap-category/check-name';
+  static const String apiUrlPostScrapCategory = '/api/v4/scrap-category/create';
+  static const String apiUrlPutScrapCategory = '/api/v4/scrap-category/update';
+  static const String apiUrlGetScrapCategoriesFromScrapCategory =
+      '/api/v4/scrap-category/get';
+  static const String apiUrlGetScrapCategorDetailFromScrapCategory =
+      '/api/v4/scrap-category/get-detail';
+  static const String apiUrlDeleteScrapCategory =
+      '/api/v4/scrap-category/remove';
+  /* Thien */
 }
 
 class IdentityAPIConstants {
@@ -76,4 +97,21 @@ class IdentityAPIConstants {
 class CommonApiConstants {
   static const errorSystem = 'Có lỗi đến từ hệ thống';
   static const engErrorSystem = 'Error System';
+  /* Thien */
+  static const String getScrapCategoriesFailedException =
+      'Failed to get scrap categories';
+  static const String getScrapCategoryDetailsFailedException =
+      'Failed to get scrap category details';
+  static const String getCollectorPhonesFailedException =
+      'Failed to get collector phones';
+  static const String getImageFailedException = 'Failed to Get Image';
+  static const String postImageFailedException = 'Failed to Post Image';
+
+  static final unnamedScrapCategory = ScrapCategoryModel.createTransactionModel(
+    id: '00000000-0000-0000-0000-000000000000',
+    appliedAmount: null,
+    name: 'Chưa phân loại',
+    bonusAmount: null,
+  );
+  /* Thien */
 }
