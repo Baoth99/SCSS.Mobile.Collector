@@ -8,6 +8,7 @@ import 'package:collector_app/providers/networks/models/response/base_response_m
 import 'package:collector_app/providers/networks/models/response/dealer_transaction_detail_response_model.dart';
 import 'package:collector_app/providers/networks/models/response/dealer_transaction_response_model.dart';
 import 'package:collector_app/providers/networks/models/response/get_statistic_response_model.dart';
+import 'package:collector_app/providers/networks/models/response/sell_collect_complaint_request_model.dart';
 import 'package:collector_app/providers/networks/models/response/seller_transaction_detail_response_model.dart';
 import 'package:collector_app/providers/networks/models/response/seller_transaction_response_model.dart';
 import 'package:collector_app/utils/common_utils.dart';
@@ -43,6 +44,8 @@ abstract class TransactionNetwork {
   );
   Future<BaseResponseModel> createCollectDealComplaint(
       CreateCollectDealTransactionRequestModel requestModel, Client client);
+  Future<BaseResponseModel> createSellCollectComplaint(
+      SellCollectComplaintRequestModel requestModel, Client client);
 }
 
 class TransactionNetworkImpl implements TransactionNetwork {
@@ -182,6 +185,27 @@ class TransactionNetworkImpl implements TransactionNetwork {
         HttpHeaders.contentTypeHeader: NetworkConstants.applicationJson,
       },
       body: createCollectDealTransactionRequestModelToJson(requestModel),
+      client: client,
+    );
+
+    var responseModel = await NetworkUtils
+        .checkSuccessStatusCodeAPIMainResponseModel<BaseResponseModel>(
+      response,
+      baseResponseModelFromJson,
+    );
+
+    return responseModel;
+  }
+
+  @override
+  Future<BaseResponseModel> createSellCollectComplaint(
+      SellCollectComplaintRequestModel requestModel, Client client) async {
+    var response = await NetworkUtils.postBodyWithBearerAuth(
+      uri: APIServiceURI.complainSellCollectTransaction,
+      headers: {
+        HttpHeaders.contentTypeHeader: NetworkConstants.applicationJson,
+      },
+      body: sellCollectComplaintRequestModelToJson(requestModel),
       client: client,
     );
 

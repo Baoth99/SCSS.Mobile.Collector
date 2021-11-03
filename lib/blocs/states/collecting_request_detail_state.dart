@@ -39,6 +39,7 @@ class CollectingRequestDetailState extends Equatable {
     this.status = FormzStatus.pure,
     required this.collectingRequestDetailStatus,
     this.approveEventStatus = ApproveEventStatus.pure,
+    this.complaint = const RequestComplaint(),
   });
 
   final String id;
@@ -61,6 +62,7 @@ class CollectingRequestDetailState extends Equatable {
   final FormzStatus status;
   final CollectingRequestDetailStatus collectingRequestDetailStatus;
   final ApproveEventStatus approveEventStatus;
+  final RequestComplaint complaint;
 
   CollectingRequestDetailState copyWith({
     String? id,
@@ -83,6 +85,7 @@ class CollectingRequestDetailState extends Equatable {
     FormzStatus? status,
     CollectingRequestDetailStatus? collectingRequestDetailStatus,
     ApproveEventStatus? approveEventStatus,
+    RequestComplaint? complaint,
   }) {
     return CollectingRequestDetailState(
       id: id ?? this.id,
@@ -108,6 +111,7 @@ class CollectingRequestDetailState extends Equatable {
       collectingRequestDetailStatus:
           collectingRequestDetailStatus ?? this.collectingRequestDetailStatus,
       approveEventStatus: approveEventStatus ?? this.approveEventStatus,
+      complaint: complaint ?? this.complaint,
     );
   }
 
@@ -133,5 +137,37 @@ class CollectingRequestDetailState extends Equatable {
         status,
         collectingRequestDetailStatus,
         approveEventStatus,
+        complaint,
+      ];
+}
+
+class RequestComplaint extends Equatable {
+  final int complaintStatus;
+  final String complaintContent;
+  final String adminReply;
+
+  const RequestComplaint({
+    this.complaintStatus = 0,
+    this.complaintContent = Symbols.empty,
+    this.adminReply = Symbols.empty,
+  });
+
+  RequestComplaint copyWith({
+    int? complaintStatus,
+    String? complaintContent,
+    String? adminReply,
+  }) {
+    return RequestComplaint(
+      complaintStatus: complaintStatus ?? this.complaintStatus,
+      complaintContent: complaintContent ?? this.complaintContent,
+      adminReply: adminReply ?? this.adminReply,
+    );
+  }
+
+  @override
+  List<Object> get props => [
+        complaintStatus,
+        complaintContent,
+        adminReply,
       ];
 }

@@ -253,6 +253,11 @@ class CollectingRequestServiceImpl implements CollectingRequestService {
         gender: data.sellerGender == 1 ? Gender.male : Gender.female,
         sellerAvatarUrl: sellerImageUrl,
         sellerPhone: data.sellerPhone,
+        complaint: RequestComplaint(
+          adminReply: data.complaint.adminReply ?? Symbols.empty,
+          complaintContent: data.complaint.complaintContent ?? Symbols.empty,
+          complaintStatus: data.complaint.complaintStatus,
+        ),
       );
       return result;
     }

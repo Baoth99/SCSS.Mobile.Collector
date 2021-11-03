@@ -81,6 +81,7 @@ class CollectingRequestDetailBloc
                 CollectingRequestDetailStatus.approved,
             collectingAddress: result.collectingAddress,
             collectingAddressName: result.collectingAddressName,
+            complaint: result.complaint,
           );
         }
       } catch (e) {
@@ -144,6 +145,7 @@ class CollectingRequestDetailBloc
           collectingRequestDetailStatus: CollectingRequestDetailStatus.approved,
           collectingAddress: result.collectingAddress,
           collectingAddressName: result.collectingAddressName,
+          complaint: result.complaint,
         );
       } catch (e) {
         AppLog.error(e);
