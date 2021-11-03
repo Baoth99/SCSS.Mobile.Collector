@@ -96,6 +96,8 @@ class Item extends Equatable {
     this.total = 0,
     this.isBonus = false,
     this.bonusAmount = 0,
+    this.promotionCode = Symbols.empty,
+    this.promoAppliedBonus = 0,
   });
   final String name;
   final String unitInfo;
@@ -103,6 +105,8 @@ class Item extends Equatable {
   final int total;
   final bool isBonus;
   final int bonusAmount;
+  final String promotionCode;
+  final int promoAppliedBonus;
 
   @override
   List<Object> get props => [
@@ -112,6 +116,8 @@ class Item extends Equatable {
         total,
         isBonus,
         bonusAmount,
+        promotionCode,
+        promoAppliedBonus,
       ];
 }
 

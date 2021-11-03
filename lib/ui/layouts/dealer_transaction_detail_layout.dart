@@ -282,6 +282,10 @@ class RequestDetailBill extends StatelessWidget {
             getSubInfoItem(
               'Tiền thưởng',
               state.totalBonus.toAppPrice(),
+              postIcon: state.totalBonus > 0 ? Icons.help_outline : null,
+              onPressed: state.totalBonus > 0
+                  ? onHelpOutlinedPressed(context, state)
+                  : null,
             ),
             getSubInfoItem(
               'Điểm thưởng',
@@ -293,7 +297,36 @@ class RequestDetailBill extends StatelessWidget {
     );
   }
 
-  Widget getSubInfoItem(String name, String value) {
+  void Function() onHelpOutlinedPressed(
+      BuildContext context, DealerTransactionDetailState state) {
+    return () {
+      showModalBottomSheet(
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        context: context,
+        builder: (context) => DraggableScrollableSheet(
+          initialChildSize: 0.9,
+          maxChildSize: 0.9,
+          minChildSize: 0.5,
+          builder: (_, scrollController) => PromotionInfo(
+            scrollController: scrollController,
+            listModel: state.transaction
+                .where((i) => i.isBonus)
+                .map((i) => PromotionInfoModel(i.promotionCode, i.name,
+                    i.bonusAmount, i.promoAppliedBonus))
+                .toList(),
+          ),
+        ),
+      );
+    };
+  }
+
+  Widget getSubInfoItem(
+    String name,
+    String value, {
+    IconData? postIcon,
+    void Function()? onPressed,
+  }) {
     return Container(
       margin: EdgeInsets.symmetric(
         vertical: 8.h,
@@ -301,10 +334,38 @@ class RequestDetailBill extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: getSubInfoItemText(name),
+            child: Row(
+              children: [
+                getSubInfoItemText(name),
+                getPostIconSubInfoItem(
+                  postIcon,
+                  onPressed,
+                ),
+              ],
+            ),
           ),
           getSubInfoItemText(value),
         ],
+      ),
+    );
+  }
+
+  Widget getPostIconSubInfoItem(
+    IconData? postIcon,
+    void Function()? onPressed,
+  ) {
+    double size = 50.0.r;
+    return SizedBox(
+      height: size,
+      width: size,
+      child: new IconButton(
+        color: AppColors.greenFF39AC8F,
+        padding: new EdgeInsets.all(0.0),
+        icon: new Icon(
+          postIcon,
+          size: size,
+        ),
+        onPressed: onPressed,
       ),
     );
   }
@@ -678,6 +739,150 @@ class AvatarDealerCircle extends StatelessWidget {
         errorWidget: (context, url, error) => Icon(
           Icons.error,
           color: AppColors.orangeFFE4625D,
+        ),
+      ),
+    );
+  }
+}
+
+class PromotionInfoModel {
+  final String code;
+  final String name;
+  final int pricePromo;
+  final int priceGet;
+  PromotionInfoModel(this.code, this.name, this.pricePromo, this.priceGet);
+}
+
+class PromotionInfo extends StatelessWidget {
+  const PromotionInfo({
+    Key? key,
+    required this.scrollController,
+    required this.listModel,
+  }) : super(key: key);
+  final ScrollController scrollController;
+  final List<PromotionInfoModel> listModel;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(36.r),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20),
+        ),
+        color: Colors.white,
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: CustomText(
+                  text: 'Khuyến mãi',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.close,
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+          Divider(),
+          Expanded(
+            child: ListView.separated(
+              itemBuilder: (context, index) {
+                var m = listModel[index];
+                return promotionPattern(
+                  m.code,
+                  m.name,
+                  m.pricePromo,
+                  m.priceGet,
+                );
+              },
+              separatorBuilder: (context, index) => Divider(),
+              itemCount: listModel.length,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget promotionPattern(
+      String code, String name, int pricePromo, int priceGet) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        getCode(code),
+        getItem(getName(name)),
+        getItem(getPricePromo(pricePromo, priceGet)),
+      ],
+    );
+  }
+
+  TextSpan getName(String name) {
+    return TextSpan(
+      style: TextStyle(color: Colors.black),
+      text: 'Loại phế liệu: ',
+      children: [
+        TextSpan(
+          text: name,
+          style: TextStyle(color: AppColors.orangeFFE4625D),
+        ),
+      ],
+    );
+  }
+
+  TextSpan getPricePromo(int pricePromo, int priceGet) {
+    return TextSpan(
+      text: 'Thưởng ',
+      children: [
+        TextSpan(
+          text: pricePromo.toAppPrice(),
+          style: TextStyle(color: AppColors.orangeFFE4625D),
+        ),
+        TextSpan(
+          text: ' khi bán ',
+        ),
+        TextSpan(
+          text: priceGet.toAppPrice(),
+          style: TextStyle(color: AppColors.orangeFFE4625D),
+        ),
+      ],
+    );
+  }
+
+  Widget getCode(String code) {
+    return CustomText(
+      text: code,
+      color: AppColors.orangeFFE4625D,
+    );
+  }
+
+  Widget getItem(TextSpan text) {
+    return ListTile(
+      dense: true,
+      visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+      title: RichText(
+        text: TextSpan(
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 40.sp,
+          ),
+          children: [
+            TextSpan(
+              text: '\u2022',
+              style: TextStyle(
+                fontSize: 40.sp,
+              ),
+            ),
+            text,
+          ],
         ),
       ),
     );
