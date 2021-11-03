@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:collector_app/blocs/home_bloc.dart';
 import 'package:collector_app/blocs/main_bloc.dart';
+import 'package:collector_app/blocs/notification_bloc.dart';
 import 'package:collector_app/blocs/profile_bloc.dart';
 import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/log/logger.dart';
@@ -10,6 +11,7 @@ import 'package:collector_app/ui/layouts/activity_layout.dart';
 import 'package:collector_app/ui/layouts/home_layout.dart';
 import 'package:collector_app/ui/layouts/notification_layout.dart';
 import 'package:collector_app/ui/layouts/statistic_layout.dart';
+import 'package:collector_app/ui/widgets/custom_text_widget.dart';
 import 'package:collector_app/utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,6 +30,9 @@ class _MainLayoutState extends State<MainLayout> {
   @override
   void initState() {
     super.initState();
+
+    // Get number of  unread notifcation count
+    context.read<NotificationBloc>().add(NotificationUncountGet());
 
     initProfileBloc();
     setBearerToken();
@@ -96,10 +101,45 @@ class _MainLayoutState extends State<MainLayout> {
                     label: 'Thống kê',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(
-                      state.screenIndex == MainLayoutConstants.notification
-                          ? Icons.notifications
-                          : Icons.notifications_outlined,
+                    icon: BlocBuilder<NotificationBloc, NotificationState>(
+                      builder: (context, sno) {
+                        return Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            Icon(
+                              state.screenIndex ==
+                                      MainLayoutConstants.notification
+                                  ? Icons.notifications
+                                  : Icons.notifications_outlined,
+                            ),
+                            sno.unreadCount > 0
+                                ? Positioned(
+                                    // draw a red marble
+                                    top: -25.0.h,
+                                    right: -20.0.w,
+                                    child: Container(
+                                      width: 60.w,
+                                      height: 60.h,
+                                      decoration: const BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Colors.red,
+                                      ),
+                                      child: Center(
+                                        child: CustomText(
+                                          color: Colors.white,
+                                          text: sno.unreadCount <= 99
+                                              ? '${sno.unreadCount}'
+                                              : '99+',
+                                          fontSize: 30.sp,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
+                          ],
+                        );
+                      },
                     ),
                     label: 'Thông báo',
                   ),
