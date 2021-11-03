@@ -1,6 +1,9 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:collector_app/blocs/feedback_admin_bloc.dart';
 import 'package:collector_app/blocs/seller_transaction_detail_bloc.dart';
 import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/ui/widgets/common_margin_container.dart';
+import 'package:collector_app/ui/widgets/complaint_done_widget.dart';
 import 'package:collector_app/ui/widgets/custom_text_widget.dart';
 import 'package:collector_app/ui/widgets/function_widgets.dart';
 import 'package:collector_app/ui/widgets/radiant_gradient_mask.dart';
@@ -68,18 +71,114 @@ class SellerTransactionDetailLayout extends StatelessWidget {
   }
 
   Widget body(BuildContext context) {
-    return ListView(
-      padding: EdgeInsets.only(
-        top: kFloatingActionButtonMargin + 5.h,
-        bottom: kFloatingActionButtonMargin + 48.h,
+    return BlocBuilder<SellerTransactionDetailBloc,
+        SellerTransactionDetailState>(
+      builder: (context, s) {
+        return ListView(
+          padding: EdgeInsets.only(
+            top: kFloatingActionButtonMargin + 5.h,
+            bottom: kFloatingActionButtonMargin + 48.h,
+          ),
+          children: [
+            const RequestDetailHeader(),
+            const RequestDetailDivider(),
+            const SellerInfo(),
+            const RequestDetailDivider(),
+            const RequestDetailBill(),
+            s.complaint.complaintStatus == ComplaintStatus.canGiveFeedback ||
+                    s.complaint.complaintStatus ==
+                        ComplaintStatus.haveGivenFeedback ||
+                    s.complaint.complaintStatus == ComplaintStatus.adminReplied
+                ? _getFeedbackToAdmin(context)
+                : const SizedBox.shrink(),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _getFeedbackToAdmin(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      alignment: Alignment.centerRight,
+      margin: EdgeInsets.only(
+        top: 40.h,
       ),
-      children: [
-        const RequestDetailHeader(),
-        const RequestDetailDivider(),
-        const SellerInfo(),
-        const RequestDetailDivider(),
-        const RequestDetailBill(),
-      ],
+      child: CommonMarginContainer(
+        child: BlocBuilder<SellerTransactionDetailBloc,
+            SellerTransactionDetailState>(
+          builder: (context, state) {
+            return TextButton(
+              onPressed: _feedbackAdminPressed(
+                context,
+                state.complaint.complaintStatus,
+                state.complaint.complaintContent,
+                state.complaint.adminReply,
+                state.id,
+              ),
+              child: const CustomText(
+                text: 'Phản hồi',
+                color: AppColors.orangeFFF5670A,
+              ),
+              style: TextButton.styleFrom(
+                primary: AppColors.orangeFFF5670A,
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  void Function() _feedbackAdminPressed(
+    BuildContext context,
+    int status,
+    String? sellingFeedback,
+    String? replyAdmin,
+    String requestId,
+  ) {
+    return () {
+      FunctionalWidgets.showCustomModalBottomSheet(
+        context: context,
+        child: _getFeedbackAdminWidget(
+          status,
+          sellingFeedback,
+          replyAdmin,
+          requestId,
+        ),
+        title: 'Phản hồi',
+        routeClosed: Routes.sellerTransactionDetail,
+      ).then((value) {
+        if (value != null && value) {
+          context
+              .read<SellerTransactionDetailBloc>()
+              .add(SellerTransactionDetailInitial());
+        }
+      });
+    };
+  }
+
+  Widget _getFeedbackAdminWidget(
+    int status,
+    String? sellingFeedback,
+    String? replyAdmin,
+    String requestId,
+  ) {
+    return BlocProvider(
+      create: (context) => FeedbackAdminBloc(
+        requestId: requestId,
+        complaintType: ComplaintType.seller,
+      ),
+      child: status == ComplaintStatus.canGiveFeedback
+          ? ComplaintWidget()
+          : (status == ComplaintStatus.haveGivenFeedback ||
+                  status == ComplaintStatus.adminReplied)
+              ? ComplaintDoneWidget(
+                  status: status,
+                  sellingFeedback: sellingFeedback ?? Symbols.empty,
+                  adminReply: replyAdmin,
+                )
+              : const SizedBox.shrink(),
     );
   }
 }
@@ -404,6 +503,140 @@ class RequestDetailDivider extends StatelessWidget {
     return Divider(
       thickness: 4.h,
       height: 100.h,
+    );
+  }
+}
+
+class ComplaintWidget extends StatelessWidget {
+  ComplaintWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<FeedbackAdminBloc, FeedbackAdminState>(
+      listener: (context, state) {
+        if (state.status.isSubmissionInProgress) {
+          FunctionalWidgets.showCustomDialog(context);
+        }
+
+        if (state.status.isSubmissionSuccess) {
+          FunctionalWidgets.showAwesomeDialog(
+            context,
+            dialogType: DialogType.SUCCES,
+            desc: 'Bạn đã gửi phản hồi đến hệ thống',
+            btnOkText: 'Đóng',
+            btnOkOnpress: () {
+              Navigator.pop(context);
+              Navigator.of(context).pop();
+              Navigator.of(context).pop(true);
+            },
+          );
+        }
+        if (state.status.isSubmissionFailure) {
+          FunctionalWidgets.showAwesomeDialog(
+            context,
+            dialogType: DialogType.WARNING,
+            desc: 'Có lỗi đến từ hệ thống',
+            btnOkText: 'Đóng',
+            isOkBorder: true,
+            btnOkColor: AppColors.errorButtonBorder,
+            textOkColor: AppColors.errorButtonText,
+            btnOkOnpress: () {
+              Navigator.pop(context);
+              Navigator.of(context).pop();
+              Navigator.of(context).pop(false);
+            },
+          );
+        }
+      },
+      child: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: AppConstants.horizontalScaffoldMargin.w,
+              vertical: 20.h,
+            ),
+            margin: EdgeInsets.symmetric(
+              vertical: 50.h,
+            ),
+            color: Colors.orange[900]!.withOpacity(0.2),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.error,
+                  color: AppColors.orangeFFF5670A,
+                ),
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.only(
+                      left: 40.w,
+                    ),
+                    child: CustomText(
+                      text:
+                          'Vui lòng điền thông tin bạn muốn phản hồi về VeChaiXANH',
+                      color: AppColors.orangeFFF5670A,
+                      fontSize: 40.sp,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          CommonMarginContainer(
+            child: TextField(
+              onChanged: (value) {
+                context.read<FeedbackAdminBloc>().add(
+                      FeedbackAdminChanged(value),
+                    );
+              },
+              keyboardType: TextInputType.multiline,
+              maxLines: 5,
+              maxLength: 200,
+              decoration: const InputDecoration(
+                hintText: 'Thông tin phản hồi',
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.grey,
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+              textInputAction: TextInputAction.done,
+              autofocus: true,
+            ),
+          ),
+          CommonMarginContainer(
+            child: BlocBuilder<FeedbackAdminBloc, FeedbackAdminState>(
+              builder: (context, state) {
+                return ElevatedButton(
+                  onPressed: state.status.isValid
+                      ? () {
+                          context
+                              .read<FeedbackAdminBloc>()
+                              .add(FeedbackAdminSubmmited());
+                        }
+                      : null,
+                  child: CustomText(
+                    text: 'Gửi',
+                    fontSize: WidgetConstants.buttonCommonFrontSize.sp,
+                    fontWeight: WidgetConstants.buttonCommonFrontWeight,
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(
+                      double.infinity,
+                      WidgetConstants.buttonCommonHeight.h,
+                    ),
+                    primary: AppColors.greenFF01C971,
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

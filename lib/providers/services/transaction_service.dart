@@ -8,6 +8,7 @@ import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/providers/configs/injection_config.dart';
 import 'package:collector_app/providers/networks/models/request/create_collect_deal_transaction_request_model.dart.dart';
 import 'package:collector_app/providers/networks/models/request/feedback_dealer_transaction_request_model.dart';
+import 'package:collector_app/providers/networks/models/response/sell_collect_complaint_request_model.dart';
 import 'package:collector_app/providers/networks/transaction_network.dart';
 import 'package:collector_app/utils/common_utils.dart';
 import 'package:http/http.dart';
@@ -26,8 +27,8 @@ abstract class TransactionService {
   Future<bool> feedbackDealerTransaction(
       String collectDealTransId, double rate, String sellingReview);
   Future<StatisticData> getStatistic(DateTime fromDate, DateTime toDate);
-  Future<bool> complainDealerTransaction(
-      String collectDealTransactionId, String sellingFeedback);
+  Future<bool> complainTransaction(String collectDealTransactionId,
+      String sellingFeedback, int complaintType);
 }
 
 class TransactionServiceImpl implements TransactionService {
@@ -146,6 +147,11 @@ class TransactionServiceImpl implements TransactionService {
             )
             .toList(),
         status: d.status,
+        complaint: SellerComplaint(
+          complaintStatus: d.complaint.complaintStatus,
+          adminReply: d.complaint.adminReply ?? Symbols.empty,
+          complaintContent: d.complaint.complaintContent ?? Symbols.empty,
+        ),
       );
       return result;
     }
@@ -256,18 +262,29 @@ class TransactionServiceImpl implements TransactionService {
   }
 
   @override
-  Future<bool> complainDealerTransaction(
-      String collectDealTransactionId, String complaint) async {
+  Future<bool> complainTransaction(String collectDealTransactionId,
+      String complaint, int complaintType) async {
     Client client = Client();
-    var result = await _transactionNetwork
-        .createCollectDealComplaint(
-            CreateCollectDealTransactionRequestModel(
-              collectDealTransactionId: collectDealTransactionId,
-              complaintContent: complaint,
-            ),
-            client)
-        .whenComplete(() => client.close());
-
+    var result;
+    if (complaintType == ComplaintType.dealer) {
+      result = await _transactionNetwork
+          .createCollectDealComplaint(
+              CreateCollectDealTransactionRequestModel(
+                collectDealTransactionId: collectDealTransactionId,
+                complaintContent: complaint,
+              ),
+              client)
+          .whenComplete(() => client.close());
+    } else if (complaintType == ComplaintType.seller) {
+      result = await _transactionNetwork
+          .createSellCollectComplaint(
+              SellCollectComplaintRequestModel(
+                collectingRequestId: collectDealTransactionId,
+                complaintContent: complaint,
+              ),
+              client)
+          .whenComplete(() => client.close());
+    }
     return result.isSuccess && result.statusCode == NetworkConstants.ok200;
   }
 }

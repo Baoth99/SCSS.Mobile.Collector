@@ -46,6 +46,7 @@ class SellerTransactionDetailBloc
             serviceFee: data.serviceFee,
             stateStatus: FormzStatus.submissionSuccess,
             sellerName: data.sellerName,
+            complaint: data.complaint,
           );
         } else {
           throw Exception();

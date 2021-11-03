@@ -133,3 +133,8 @@ class ComplaintStatus {
   static const int haveGivenFeedback = 3;
   static const int adminReplied = 4;
 }
+
+class ComplaintType {
+  static const int seller = 1;
+  static const int dealer = 2;
+}

@@ -54,6 +54,7 @@ class ResData {
     required this.sellerName,
     required this.sellerPhone,
     required this.sellerGender,
+    required this.complaint,
   });
 
   String id;
@@ -73,6 +74,7 @@ class ResData {
   String sellerName;
   String sellerPhone;
   int sellerGender;
+  Complaint complaint;
 
   factory ResData.fromJson(Map<String, dynamic> json) => ResData(
         id: json["id"],
@@ -92,5 +94,27 @@ class ResData {
         sellerName: json["sellerName"],
         sellerPhone: json["sellerPhone"],
         sellerGender: json["sellerGender"],
+        complaint: Complaint.fromJson(json["complaint"]),
+      );
+}
+
+class Complaint {
+  Complaint({
+    this.complaintId,
+    required this.complaintStatus,
+    this.complaintContent,
+    this.adminReply,
+  });
+
+  final String? complaintId;
+  final int complaintStatus;
+  final String? complaintContent;
+  final String? adminReply;
+
+  factory Complaint.fromJson(Map<String, dynamic> json) => Complaint(
+        complaintId: json["complaintId"],
+        complaintStatus: json["complaintStatus"],
+        complaintContent: json["complaintContent"],
+        adminReply: json["adminReply"],
       );
 }

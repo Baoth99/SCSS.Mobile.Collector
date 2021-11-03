@@ -11,6 +11,7 @@ class SellerTransactionDetailState extends Equatable {
     this.serviceFee = 0,
     this.billTotal = 0,
     this.status = 0,
+    this.complaint = const SellerComplaint(),
     this.stateStatus = FormzStatus.pure,
   }) {
     this.transaction = transaction ?? [];
@@ -25,6 +26,7 @@ class SellerTransactionDetailState extends Equatable {
   final int serviceFee;
   final int billTotal;
   final int status;
+  final SellerComplaint complaint;
   final FormzStatus stateStatus;
 
   SellerTransactionDetailState copyWith({
@@ -36,6 +38,7 @@ class SellerTransactionDetailState extends Equatable {
     int? serviceFee,
     int? billTotal,
     int? status,
+    SellerComplaint? complaint,
     FormzStatus? stateStatus,
   }) {
     var state = SellerTransactionDetailState(
@@ -49,6 +52,7 @@ class SellerTransactionDetailState extends Equatable {
       serviceFee: serviceFee ?? this.serviceFee,
       billTotal: billTotal ?? this.billTotal,
       status: status ?? this.status,
+      complaint: complaint ?? this.complaint,
       stateStatus: stateStatus ?? this.stateStatus,
     );
     return state;
@@ -65,6 +69,7 @@ class SellerTransactionDetailState extends Equatable {
         serviceFee,
         billTotal,
         status,
+        complaint,
         stateStatus,
       ];
 }
@@ -90,23 +95,23 @@ class TransactionItem extends Equatable {
       ];
 }
 
-class Complaint extends Equatable {
+class SellerComplaint extends Equatable {
   final int complaintStatus;
   final String complaintContent;
   final String adminReply;
 
-  const Complaint({
+  const SellerComplaint({
     this.complaintStatus = 0,
     this.complaintContent = Symbols.empty,
     this.adminReply = Symbols.empty,
   });
 
-  Complaint copyWith({
+  SellerComplaint copyWith({
     int? complaintStatus,
     String? complaintContent,
     String? adminReply,
   }) {
-    return Complaint(
+    return SellerComplaint(
       complaintStatus: complaintStatus ?? this.complaintStatus,
       complaintContent: complaintContent ?? this.complaintContent,
       adminReply: adminReply ?? this.adminReply,

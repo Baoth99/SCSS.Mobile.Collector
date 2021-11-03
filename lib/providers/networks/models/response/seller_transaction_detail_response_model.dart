@@ -44,6 +44,7 @@ class ResData {
     required this.dayOfWeek,
     required this.date,
     required this.time,
+    required this.complaint,
     this.items,
     this.total,
     this.transactionFee,
@@ -55,6 +56,7 @@ class ResData {
   final int dayOfWeek;
   final String date;
   final String time;
+  final Complaint complaint;
   final List<Item>? items;
   final int? total;
   final int? transactionFee;
@@ -69,6 +71,7 @@ class ResData {
         items: json["items"] == null
             ? null
             : List<Item>.from(json["items"].map((x) => Item.fromJson(x))),
+        complaint: Complaint.fromJson(json["complaint"]),
         total: json["total"],
         transactionFee: json["transactionFee"],
       );
@@ -92,5 +95,26 @@ class Item {
         quantity: json["quantity"]?.toDouble(),
         unit: json["unit"],
         total: json["total"],
+      );
+}
+
+class Complaint {
+  Complaint({
+    this.complaintId,
+    required this.complaintStatus,
+    this.complaintContent,
+    this.adminReply,
+  });
+
+  final String? complaintId;
+  final int complaintStatus;
+  final String? complaintContent;
+  final String? adminReply;
+
+  factory Complaint.fromJson(Map<String, dynamic> json) => Complaint(
+        complaintId: json["complaintId"],
+        complaintStatus: json["complaintStatus"],
+        complaintContent: json["complaintContent"],
+        adminReply: json["adminReply"],
       );
 }

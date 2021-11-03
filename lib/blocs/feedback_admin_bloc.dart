@@ -15,10 +15,12 @@ class FeedbackAdminBloc extends Bloc<FeedbackAdminEvent, FeedbackAdminState> {
   late TransactionService _transactionService;
   FeedbackAdminBloc({
     required String requestId,
+    required int complaintType,
     TransactionService? transactionService,
   }) : super(
           FeedbackAdminState(
             requestId: requestId,
+            complaintType: complaintType,
           ),
         ) {
     _transactionService = transactionService ?? getIt.get<TransactionService>();
@@ -48,9 +50,10 @@ class FeedbackAdminBloc extends Bloc<FeedbackAdminEvent, FeedbackAdminState> {
         );
 
         if (state.status.isValid) {
-          bool result = await _transactionService.complainDealerTransaction(
+          bool result = await _transactionService.complainTransaction(
             state.requestId,
             state.feedbackAdmin.value,
+            state.complaintType,
           );
 
           if (result) {

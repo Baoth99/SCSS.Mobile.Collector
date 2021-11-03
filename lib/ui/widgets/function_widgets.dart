@@ -67,7 +67,7 @@ class FunctionalWidgets {
     required BuildContext context,
     String? title,
     required Widget child,
-    required String routeClosed,
+    String? routeClosed,
   }) {
     return showModalBottomSheet<T>(
       context: context,
@@ -119,10 +119,14 @@ class FunctionalWidgets {
                 ),
                 IconButton(
                   onPressed: () {
-                    Navigator.popUntil(
-                      context,
-                      ModalRoute.withName(routeClosed),
-                    );
+                    if (routeClosed != null) {
+                      Navigator.popUntil(
+                        context,
+                        ModalRoute.withName(routeClosed),
+                      );
+                    } else {
+                      Navigator.of(context).pop();
+                    }
                   },
                   icon: const Icon(
                     Icons.close,
