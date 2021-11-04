@@ -119,10 +119,6 @@ class FirebaseNotification {
       CollectorApp.navigatorKey.currentContext
           ?.read<NotificationBloc>()
           .add(NotificationGetFirst());
-      //update pending list
-      CollectorApp.navigatorKey.currentContext
-          ?.read<HomeBloc>()
-          .add(HomeInitial());
     });
   }
 }

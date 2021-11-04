@@ -20,7 +20,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   @override
   Stream<HomeState> mapEventToState(HomeEvent event) async* {
-    /* if (event is HomeFetch) {
+    if (event is HomeFetch) {
       try {
         if (state.apiState == APIFetchState.idle &&
             !state.status.isSubmissionInProgress &&
@@ -42,11 +42,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         AppLog.error(e);
         yield state.copyWith(
           apiState: APIFetchState.idle,
-          collectingRequestModel: state.collectingRequestModel,
+          listCollectingRequestModel: state.listCollectingRequestModel,
         );
       }
-    } else */
-    if (event is HomeInitial) {
+    } else if (event is HomeInitial) {
       try {
         yield state.copyWith(
           status: FormzStatus.submissionInProgress,
