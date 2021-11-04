@@ -3,6 +3,7 @@ import 'package:collector_app/blocs/notification_bloc.dart';
 import 'package:collector_app/blocs/profile_bloc.dart';
 import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/ui/layouts/account_qr_layout.dart';
+import 'package:collector_app/ui/layouts/add_category_layout.dart';
 import 'package:collector_app/ui/layouts/approved_requests_layout.dart';
 import 'package:collector_app/ui/layouts/category_detail_view.dart';
 import 'package:collector_app/ui/layouts/dealer_map_layout.dart';
@@ -97,6 +98,7 @@ class CollectorApp extends StatelessWidget {
                 const DealerTransactionDetailLayout(),
             Routes.categories: (_) => const CategoriesLayout(),
             Routes.categoryDetail: (_) => CategoryDetailLayout(),
+            Routes.addCategory: (_) => AddCategoryLayout(),
           },
           builder: EasyLoading.init(),
         ),

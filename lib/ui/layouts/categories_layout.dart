@@ -63,12 +63,11 @@ class CategoriesLayout extends StatelessWidget {
           buildWhen: (p, c) => false,
           builder: (blocContext, state) {
             return InkWell(
-              //TODO: Thien
-              // onTap: () => Navigator.of(context)
-              //     .pushNamed(CustomRoutes.addCategory)
-              //     .then((value) {
-              //   blocContext.read<CategoriesBloc>().add(EventInitData());
-              // }),
+              onTap: () => Navigator.of(context)
+                  .pushNamed(Routes.addCategory)
+                  .then((value) {
+                blocContext.read<CategoriesBloc>().add(EventInitData());
+              }),
               child: Container(
                 width: 60,
                 child: Center(

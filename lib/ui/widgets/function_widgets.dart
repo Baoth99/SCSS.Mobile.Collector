@@ -357,5 +357,14 @@ class FunctionalWidgets {
       ),
     );
   }
+
+  static OutlinedButton customCancelButton(context, text) {
+    return OutlinedButton(
+      style:
+          ButtonStyle(foregroundColor: MaterialStateProperty.all(Colors.grey)),
+      onPressed: () => Navigator.pop(context),
+      child: Text(text),
+    );
+  }
   /* Thien */
 }

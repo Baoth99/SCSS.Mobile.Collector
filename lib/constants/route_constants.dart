@@ -31,6 +31,7 @@ class Routes {
   //Scrap Categories
   static const categories = 'categories';
   static const categoryDetail = 'categoryDetail';
+  static const addCategory = 'addCategory';
 
   //QR Code
   static const accountQRCode = 'accountQRCode';
