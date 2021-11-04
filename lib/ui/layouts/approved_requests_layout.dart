@@ -4,6 +4,7 @@ import 'package:collector_app/ui/layouts/home_layout.dart';
 import 'package:collector_app/ui/widgets/common_margin_container.dart';
 import 'package:collector_app/ui/widgets/custom_text_widget.dart';
 import 'package:collector_app/ui/widgets/function_widgets.dart';
+import 'package:collector_app/ui/widgets/wait_to_collect_empty.dart';
 import 'package:collector_app/utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,7 +18,6 @@ class ApprovedRequestLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //initial
-    context.read<HomeBloc>().add(HomeInitial());
     context.read<HomeBloc>().add(HomeSearch(Symbols.empty));
 
     //
@@ -86,26 +86,30 @@ class ApprovedRequestLayout extends StatelessWidget {
                       .toList();
                 }
 
-                return ListView.separated(
-                  itemBuilder: (context, index) {
-                    var r = listView[index];
+                if (state.totalRequest == 0) {
+                  return WaitToCollectEmpty();
+                } else {
+                  return ListView.separated(
+                    itemBuilder: (context, index) {
+                      var r = listView[index];
 
-                    return CollectingRequest(
-                      bookingId: r.id,
-                      distance: r.distanceText,
-                      bulky: r.isBulky,
-                      cusName: r.sellerName,
-                      time: CommonUtils.combineTimeToDateString(r.dayOfWeek,
-                          r.collectingRequestDate, r.fromTime, r.toTime),
-                      placeTitle: r.collectingAddressName,
-                      placeName: r.collectingAddress,
-                    );
-                  },
-                  separatorBuilder: (context, index) => SizedBox(
-                    height: 20.h,
-                  ),
-                  itemCount: listView.length,
-                );
+                      return CollectingRequest(
+                        bookingId: r.id,
+                        distance: r.distanceText,
+                        bulky: r.isBulky,
+                        cusName: r.sellerName,
+                        time: CommonUtils.combineTimeToDateString(r.dayOfWeek,
+                            r.collectingRequestDate, r.fromTime, r.toTime),
+                        placeTitle: r.collectingAddressName,
+                        placeName: r.collectingAddress,
+                      );
+                    },
+                    separatorBuilder: (context, index) => SizedBox(
+                      height: 20.h,
+                    ),
+                    itemCount: listView.length,
+                  );
+                }
               },
             ),
           ),

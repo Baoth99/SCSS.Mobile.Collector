@@ -25,7 +25,8 @@ class MainLayout extends StatefulWidget {
 }
 
 class _MainLayoutState extends State<MainLayout> {
-  late Timer _timer;
+  late final Timer _timer;
+  late final Timer _timer5;
 
   @override
   void initState() {
@@ -65,11 +66,27 @@ class _MainLayoutState extends State<MainLayout> {
     } catch (e) {
       AppLog.error(e);
     }
+    try {
+      _timer5 = Timer.periodic(
+        const Duration(seconds: 60),
+        (timer) {
+          try {
+            context.read<HomeBloc>().add(HomeFetch());
+            AppLog.info('fetch');
+          } catch (e) {
+            AppLog.error(e);
+          }
+        },
+      );
+    } catch (e) {
+      AppLog.error(e);
+    }
   }
 
   @override
   void dispose() {
     _timer.cancel();
+    _timer5.cancel();
     super.dispose();
   }
 
