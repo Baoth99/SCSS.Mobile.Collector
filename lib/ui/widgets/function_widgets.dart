@@ -9,6 +9,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
+enum rowFlexibleType { smallToBig, bigToSmall }
+
 class FunctionalWidgets {
   static Future<T?> showCustomDialog<T>(BuildContext context,
       [String text = 'Vui lòng đợi...', String? label]) {
@@ -264,6 +266,94 @@ class FunctionalWidgets {
             Text('Đã có lỗi xảy ra'),
           ],
         ),
+      ),
+    );
+  }
+
+  static Widget customText(
+      {required String text,
+      Alignment? alignment,
+      double? fontSize,
+      TextAlign? textAlign,
+      Color? color,
+      double? height,
+      TextStyle? textStyle,
+      FontWeight? fontWeight}) {
+    return Container(
+      height: height ?? 50,
+      alignment: alignment ?? Alignment.centerLeft,
+      child: Text(
+        text,
+        style: textStyle ??
+            TextStyle(
+              fontSize: fontSize ?? 15,
+              color: color ?? Color.fromARGB(255, 20, 20, 21),
+              fontWeight: fontWeight,
+            ),
+        textAlign: textAlign ?? TextAlign.left,
+      ),
+    );
+  }
+
+  static Row rowFlexibleBuilder(
+      smallwidget, largeWidget, rowFlexibleType type) {
+    return type == rowFlexibleType.smallToBig
+        ? Row(
+            children: [
+              flexibleSmallBuilder(smallwidget),
+              flexibleSpaceBuilder(),
+              flexibleLargeBuilder(largeWidget),
+            ],
+          )
+        : Row(
+            children: [
+              flexibleLargeBuilder(largeWidget),
+              flexibleSpaceBuilder(),
+              flexibleSmallBuilder(smallwidget),
+            ],
+          );
+  }
+
+  static Flexible flexibleSmallBuilder(widget) {
+    return Flexible(
+      flex: 28,
+      fit: FlexFit.tight,
+      child: widget,
+    );
+  }
+
+  static Flexible flexibleSpaceBuilder() {
+    return Flexible(
+      flex: 2,
+      child: Container(),
+    );
+  }
+
+  static Flexible flexibleLargeBuilder(widget) {
+    return Flexible(
+      flex: 70,
+      fit: FlexFit.tight,
+      child: widget,
+    );
+  }
+
+  static ElevatedButton customElevatedButton(context, text, action) {
+    return ElevatedButton(onPressed: action, child: Text(text));
+  }
+
+  static OutlinedButton customSecondaryButton({
+    required String text,
+    Function()? action,
+    MaterialStateProperty<Color?>? textColor,
+    MaterialStateProperty<Color?>? backgroundColor,
+  }) {
+    return OutlinedButton(
+      onPressed: action ?? () {},
+      child: Text(text),
+      style: ButtonStyle(
+        foregroundColor: textColor ?? MaterialStateProperty.all(Colors.grey),
+        backgroundColor:
+            backgroundColor ?? MaterialStateProperty.all(Colors.grey),
       ),
     );
   }

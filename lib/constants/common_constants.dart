@@ -61,6 +61,7 @@ class Symbols {
   static const String space = ' ';
   static const String comma = ',';
   static const String minus = '-';
+  static const String vndSymbolText = 'đ';
 }
 
 class Others {
