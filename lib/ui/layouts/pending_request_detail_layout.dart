@@ -116,33 +116,72 @@ class PendingRequestDetailBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Column(
-          mainAxisSize: MainAxisSize.min,
+    return BlocBuilder<CollectingRequestDetailBloc,
+        CollectingRequestDetailState>(
+      builder: (context, state) {
+        return Stack(
           children: [
-            Expanded(child: map()),
-            info(),
-          ],
-        ),
-        Positioned.fill(
-          right: 50.w,
-          top: 100.h,
-          child: Align(
-            alignment: Alignment.topRight,
-            child: IconButton(
-              icon: Icon(
-                Icons.cancel,
-                size: 70.sp,
-                color: Colors.grey,
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Expanded(child: map()),
+                info(),
+              ],
             ),
-          ),
-        ),
-      ],
+            Positioned.fill(
+              right: 50.w,
+              top: 100.h,
+              child: Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.cancel,
+                    size: 70.sp,
+                    color: Colors.grey,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ),
+            ),
+            Positioned.fill(
+              right: 50.w,
+              top: 100.h,
+              child: Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.cancel,
+                    size: 70.sp,
+                    color: Colors.grey,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ),
+            ),
+            Positioned.fill(
+              right: 50.w,
+              top: 700.h,
+              child: Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.directions,
+                    size: 70.sp,
+                    color: Colors.grey,
+                  ),
+                  onPressed: () {
+                    CommonUtils.launchMapDir(state.latitude, state.longtitude);
+                  },
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 
