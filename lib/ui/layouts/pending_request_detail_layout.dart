@@ -6,6 +6,7 @@ import 'package:collector_app/blocs/collecting_request_detail_bloc.dart';
 import 'package:collector_app/blocs/feedback_admin_bloc.dart';
 import 'package:collector_app/blocs/models/gender_model.dart';
 import 'package:collector_app/constants/constants.dart';
+import 'package:collector_app/ui/layouts/seller_transaction_detail_layout.dart';
 import 'package:collector_app/ui/layouts/view_image_layout.dart';
 import 'package:collector_app/ui/widgets/cached_avatar_widget.dart';
 import 'package:collector_app/ui/widgets/common_margin_container.dart';
@@ -245,7 +246,14 @@ class PendingRequestDetailBody extends StatelessWidget {
               ),
               title: 'Hủy Đơn Hẹn',
               routeClosed: Routes.pendingRequestDetail,
-            );
+            ).then((value) {
+              if (value != null && value) {
+                Navigator.of(context).popAndPushNamed(
+                  Routes.sellerTransactionDetail,
+                  arguments: SellerTransctionDetailArgs(requestId),
+                );
+              }
+            });
           },
           width: 300.w,
           color: Colors.red,
