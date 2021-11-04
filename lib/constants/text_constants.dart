@@ -1,6 +1,7 @@
 class TextConstants {
   static const String accessToken = 'accessToken';
   static const String emptyString = '';
+  static const String zeroString = '0';
   static const String zeroId = '00000000-0000-0000-0000-000000000000';
   static const String missingBearerToken = 'missingBearerToken';
   static const String processing = 'Đang xử lí...';
