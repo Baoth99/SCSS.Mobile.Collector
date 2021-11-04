@@ -215,17 +215,16 @@ class CategoriesLayout extends StatelessWidget {
           ),
         ),
         title: Text(model.name),
-        //TODO: Thien detail
-        // onTap: () => Navigator.of(context)
-        //     .pushNamed(
-        //   CustomRoutes.categoryDetail,
-        //   arguments: model.id,
-        // )
-        //     .then(
-        //   (value) {
-        //     blocContext.read<CategoriesBloc>().add(EventInitData());
-        //   },
-        // ),
+        onTap: () => Navigator.of(context)
+            .pushNamed(
+          Routes.categoryDetail,
+          arguments: model.id,
+        )
+            .then(
+          (value) {
+            blocContext.read<CategoriesBloc>().add(EventInitData());
+          },
+        ),
       );
     });
   }

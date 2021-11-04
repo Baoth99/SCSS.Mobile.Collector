@@ -30,6 +30,7 @@ class Routes {
 
   //Scrap Categories
   static const categories = 'categories';
+  static const categoryDetail = 'categoryDetail';
 
   //QR Code
   static const accountQRCode = 'accountQRCode';

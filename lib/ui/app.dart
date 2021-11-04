@@ -4,6 +4,7 @@ import 'package:collector_app/blocs/profile_bloc.dart';
 import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/ui/layouts/account_qr_layout.dart';
 import 'package:collector_app/ui/layouts/approved_requests_layout.dart';
+import 'package:collector_app/ui/layouts/category_detail_view.dart';
 import 'package:collector_app/ui/layouts/dealer_map_layout.dart';
 import 'package:collector_app/ui/layouts/dealer_search_layout.dart';
 import 'package:collector_app/ui/layouts/dealer_transaction_detail_layout.dart';
@@ -95,6 +96,7 @@ class CollectorApp extends StatelessWidget {
             Routes.dealerTransactionDetail: (_) =>
                 const DealerTransactionDetailLayout(),
             Routes.categories: (_) => const CategoriesLayout(),
+            Routes.categoryDetail: (_) => CategoryDetailLayout(),
           },
           builder: EasyLoading.init(),
         ),
