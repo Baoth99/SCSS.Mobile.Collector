@@ -35,6 +35,10 @@ class CommonUtils {
     return number.toString().padLeft(width, '0');
   }
 
+  static String toStringDDMMYYY(DateTime date) {
+    return DateFormat(Others.ddMMyyyyPattern).format(date);
+  }
+
   static String addZeroBeforePhoneNumber(String phoneNumber) {
     if (phoneNumber.length == 9) {
       phoneNumber = '0$phoneNumber';

@@ -1,6 +1,7 @@
 import 'package:collector_app/blocs/account_bloc.dart';
 import 'package:collector_app/blocs/models/gender_model.dart';
 import 'package:collector_app/blocs/profile_bloc.dart';
+import 'package:collector_app/ui/layouts/profile_layout.dart';
 import 'package:collector_app/ui/layouts/profile_password_edit_layout.dart';
 import 'package:collector_app/ui/widgets/custom_progress_indicator_dialog_widget.dart';
 import 'package:flutter/cupertino.dart';
@@ -183,15 +184,29 @@ class AccountBody extends StatelessWidget {
     return Container(
       child: Column(
         children: [
-          option(
-            'Thông tin tài khoản',
-            () {
-              Navigator.of(context).pushNamed(
-                Routes.profileEdit,
+          BlocBuilder<ProfileBloc, ProfileState>(
+            builder: (context, state) {
+              return option(
+                'Thông tin tài khoản',
+                () {
+                  Navigator.of(context).pushNamed(
+                    Routes.profileEdit,
+                    arguments: ProfileArgs(
+                      name: state.name,
+                      imagePath: state.image ?? Symbols.empty,
+                      phoneNumber: state.phone,
+                      address: state.address ?? Symbols.empty,
+                      email: state.email ?? Symbols.empty,
+                      gender: state.gender,
+                      birthdate: state.birthDate ?? DateTime.now(),
+                      idCard: state.idCard,
+                    ),
+                  );
+                },
+                Colors.black,
+                Icons.arrow_forward_ios,
               );
             },
-            Colors.black,
-            Icons.arrow_forward_ios,
           ),
           BlocBuilder<ProfileBloc, ProfileState>(
             builder: (context, state) {
