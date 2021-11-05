@@ -66,21 +66,6 @@ class _MainLayoutState extends State<MainLayout> {
     } catch (e) {
       AppLog.error(e);
     }
-    try {
-      _timer5 = Timer.periodic(
-        const Duration(seconds: 60),
-        (timer) {
-          try {
-            context.read<HomeBloc>().add(HomeFetch());
-            AppLog.info('fetch');
-          } catch (e) {
-            AppLog.error(e);
-          }
-        },
-      );
-    } catch (e) {
-      AppLog.error(e);
-    }
   }
 
   @override
