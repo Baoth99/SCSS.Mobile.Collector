@@ -162,6 +162,25 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       }
     } else if (event is LoginIntial) {
       add(LoginRefreshTokenConnected());
+    } else if (event is LoginPasswordShowOrHide) {
+      PasswordLogin password;
+      var commonPassword = state.password.value.copyWith(
+        isHide: !state.password.value.isHide,
+      );
+
+      if (state.password.pure) {
+        password = PasswordLogin.pure(
+          password: commonPassword,
+        );
+      } else {
+        password = PasswordLogin.dirty(
+          password: commonPassword,
+        );
+      }
+
+      yield state.copyWith(
+        password: password,
+      );
     }
   }
 }
