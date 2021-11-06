@@ -72,6 +72,10 @@ class APIServiceURI {
   static final notificationGet = '${apiUrl}notification/get';
   static final notificationUnreadCount = '${apiUrl}notification/unread-count';
   static final notificationRead = '${apiUrl}notification/read';
+  static final registerOTP = '${apiUrl}collector/account/register-otp';
+  static final confirmOTPRegister =
+      '${EnvID4AppSettingValue.apiUrl}api/identity/account/confirm-otp-register';
+  static final register = '${apiUrl}collector/account/register';
 }
 
 class IdentityAPIConstants {
