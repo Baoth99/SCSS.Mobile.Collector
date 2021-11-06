@@ -26,3 +26,5 @@ class LoginButtonSubmmited extends LoginEvent {}
 class LoginRefreshTokenConnected extends LoginEvent {}
 
 class LoginIntial extends LoginEvent {}
+
+class LoginPasswordShowOrHide extends LoginEvent {}

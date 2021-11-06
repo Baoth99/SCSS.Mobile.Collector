@@ -23,6 +23,7 @@ class CustomBorderTextFormField extends StatefulWidget {
     this.errorText,
     this.empty = false,
     this.autofocus = false,
+    this.suffixIcon,
   }) : super(key: key);
   final String? labelText;
   final Color commonColor;
@@ -41,6 +42,7 @@ class CustomBorderTextFormField extends StatefulWidget {
   final String? errorText;
   final bool empty;
   final bool autofocus;
+  final Widget? suffixIcon;
 
   @override
   _CustomBorderTextFormFieldState createState() =>
@@ -85,6 +87,7 @@ class _CustomBorderTextFormFieldState extends State<CustomBorderTextFormField> {
         autocorrect: false,
         style: widget.style,
         decoration: InputDecoration(
+          suffixIcon: widget.suffixIcon,
           errorText: widget.errorText,
           labelText: widget.labelText,
           labelStyle: widget.labelStyle,
