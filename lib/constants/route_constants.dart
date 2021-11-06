@@ -54,4 +54,6 @@ class Routes {
 
   static const sellerTransactionDetail = 'sellerTransactionDetail';
   static const dealerTransactionDetail = 'dealerTransactionDetail';
+  static const signupOTP = 'signupOTP';
+  static const signupInformation = 'signupInformation';
 }

@@ -20,7 +20,7 @@ extension DoubleExtension on double {
 
 extension IntegerExtension on int {
   String toStringLeadingTwoZero() {
-    return this.toString().padLeft(2, '0');
+    return toString().padLeft(2, '0');
   }
 }
 

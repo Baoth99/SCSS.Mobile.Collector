@@ -5,9 +5,12 @@ import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/providers/configs/injection_config.dart';
 import 'package:collector_app/providers/networks/identity_server_network.dart';
 import 'package:collector_app/providers/networks/models/request/account_coordinate_request_model.dart';
+import 'package:collector_app/providers/networks/models/request/confirm_otp_register_request_model.dart';
 import 'package:collector_app/providers/networks/models/request/confirm_restore_password_request_model.dart';
 import 'package:collector_app/providers/networks/models/request/connect_revocation_request_model.dart';
 import 'package:collector_app/providers/networks/models/request/connect_token_request_model.dart';
+import 'package:collector_app/providers/networks/models/request/register_otp_request_model.dart';
+import 'package:collector_app/providers/networks/models/request/register_request_model.dart';
 import 'package:collector_app/providers/networks/models/request/restore_pass_otp_request_model.dart';
 import 'package:collector_app/providers/networks/models/request/restore_password_request_model.dart';
 import 'package:collector_app/providers/networks/models/response/connect_token_response_model.dart';
@@ -37,10 +40,20 @@ abstract class IdentityServerService {
   Future<String> confirmOTPRestorePass(String phoneNumber, String otp);
   Future<int> restorePassword(
       String phoneNumber, String token, String newPassword);
+  Future<bool> sendingOTPRegister(String phoneNumber);
+  Future<String> confirmOTPRegister(String phoneNumber, String otp);
+  Future<int> register(
+    String registerToken,
+    String userName,
+    String password,
+    String name,
+    Gender gender,
+    String deviceId,
+  );
 }
 
 class IdentityServerServiceImpl implements IdentityServerService {
-  late IdentityServerNetwork _identityServerNetwork;
+  late final IdentityServerNetwork _identityServerNetwork;
 
   IdentityServerServiceImpl({IdentityServerNetwork? identityServerNetwork}) {
     _identityServerNetwork =
@@ -315,6 +328,70 @@ class IdentityServerServiceImpl implements IdentityServerService {
             phone: phoneNumber,
             newPassword: newPassword,
             token: token,
+          ),
+          client,
+        )
+        .whenComplete(() => client.close());
+
+    if (result.isSuccess && result.statusCode == NetworkConstants.ok200) {
+      return NetworkConstants.ok200;
+    } else {
+      return NetworkConstants.badRequest400;
+    }
+  }
+
+  @override
+  Future<bool> sendingOTPRegister(String phoneNumber) async {
+    phoneNumber = CommonUtils.addZeroBeforePhoneNumber(phoneNumber);
+
+    Client client = Client();
+    var result = await _identityServerNetwork
+        .registerOTP(
+          RegisterOTPRequestModel(phone: phoneNumber),
+          client,
+        )
+        .whenComplete(() => client.close());
+
+    return result.isSuccess && result.statusCode == NetworkConstants.ok200;
+  }
+
+  @override
+  Future<String> confirmOTPRegister(String phoneNumber, String otp) async {
+    Client client = Client();
+    var result = await _identityServerNetwork
+        .confirmOTPRegister(
+          ConfirmOTPRegisterRequestModel(phone: phoneNumber, otp: otp),
+          client,
+        )
+        .whenComplete(() => client.close());
+    if (result.isSuccess &&
+        result.statusCode == NetworkConstants.ok200 &&
+        result.resData != null &&
+        result.resData!.isNotEmpty) {
+      return result.resData!;
+    }
+    return Symbols.empty;
+  }
+
+  @override
+  Future<int> register(
+    String registerToken,
+    String userName,
+    String password,
+    String name,
+    Gender gender,
+    String deviceID,
+  ) async {
+    Client client = Client();
+    var result = await _identityServerNetwork
+        .register(
+          RegisterRequestModel(
+            registerToken: registerToken,
+            userName: userName,
+            password: password,
+            name: name,
+            gender: Gender.male == gender ? 1 : 2,
+            deviceId: deviceID,
           ),
           client,
         )
