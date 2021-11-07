@@ -45,6 +45,10 @@ class ImagesPaths {
   static const String emptyActivityList = '$imagePath/empty_activity_list.png';
   static const String sellerLogo = '$imagePath/seller_logo.png';
   static const String sellerLogoName = 'sellerLogoName';
+  static const String closeIcon = '$imagePath/closeIcon.png';
+  static const String directionIcon = '$imagePath/directionIcon.png';
+  static const String phoneIcon = '$imagePath/phoneIcon.png';
+  static const String promotionIcon = '$imagePath/promotionIcon.png';
 }
 
 class SvgIcons {

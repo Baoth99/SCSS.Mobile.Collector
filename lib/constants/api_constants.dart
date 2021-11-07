@@ -15,6 +15,7 @@ class APIServiceURI {
       '${apiUrl}collector/account/collector-info';
   static final accountCoordinate = '${apiUrl}collector/account/coordinate';
   static final dealerSearch = '${apiUrl}dealer-info/search';
+  static final dealerDetail = '${apiUrl}dealer-info/detail';
   static final hubColellectingRequest =
       '${EnvBaseAppSettingValue.baseApiUrl}hubs/collector/collecting-request';
   static final appointments = '${apiUrl}collecting-request/appointments';

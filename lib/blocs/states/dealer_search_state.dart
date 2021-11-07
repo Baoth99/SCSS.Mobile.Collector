@@ -71,3 +71,43 @@ class DealerInfo extends Equatable {
         distanceText,
       ];
 }
+
+class DealerDetailInfo extends Equatable {
+  const DealerDetailInfo({
+    required this.dealerId,
+    required this.dealerName,
+    required this.dealerAddress,
+    required this.dealerPhone,
+    required this.latitude,
+    required this.longtitude,
+    required this.dealerImageUrl,
+    required this.openTime,
+    required this.closeTime,
+    required this.rate,
+  });
+
+  final String dealerId;
+  final String dealerName;
+  final String dealerAddress;
+  final String dealerPhone;
+  final double latitude;
+  final double longtitude;
+  final String dealerImageUrl;
+  final String openTime;
+  final String closeTime;
+  final double rate;
+
+  @override
+  List<Object> get props => [
+        dealerId,
+        dealerName,
+        dealerAddress,
+        dealerPhone,
+        latitude,
+        longtitude,
+        dealerImageUrl,
+        openTime,
+        closeTime,
+        rate,
+      ];
+}

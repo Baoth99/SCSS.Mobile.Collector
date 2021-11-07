@@ -42,6 +42,7 @@ class Routes {
   //dealer
   static const dealerSearch = 'dealerSearch';
   static const dealerMap = 'dealerMap';
+  static const dealerDetail = 'dealerDetail';
 
   static const viewImage = 'viewImage';
 

@@ -55,7 +55,7 @@ class CollectorApp extends StatelessWidget {
         ],
         child: MaterialApp(
           navigatorKey: navigatorKey,
-          title: 'Flutter Demo',
+          title: 'VeChaiXANH Thu Gom',
           theme: ThemeData(
             primarySwatch: Colors.green,
             primaryColor: AppConstants.primaryColor,
