@@ -77,6 +77,7 @@ class APIServiceURI {
   static final confirmOTPRegister =
       '${EnvID4AppSettingValue.apiUrl}api/identity/account/confirm-otp-register';
   static final register = '${apiUrl}collector/account/register';
+  static final dealerInfoPromotion = '${apiUrl}dealer-info/promotions';
 }
 
 class IdentityAPIConstants {
