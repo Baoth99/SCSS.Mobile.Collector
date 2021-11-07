@@ -132,16 +132,16 @@ class _Body extends StatelessWidget {
                   fontSize: 45.sp,
                   fontWeight: FontWeight.w500,
                 ),
-                Spacer(),
-                CustomTextButton(
-                  text: 'Tạo tài khoản',
-                  onPressed: () {
-                    _navigateToSignup(context);
-                  },
-                  color: AppColors.orangeFFF5670A,
-                  fontSize: 45.sp,
-                  fontWeight: FontWeight.w500,
-                ),
+                // Spacer(),
+                // CustomTextButton(
+                //   text: 'Tạo tài khoản',
+                //   onPressed: () {
+                //     _navigateToSignup(context);
+                //   },
+                //   color: AppColors.orangeFFF5670A,
+                //   fontSize: 45.sp,
+                //   fontWeight: FontWeight.w500,
+                // ),
               ],
             ),
           ),
