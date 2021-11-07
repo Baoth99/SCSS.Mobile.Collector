@@ -6,6 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collector_app/blocs/dealer_detail_bloc.dart';
 import 'package:collector_app/blocs/dealer_search_bloc.dart';
 import 'package:collector_app/constants/constants.dart';
+import 'package:collector_app/ui/layouts/promotion_layout.dart';
 import 'package:collector_app/ui/widgets/common_margin_container.dart';
 import 'package:collector_app/ui/widgets/custom_text_widget.dart';
 import 'package:collector_app/ui/widgets/function_widgets.dart';
@@ -424,26 +425,34 @@ class DealerWidget extends StatelessWidget {
                         ),
                       ),
                       _divider(),
-                      Container(
-                        padding: EdgeInsets.only(
-                            top: 20.h, bottom: 20.h, left: 80.w),
-                        child: Row(
-                          // mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              margin: EdgeInsets.only(right: 40.w),
-                              child: Image.asset(
-                                ImagesPaths.promotionIcon,
-                                width: 120.w,
+                      InkWell(
+                        onTap: () {
+                          Navigator.of(context).pushNamed(
+                            Routes.promotion,
+                            arguments: PromotionArgs(state.id),
+                          );
+                        },
+                        child: Container(
+                          padding: EdgeInsets.only(
+                              top: 20.h, bottom: 20.h, left: 80.w),
+                          child: Row(
+                            // mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(right: 40.w),
+                                child: Image.asset(
+                                  ImagesPaths.promotionIcon,
+                                  width: 120.w,
+                                ),
                               ),
-                            ),
-                            Expanded(
-                              child: CustomText(
-                                text: 'Khuyến mãi',
-                                // overflow: TextOverflow.ellipsis,
-                              ),
-                            )
-                          ],
+                              Expanded(
+                                child: CustomText(
+                                  text: 'Khuyến mãi',
+                                  // overflow: TextOverflow.ellipsis,
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                       _divider(),

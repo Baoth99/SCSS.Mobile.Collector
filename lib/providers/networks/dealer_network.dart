@@ -1,5 +1,6 @@
 import 'package:collector_app/constants/api_constants.dart';
 import 'package:collector_app/providers/networks/models/response/dealer_detail_response.dart';
+import 'package:collector_app/providers/networks/models/response/dealer_promotion_response_model.dart';
 import 'package:collector_app/providers/networks/models/response/dealer_search_response_model.dart';
 import 'package:collector_app/utils/common_utils.dart';
 import 'package:http/http.dart';
@@ -16,8 +17,13 @@ abstract class DealerNetwork {
   );
 
   Future<DealerDetailResponseModel> getDealerDetail(
-      String id,
-      Client client,
+    String id,
+    Client client,
+  );
+
+  Future<DealerPromotionResposeModel> getPromotions(
+    String id,
+    Client client,
   );
 }
 
@@ -55,21 +61,31 @@ class DealerNetworkImpl implements DealerNetwork {
 
   @override
   Future<DealerDetailResponseModel> getDealerDetail(
-      String id,
-      Client client
-      ) async {
+      String id, Client client) async {
     var response = await NetworkUtils.getNetworkWithBearer(
         uri: APIServiceURI.dealerDetail,
         client: client,
         queries: {
           "id": id,
-        }
-    );
-    var responseModel = await NetworkUtils
-        .checkSuccessStatusCodeAPIMainResponseModel(
-        response,
-        dealerDetailResponseModelFromJson
-    );
+        });
+    var responseModel =
+        await NetworkUtils.checkSuccessStatusCodeAPIMainResponseModel(
+            response, dealerDetailResponseModelFromJson);
+    return responseModel;
+  }
+
+  @override
+  Future<DealerPromotionResposeModel> getPromotions(
+      String id, Client client) async {
+    var response = await NetworkUtils.getNetworkWithBearer(
+        uri: APIServiceURI.dealerInfoPromotion,
+        client: client,
+        queries: {
+          "dealerId": id,
+        });
+    var responseModel =
+        await NetworkUtils.checkSuccessStatusCodeAPIMainResponseModel(
+            response, dealerPromotionResposeModelFromJson);
     return responseModel;
   }
 }

@@ -18,6 +18,7 @@ import 'package:collector_app/ui/layouts/pending_request_detail_layout.dart';
 import 'package:collector_app/ui/layouts/pending_request_layout.dart';
 import 'package:collector_app/ui/layouts/profile_layout.dart';
 import 'package:collector_app/ui/layouts/profile_password_edit_layout.dart';
+import 'package:collector_app/ui/layouts/promotion_layout.dart';
 import 'package:collector_app/ui/layouts/seller_transaction_detail_layout.dart';
 import 'package:collector_app/ui/layouts/signup_phone_number_layout.dart';
 import 'package:collector_app/ui/layouts/splash_screen_layout.dart';
@@ -103,6 +104,7 @@ class CollectorApp extends StatelessWidget {
             Routes.addCategory: (_) => AddCategoryLayout(),
             Routes.profileEdit: (_) => ProfileLayout(),
             Routes.signupPhoneNumber: (_) => const SignupPhoneNumberLayout(),
+            Routes.promotion: (_) => const PromotionLayout(),
           },
           builder: EasyLoading.init(),
         ),

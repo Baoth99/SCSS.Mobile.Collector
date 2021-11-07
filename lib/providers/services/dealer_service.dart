@@ -1,5 +1,6 @@
 import 'package:collector_app/blocs/dealer_detail_bloc.dart';
 import 'package:collector_app/blocs/dealer_search_bloc.dart';
+import 'package:collector_app/blocs/promotion_bloc.dart';
 import 'package:collector_app/constants/api_constants.dart';
 import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/log/logger.dart';
@@ -19,8 +20,10 @@ abstract class DealerService {
   );
 
   Future<DealerDetailState> getDealerDetail(
-      String id,
-      );
+    String id,
+  );
+
+  Future<List<PromotionModel>> getPromotions(String id);
 }
 
 class DealerServiceImpl extends DealerService {
@@ -86,37 +89,66 @@ class DealerServiceImpl extends DealerService {
   }
 
   @override
-  Future<DealerDetailState> getDealerDetail(
-    String id
-  ) async {
+  Future<DealerDetailState> getDealerDetail(String id) async {
     Client client = Client();
     var responseModel = await _dealerNetwork
         .getDealerDetail(
-      id,
-      client,
-    ).whenComplete(() => client.close());
+          id,
+          client,
+        )
+        .whenComplete(() => client.close());
     var data = responseModel.resData;
-    if(data != null) {
+    if (data != null) {
       String dealerImageUrl = Symbols.empty;
-      if(data.dealerImageUrl != null && data.dealerImageUrl!.isNotEmpty) {
+      if (data.dealerImageUrl != null && data.dealerImageUrl!.isNotEmpty) {
         dealerImageUrl = NetworkUtils.getUrlWithQueryString(
-            APIServiceURI.imageGet, {'imageUrl': data.dealerImageUrl!}
-        );
+            APIServiceURI.imageGet, {'imageUrl': data.dealerImageUrl!});
       }
       DealerDetailState result = DealerDetailState(
-        id: data.dealerId,
-        dealerName: data.dealerName,
-        dealerImageUrl: dealerImageUrl,
-        dealerPhone: data.dealerPhone,
-        rate: data.rating,
-        openTime: data.openTime,
-        closeTime: data.closeTime,
-        dealerAddress: data.dealerAddress,
-        latitude: data.latitude,
-        longtitude: data.longtitude
-      );
+          id: data.dealerId,
+          dealerName: data.dealerName,
+          dealerImageUrl: dealerImageUrl,
+          dealerPhone: data.dealerPhone,
+          rate: data.rating,
+          openTime: data.openTime,
+          closeTime: data.closeTime,
+          dealerAddress: data.dealerAddress,
+          latitude: data.latitude,
+          longtitude: data.longtitude);
       return result;
     }
     throw Exception(CommonApiConstants.errorSystem);
+  }
+
+  @override
+  Future<List<PromotionModel>> getPromotions(String id) async {
+    Client client = Client();
+    List<PromotionModel> result = await _dealerNetwork
+        .getPromotions(
+      id,
+      client,
+    )
+        .then((value) {
+      var data = value.resData;
+      if (data != null) {
+        var r = data.map(
+          (e) {
+            return PromotionModel(
+                id: e.id,
+                code: e.code,
+                promotionName: e.promotionName,
+                bonusAmount: e.bonusAmount,
+                appliedAmount: e.appliedAmount,
+                appliedScrapCategory: e.appliedScrapCategory,
+                appliedFromTime: e.appliedFromTime,
+                appliedToTime: e.appliedToTime);
+          },
+        ).toList();
+        return r;
+      }
+      AppLog.error('ResData is null');
+      return [];
+    });
+    return result;
   }
 }
