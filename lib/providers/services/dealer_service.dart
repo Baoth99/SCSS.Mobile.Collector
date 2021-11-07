@@ -1,3 +1,4 @@
+import 'package:collector_app/blocs/dealer_detail_bloc.dart';
 import 'package:collector_app/blocs/dealer_search_bloc.dart';
 import 'package:collector_app/constants/api_constants.dart';
 import 'package:collector_app/constants/constants.dart';
@@ -16,6 +17,10 @@ abstract class DealerService {
     int page,
     int size,
   );
+
+  Future<DealerDetailState> getDealerDetail(
+      String id,
+      );
 }
 
 class DealerServiceImpl extends DealerService {
@@ -78,5 +83,40 @@ class DealerServiceImpl extends DealerService {
       return [];
     });
     return result;
+  }
+
+  @override
+  Future<DealerDetailState> getDealerDetail(
+    String id
+  ) async {
+    Client client = Client();
+    var responseModel = await _dealerNetwork
+        .getDealerDetail(
+      id,
+      client,
+    ).whenComplete(() => client.close());
+    var data = responseModel.resData;
+    if(data != null) {
+      String dealerImageUrl = Symbols.empty;
+      if(data.dealerImageUrl != null && data.dealerImageUrl!.isNotEmpty) {
+        dealerImageUrl = NetworkUtils.getUrlWithQueryString(
+            APIServiceURI.imageGet, {'imageUrl': data.dealerImageUrl!}
+        );
+      }
+      DealerDetailState result = DealerDetailState(
+        id: data.dealerId,
+        dealerName: data.dealerName,
+        dealerImageUrl: dealerImageUrl,
+        dealerPhone: data.dealerPhone,
+        rate: data.rating,
+        openTime: data.openTime,
+        closeTime: data.closeTime,
+        dealerAddress: data.dealerAddress,
+        latitude: data.latitude,
+        longtitude: data.longtitude
+      );
+      return result;
+    }
+    throw Exception(CommonApiConstants.errorSystem);
   }
 }

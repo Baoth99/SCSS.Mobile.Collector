@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:collector_app/blocs/dealer_detail_bloc.dart';
 import 'package:collector_app/blocs/dealer_search_bloc.dart';
 import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/ui/widgets/common_margin_container.dart';
@@ -211,11 +212,277 @@ class DealerWidget extends StatelessWidget {
   final String distance;
   final String urlImage;
 
+  Widget _divider() {
+    return Container(
+      child: Divider(
+        thickness: 3.h,
+        color: AppColors.greyFFEEEEEE,
+      ),
+    );
+  }
+
+  Widget dealerImage(BuildContext context){
+    return BlocProvider(
+      create: (context) => DealerDetailBloc()..add(DealerDetailInitial(id)),
+      child: Stack(
+          alignment: Alignment.topRight,
+          children: [
+            BlocBuilder<DealerDetailBloc, DealerDetailState>(
+              builder: (context, state) {
+                return Align(
+                  alignment: Alignment.topLeft,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(50.r),
+                    ),
+                    child: Container(
+                      height: 830.h,
+                      width: 1230.w,
+                      child: CachedNetworkImage(
+                        httpHeaders: {HttpHeaders.authorizationHeader: bearerToken},
+                        imageUrl: state.dealerImageUrl,
+                        imageBuilder: (context, imageProvider) => Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        placeholder: (context, url) => Container(
+                          child: Center(
+                            child: FunctionalWidgets.getLoadingCircle(),
+                          ),
+                        ),
+                        errorWidget: (context, url, error) => Icon(
+                          Icons.error,
+                          color: AppColors.orangeFFE4625D,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                margin: EdgeInsets.only(
+                    top: 20.h,
+                    right: 20.w
+                ),
+                child: Image.asset(
+                  ImagesPaths.closeIcon,
+                  width: 80.w,
+                ),
+              ),
+            )
+          ]
+      ),
+    );
+  }
+
+  Widget dealerInfo(){
+    return BlocProvider(
+      create: (context) => DealerDetailBloc()..add(DealerDetailInitial(id)),
+      child: BlocBuilder<DealerDetailBloc, DealerDetailState>(
+          builder: (context, state) {
+            return Container(
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.black.withOpacity(0.25),
+                    blurRadius: 1.0,
+                    spreadRadius: 0.0,
+                    offset: Offset(1.0, 1.0), // shadow direction: bottom right
+                  )
+                ],
+              ),
+              padding: EdgeInsets.all(40.sp),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomText(
+                    text: state.dealerName,
+                    fontSize: 55.sp,
+                    fontWeight: FontWeight.w600,
+                    // overflow: TextOverflow.ellipsis,
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(
+                        vertical: 16.h
+                    ),
+                    child: Row(
+                      children: [
+                        CustomText(
+                          text: state.rate.toStringAsFixed(1),
+                          fontWeight: FontWeight.w400,
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: 10.w),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.star,
+                                color: AppColors.orangeFFF5670A,
+                                size: 45.sp,
+                              ),
+
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  CustomText(
+                    text: 'Giờ mở cửa: ' + state.openTime
+                          + ' - ' + state.closeTime,
+                    fontSize: 45.sp,
+                    color: AppColors.black.withOpacity(0.7),),
+                ],
+              ),
+            );
+          }
+      ),
+    );
+  }
+
+  Widget dealerContact() {
+    return BlocProvider(
+        create: (context) => DealerDetailBloc()..add(DealerDetailInitial(id)),
+        child: BlocBuilder<DealerDetailBloc, DealerDetailState>(
+            builder: (context, state) {
+          return Container(
+            color: AppColors.white,
+            child: Column(
+              children: [
+                _divider(),
+                Container(
+                  padding: EdgeInsets.only(
+                      top: 20.h, bottom: 20.h, left: 80.w, right: 40.w),
+                  child: Row(
+                    // mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(right: 40.w),
+                        child: Image.asset(
+                          ImagesPaths.directionIcon,
+                          width: 120.w,
+                        ),
+                      ),
+                      Expanded(
+                        child: CustomText(
+                          text: state.dealerAddress,
+                          // overflow: TextOverflow.ellipsis,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                _divider(),
+                Container(
+                  padding: EdgeInsets.only(top: 20.h, bottom: 20.h, left: 80.w),
+                  child: Row(
+                    // mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(right: 40.w),
+                        child: Image.asset(
+                          ImagesPaths.phoneIcon,
+                          width: 120.w,
+                        ),
+                      ),
+                      Expanded(
+                        child: CustomText(
+                          text: state.dealerPhone,
+                          // overflow: TextOverflow.ellipsis,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                _divider(),
+                Container(
+                  padding: EdgeInsets.only(top: 20.h, bottom: 20.h, left: 80.w),
+                  child: Row(
+                    // mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(right: 40.w),
+                        child: Image.asset(
+                          ImagesPaths.promotionIcon,
+                          width: 120.w,
+                        ),
+                      ),
+                      Expanded(
+                        child: CustomText(
+                          text: 'Khuyến mãi',
+                          // overflow: TextOverflow.ellipsis,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                _divider(),
+                Container(
+                  margin: EdgeInsets.only(
+                      top: 30.h, bottom: 330.h, left: 50.w, right: 50.w),
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(30.r),
+                      child: Image.network(
+                        'https://media.wired.com/photos/59269cd37034dc5f9'
+                        '1bec0f1/191:100/w_1280,c_limit/GoogleMapTA.jpg',
+                      )),
+                )
+              ],
+            ),
+          );
+        }
+      )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
         //detail
+        showModalBottomSheet<void>(
+          backgroundColor: Colors.transparent,
+          context: context,
+          isScrollControlled: true,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(50.r),
+              )
+          ),
+          builder: (BuildContext context) {
+            return DraggableScrollableSheet(
+              initialChildSize: 0.96,
+              minChildSize: 0.85,
+              maxChildSize: 1,
+              builder: (BuildContext context, ScrollController scrollController) {
+                return Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(50.r),
+                      )
+                  ),
+                  child: ListView(
+                    controller: scrollController,
+                    children: <Widget>[
+                      dealerImage(context),
+                      dealerInfo(),
+                      dealerContact()
+                    ],
+                  ),
+                );},
+            );
+          },
+        );
       },
       child: Container(
         constraints: BoxConstraints(
