@@ -125,19 +125,25 @@ class InputContainer extends StatelessWidget {
                 30.0.r,
               ),
             ),
-            child: Row(children: [
-              Container(
-                margin: EdgeInsets.symmetric(
-                  horizontal: 35.w,
+            child: Row(
+              children: [
+                Container(
+                  width: 900.w,
+                  margin: EdgeInsets.symmetric(
+                    horizontal: 35.w,
+                  ),
+                  constraints: BoxConstraints(minHeight: 150.h),
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    text,
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      fontSize: 50.sp,
+                    ),
+                  ),
                 ),
-                height: 150.h,
-                alignment: Alignment.centerLeft,
-                child: CustomText(
-                  text: text,
-                  fontSize: 50.sp,
-                ),
-              ),
-            ]),
+              ],
+            ),
           ),
           Positioned(
             top: -15.h,
