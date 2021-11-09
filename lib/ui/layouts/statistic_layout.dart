@@ -3,6 +3,7 @@ import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/ui/widgets/common_margin_container.dart';
 import 'package:collector_app/ui/widgets/custom_text_widget.dart';
 import 'package:collector_app/ui/widgets/function_widgets.dart';
+import 'package:collector_app/ui/widgets/radiant_gradient_mask.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,7 +22,6 @@ class StatisticLayout extends StatelessWidget {
         ),
       child: Scaffold(
         body: MainLayout(),
-        backgroundColor: Colors.grey,
       ),
     );
   }
@@ -75,8 +75,19 @@ class MainLayout extends StatelessWidget {
           ],
         ),
       ),
-      color: Colors.green,
-      height: 400.h,
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment
+                .bottomCenter, // 10% of the width, so there are ten blinds.
+            colors: <Color>[
+              AppColors.greenFF61C53D.withOpacity(0.7),
+              AppColors.greenFF39AC8F.withOpacity(0.7),
+            ], // red to yellow
+            tileMode: TileMode.repeated, // repeats the gradient over the canvas
+          ),
+      ),
+      height: 500.h,
       width: double.infinity,
     );
   }
@@ -86,6 +97,9 @@ class MainLayout extends StatelessWidget {
       child: CustomText(
         text: 'Thống kê',
         textAlign: TextAlign.left,
+        color: AppColors.white,
+        fontSize: 80.sp,
+        fontWeight: FontWeight.w500,
       ),
       width: double.infinity,
     );
@@ -96,9 +110,22 @@ class MainLayout extends StatelessWidget {
       builder: (context, state) {
         return InkWell(
           onTap: onDateTap(context, state),
-          child: CustomText(
-              text:
-                  '${state.fromDate.toStatisticString()} - ${state.toDate.toStatisticString()}'),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CustomText(
+                  text:
+                      '${state.fromDate.toStatisticString()}  -  ${state.toDate.toStatisticString()}',
+              fontSize: 55.sp,
+              color: AppColors.white,
+              fontWeight: FontWeight.w500,),
+              Icon(
+                Icons.arrow_drop_down,
+                color: Colors.white,
+                size: 80.sp,
+              ),
+            ],
+          ),
         );
       },
     );
@@ -135,11 +162,24 @@ class MainLayout extends StatelessWidget {
   Widget dataPart() {
     return CommonMarginContainer(
       child: Container(
-        constraints: BoxConstraints(
-          minHeight: 300.h,
+        margin: EdgeInsets.only(top: 60.h),
+        padding: EdgeInsets.only(
+          top: 60.h,
+          bottom: 60.h
         ),
         width: double.infinity,
-        decoration: BoxDecoration(color: Colors.white),
+        decoration: BoxDecoration(
+            color: Colors.white,
+          borderRadius: BorderRadius.circular(40.0.r),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.black.withOpacity(0.25),
+              blurRadius: 2.0,
+              spreadRadius: 0.0,
+              offset: Offset(1.0, 1.0), // shadow direction: bottom right
+            )
+          ],
+        ),
         child: Column(
           children: [
             listData(),
@@ -154,17 +194,23 @@ class MainLayout extends StatelessWidget {
   Widget listData() {
     return BlocBuilder<StatisticBloc, StatisticState>(
       builder: (context, state) {
-        return Column(
-          children: [
-            DataPattern(
-              title: 'Tổng thu mua',
-              price: state.statisticData.collectingTotal,
-            ),
-            DataPattern(
-              title: 'Tổng bán',
-              price: state.statisticData.sellingTotal,
-            ),
-          ],
+        return Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: 30.w
+          ),
+          child: Column(
+            children: [
+              DataPattern(
+                title: 'Tổng thu mua',
+                price: state.statisticData.collectingTotal,
+              ),
+              SizedBox(height: 40.h,),
+              DataPattern(
+                title: 'Tổng bán',
+                price: state.statisticData.sellingTotal,
+              ),
+            ],
+          ),
         );
       },
     );
@@ -191,10 +237,15 @@ class MainLayout extends StatelessWidget {
   }
 
   Widget divider() {
-    return Divider(
-      thickness: 4.h,
-      indent: 50.w,
-      endIndent: 50.w,
+    return Container(
+      margin: EdgeInsets.symmetric(
+        vertical: 40.h
+      ),
+      child: Divider(
+        thickness: 4.h,
+        indent: 50.w,
+        endIndent: 50.w,
+      ),
     );
   }
 }
@@ -216,9 +267,16 @@ class ConclusionPattern extends StatelessWidget {
         children: [
           CustomText(
             text: title,
+            fontSize: 48.sp,
+            fontWeight: FontWeight.w400,
+          ),
+          SizedBox(
+            height: 30.h,
           ),
           CustomText(
             text: quantity.toString(),
+            fontSize: 70.sp,
+            fontWeight: FontWeight.w500,
           ),
         ],
       ),
@@ -243,9 +301,13 @@ class DataPattern extends StatelessWidget {
         children: [
           CustomText(
             text: title,
+            fontSize: 53.sp,
+            fontWeight: FontWeight.w500,
           ),
           CustomText(
             text: price.toAppPrice(),
+            fontSize: 53.sp,
+            fontWeight: FontWeight.w500,
           ),
         ],
       ),
