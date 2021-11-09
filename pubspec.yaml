@@ -63,6 +63,7 @@ dependencies:
   grouped_list: ^4.1.0
   flutter_easyloading: ^3.0.3
   image_picker: ^0.8.4
+  dropdown_search: ^1.0.0
 
 dev_dependencies:
   flutter_test:

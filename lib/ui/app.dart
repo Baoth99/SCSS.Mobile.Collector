@@ -32,6 +32,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'layouts/categories_layout.dart';
+import 'layouts/create_transaction_layout.dart';
 
 class CollectorApp extends StatelessWidget {
   static final navigatorKey = GlobalKey<NavigatorState>();
@@ -105,6 +106,7 @@ class CollectorApp extends StatelessWidget {
             Routes.profileEdit: (_) => ProfileLayout(),
             Routes.signupPhoneNumber: (_) => const SignupPhoneNumberLayout(),
             Routes.promotion: (_) => const PromotionLayout(),
+            Routes.createTransaction: (_) => CreateTransactionLayout(),
           },
           builder: EasyLoading.init(),
         ),

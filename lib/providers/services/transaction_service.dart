@@ -5,6 +5,7 @@ import 'package:collector_app/blocs/seller_transaction_detail_bloc.dart';
 import 'package:collector_app/blocs/statistic_bloc.dart';
 import 'package:collector_app/constants/api_constants.dart';
 import 'package:collector_app/constants/constants.dart';
+import 'package:collector_app/constants/text_constants.dart';
 import 'package:collector_app/providers/configs/injection_config.dart';
 import 'package:collector_app/providers/networks/models/request/create_collect_deal_transaction_request_model.dart.dart';
 import 'package:collector_app/providers/networks/models/request/feedback_dealer_transaction_request_model.dart';
@@ -12,6 +13,8 @@ import 'package:collector_app/providers/networks/models/response/sell_collect_co
 import 'package:collector_app/providers/networks/transaction_network.dart';
 import 'package:collector_app/utils/common_utils.dart';
 import 'package:http/http.dart';
+
+import 'models/create_sell_collect_transaction_request_model.dart';
 
 abstract class TransactionService {
   Future<List<SellerTransaction>> getSellerTransaction(
@@ -29,6 +32,8 @@ abstract class TransactionService {
   Future<StatisticData> getStatistic(DateTime fromDate, DateTime toDate);
   Future<bool> complainTransaction(String collectDealTransactionId,
       String sellingFeedback, int complaintType);
+  Future<bool> createSellCollectTransaction(
+      {required CreateSellCollectTransactionRequestModel model});
 }
 
 class TransactionServiceImpl implements TransactionService {
@@ -286,5 +291,24 @@ class TransactionServiceImpl implements TransactionService {
           .whenComplete(() => client.close());
     }
     return result.isSuccess && result.statusCode == NetworkConstants.ok200;
+  }
+
+  Future<bool> createSellCollectTransaction(
+      {required CreateSellCollectTransactionRequestModel model}) async {
+    try {
+      //get access token
+      var accessToken = await NetworkUtils.getBearerTokenPure();
+      if (accessToken.isNotEmpty) {
+        var result = await TransactionNetworkImpl.postSellCollectTransaction(
+          bearerToken: accessToken,
+          body: createSellCollectTransactionRequestModelToJson(model),
+        );
+        //get info review
+        return result['isSuccess'];
+      } else
+        throw Exception(TextConstants.missingBearerToken);
+    } catch (e) {
+      throw (e);
+    }
   }
 }

@@ -32,4 +32,30 @@ class TextConstants {
   static const String camera = 'Máy ảnh';
   static const String gallery = 'Thư viện';
   static const String saveUpdate = 'Lưu thay đổi';
+  static const String createTransactionSuccessfullyText =
+      'Tạo giao dịch thành công';
+  static const String createTransactionFailedText = 'Tạo giao dịch thất bại';
+  static const String createTransaction = 'Tạo giao dịch';
+  static const String sellerPhone = 'Số điện thoại người bán';
+  static const String phoneBlank = 'Số điện thoại không được để trống';
+  static const String sellerName = 'Tên người bán';
+  static const String noItemsErrorText = 'Giao dịch phải có một danh mục';
+  static const String subTotal = 'Tạm tính';
+  static const String total = 'Khách hàng nhận';
+  static const String calculatedByUnitPrice = 'Tính theo đơn giá';
+  static const String calculatedByUnitPriceExplaination =
+      'Tính tiền bằng đơn giá nhân số lượng';
+  static const String scrapType = 'Loại phế liệu';
+  static const String scrapTypeBlank = '$scrapType không được để trống';
+  static const String scrapTypeNotChoosenError = 'Xin chọn $scrapType';
+  static const String scrapCategoryUnitBlank = 'Xin chọn $unit';
+  static const String quantity = 'Số lượng';
+  static const String quantityBlank = '$quantity không được để trống';
+  static const String quantityZero = '$quantity phải lớn hơn 0';
+  static const String unitPriceBlank = '$unitPrice không được để trống';
+  static const String unitPriceNegative = '$unitPrice không được là số âm';
+  static const String totalBlank = 'Tổng cộng không được để trống';
+  static const String totalNegative = 'Tổng cộng không được là số âm';
+  static const String totalOverLimit = 'Tổng cộng thấp hơn 100 triệu đồng';
+  static const String addScrap = 'Thêm phế liệu';
 }

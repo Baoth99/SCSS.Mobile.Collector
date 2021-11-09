@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:collector_app/constants/api_constants.dart';
@@ -12,8 +13,10 @@ import 'package:collector_app/providers/networks/models/response/sell_collect_co
 import 'package:collector_app/providers/networks/models/response/seller_transaction_detail_response_model.dart';
 import 'package:collector_app/providers/networks/models/response/seller_transaction_response_model.dart';
 import 'package:collector_app/utils/common_utils.dart';
+import 'package:collector_app/utils/env_util.dart';
 import 'package:http/http.dart';
 import 'package:collector_app/utils/extension_methods.dart';
+import 'package:http/http.dart' as http;
 
 abstract class TransactionNetwork {
   Future<SellerTransactionResponseModel> getSellerTransaction(
@@ -216,5 +219,27 @@ class TransactionNetworkImpl implements TransactionNetwork {
     );
 
     return responseModel;
+  }
+
+  static Future<Map<String, dynamic>> postSellCollectTransaction({
+    required String bearerToken,
+    required String body,
+  }) async {
+    //add headers
+    Map<String, String> headers = {
+      HttpHeaders.contentTypeHeader: 'application/json',
+      HttpHeaders.authorizationHeader: 'Bearer $bearerToken',
+    };
+
+    final uri = Uri.http(EnvBaseAppSettingValue.baseApiUrlWithoutHttp,
+        APIServiceURI.apiUrlPostSellCollectTransaction);
+
+    final response = await http.post(
+      uri,
+      headers: headers,
+      body: body,
+    );
+
+    return json.decode(response.body);
   }
 }
