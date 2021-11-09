@@ -301,9 +301,23 @@ class PendingRequestDetailBody extends StatelessWidget {
           width: 40.w,
         ),
         Expanded(
-          child: CustomButton(
-            title: 'Tạo giao dịch',
-            onPressed: () {},
+          child: BlocBuilder<CollectingRequestDetailBloc,
+              CollectingRequestDetailState>(
+            builder: (context, state) {
+              return CustomButton(
+                title: 'Tạo giao dịch',
+                onPressed: () {
+                  Navigator.pushNamed(context, Routes.createTransaction,
+                      arguments: {
+                        'collectingRequestId': state.id,
+                        'collectingRequestCode': state.collectingRequestCode,
+                        'sellerName': state.sellerName,
+                        'sellerPhone': state.sellerPhone,
+                        'sellerAvatarUrl': state.sellerAvatarUrl,
+                      });
+                },
+              );
+            },
           ),
         ),
       ],

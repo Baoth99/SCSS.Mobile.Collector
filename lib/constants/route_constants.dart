@@ -58,4 +58,5 @@ class Routes {
   static const signupOTP = 'signupOTP';
   static const signupInformation = 'signupInformation';
   static const promotion = 'promotion';
+  static const createTransaction = 'createTransaction';
 }

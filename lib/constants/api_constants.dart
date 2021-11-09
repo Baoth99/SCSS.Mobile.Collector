@@ -69,6 +69,8 @@ class APIServiceURI {
       '/api/v4/scrap-category/get-detail';
   static const String apiUrlDeleteScrapCategory =
       '/api/v4/scrap-category/remove';
+  static const String apiUrlPostSellCollectTransaction =
+      '/api/v4/transaction/sell-colect/create';
   /* Thien */
   static final notificationGet = '${apiUrl}notification/get';
   static final notificationUnreadCount = '${apiUrl}notification/unread-count';

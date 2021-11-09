@@ -14,6 +14,7 @@ class AppConstants {
   static const Color primaryColor = AppColors.greenFF61C53D;
   static const Color accentColor = AppColors.greenFF61C53D;
   static const double horizontalScaffoldMargin = 48.0;
+  static const Color lightGray = const Color.fromARGB(255, 248, 248, 248);
 }
 
 class AppIcons {
@@ -142,4 +143,14 @@ class ComplaintStatus {
 class ComplaintType {
   static const int seller = 1;
   static const int dealer = 2;
+}
+
+class CreateTransactionConstants {
+  static const int totalLimit = 100000000;
+}
+
+class CustomRegexs {
+  static const String phoneRegex = r'^0[0-9]{9}$';
+  static const String passwordRegex = r'^.{6,}$';
+  static const String otpRegex = r'^[0-9]{6}$';
 }
