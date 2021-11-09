@@ -50,10 +50,13 @@ class CreateTransactionLayout extends StatelessWidget {
                   );
                 } else if (state.process == CreateTransactionProcess.valid) {
                   CustomCoolAlert.showCoolAlert(
-                    context: context,
-                    title: TextConstants.createTransactionSuccessfullyText,
-                    type: CoolAlertType.success,
-                  );
+                      context: context,
+                      title: TextConstants.createTransactionSuccessfullyText,
+                      type: CoolAlertType.success,
+                      onTap: () {
+                        Navigator.popUntil(
+                            context, ModalRoute.withName(Routes.main));
+                      });
                 }
               },
             ),
