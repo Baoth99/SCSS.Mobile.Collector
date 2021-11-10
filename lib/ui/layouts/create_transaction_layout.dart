@@ -40,34 +40,29 @@ class CreateTransactionLayout extends StatelessWidget {
                   _showItemDialog(context);
                 }
                 //process
-                if (state.process == CreateTransactionProcess.processed) {
+                if (state.process == CreateTransactionProcess.processing) {
+                  EasyLoading.show(status: 'Đang xử lí...');
+                } else {
                   EasyLoading.dismiss();
-                } else if (state.process == CreateTransactionProcess.error) {
-                  CustomCoolAlert.showCoolAlert(
-                    context: context,
-                    title: TextConstants.createTransactionFailedText,
-                    type: CoolAlertType.error,
-                  );
-                } else if (state.process == CreateTransactionProcess.valid) {
-                  CustomCoolAlert.showCoolAlert(
+                  if (state.process == CreateTransactionProcess.error) {
+                    CustomCoolAlert.showCoolAlert(
                       context: context,
-                      title: TextConstants.createTransactionSuccessfullyText,
-                      type: CoolAlertType.success,
-                      onTap: () {
-                        Navigator.popUntil(
-                            context, ModalRoute.withName(Routes.main));
-                      });
+                      title: TextConstants.createTransactionFailedText,
+                      type: CoolAlertType.error,
+                    );
+                  } else if (state.process == CreateTransactionProcess.valid) {
+                    CustomCoolAlert.showCoolAlert(
+                        context: context,
+                        title: TextConstants.createTransactionSuccessfullyText,
+                        type: CoolAlertType.success,
+                        onTap: () {
+                          Navigator.popUntil(
+                              context, ModalRoute.withName(Routes.main));
+                        });
+                  }
                 }
               },
             ),
-            BlocListener<CreateTransactionBloc, CreateTransactionState>(
-                listenWhen: (previous, current) {
-              return previous.process == CreateTransactionProcess.neutral;
-            }, listener: (context, state) {
-              if (state.process == CreateTransactionProcess.processing) {
-                EasyLoading.show(status: 'Đang xử lí...');
-              }
-            }),
           ],
           child: Scaffold(
             appBar: AppBar(
@@ -602,8 +597,8 @@ class CreateTransactionLayout extends StatelessWidget {
             validator: (value) {
               if (value == null || value.isEmpty)
                 return TextConstants.totalBlank;
-              if (!state.isItemTotalNegative) {
-                return TextConstants.totalNegative;
+              if (!state.isItemTotalSmallerThanZero) {
+                return TextConstants.totalSmallerThanZero;
               }
               if (!state.isItemTotalUnderLimit) {
                 return TextConstants.totalOverLimit;

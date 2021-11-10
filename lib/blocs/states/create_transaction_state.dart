@@ -107,14 +107,14 @@ class CreateTransactionState {
       return true;
   }
 
-  bool get isItemTotalNegative {
+  bool get isItemTotalSmallerThanZero {
     if (isItemTotalCalculatedByUnitPrice) {
-      if (itemTotalCalculated < 0) {
+      if (itemTotalCalculated <= 0) {
         return false;
       } else
         return true;
     } else {
-      if (itemTotal < 0) {
+      if (itemTotal <= 0) {
         return false;
       } else
         return true;
