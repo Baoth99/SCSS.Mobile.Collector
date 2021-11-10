@@ -40,3 +40,8 @@ class EventChangeScrapName extends AddCategoryEvent {
   @override
   List<Object?> get props => [scrapName];
 }
+
+class EventCloseImagePicker extends AddCategoryEvent {
+  @override
+  List<Object?> get props => [];
+}

@@ -261,34 +261,36 @@ class AddCategoryLayout extends StatelessWidget {
     };
 
     showModalBottomSheet(
-        context: context,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(10),
-            topRight: Radius.circular(10),
-          ),
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(10),
+          topRight: Radius.circular(10),
         ),
-        builder: (_) => ListView(
-              shrinkWrap: true,
-              children: [
-                ListTile(
-                  leading: Icon(Icons.camera_alt),
-                  title: Text(TextConstants.camera),
-                  onTap: () {
-                    Navigator.pop(context);
-                    selectImageSource(ImageSource.camera);
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.image),
-                  title: Text(TextConstants.gallery),
-                  onTap: () {
-                    Navigator.pop(context);
-                    selectImageSource(ImageSource.gallery);
-                  },
-                ),
-              ],
-            ));
+      ),
+      builder: (_) => ListView(
+        shrinkWrap: true,
+        children: [
+          ListTile(
+            leading: Icon(Icons.camera_alt),
+            title: Text(TextConstants.camera),
+            onTap: () {
+              Navigator.pop(context);
+              selectImageSource(ImageSource.camera);
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.image),
+            title: Text(TextConstants.gallery),
+            onTap: () {
+              Navigator.pop(context);
+              selectImageSource(ImageSource.gallery);
+            },
+          ),
+        ],
+      ),
+    ).then((value) =>
+        context.read<AddCategoryBloc>().add(EventCloseImagePicker()));
   }
 
   Container _buttons(BuildContext blocContext) {

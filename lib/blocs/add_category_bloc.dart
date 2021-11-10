@@ -32,18 +32,24 @@ class AddCategoryBloc extends Bloc<AddCategoryEvent, AddCategoryState> {
       yield state.copyWith(isImageSourceActionSheetVisible: false);
       final pickedImage = await _picker.pickImage(source: event.imageSource);
       if (pickedImage != null) {
-        yield state.copyWith(pickedImageUrl: pickedImage.path);
+        yield state.copyWith(
+          pickedImageUrl: pickedImage.path,
+          isImageSourceActionSheetVisible: false,
+        );
       } else
         return;
     }
     if (event is EventChangeScrapName) {
       yield state.copyWith(
+        isImageSourceActionSheetVisible: false,
         scrapName: event.scrapName,
         isNameExisted: false,
       );
     }
     if (event is EventAddScrapCategoryUnit) {
-      yield state.copyWith(controllers: event.controllers);
+      yield state.copyWith(
+          isImageSourceActionSheetVisible: false,
+          controllers: event.controllers);
     }
     if (event is EventSubmitScrapCategory) {
       yield LoadingState(
@@ -114,6 +120,9 @@ class AddCategoryBloc extends Bloc<AddCategoryEvent, AddCategoryState> {
           isNameExisted: state.isNameExisted,
         );
       }
+    }
+    if (event is EventCloseImagePicker) {
+      yield state.copyWith(isImageSourceActionSheetVisible: false);
     }
   }
 
