@@ -55,7 +55,7 @@ class TextConstants {
   static const String unitPriceBlank = '$unitPrice không được để trống';
   static const String unitPriceNegative = '$unitPrice không được là số âm';
   static const String totalBlank = 'Tổng cộng không được để trống';
-  static const String totalNegative = 'Tổng cộng không được là số âm';
+  static const String totalSmallerThanZero = 'Tổng cộng phải lớn hơn 0 đ';
   static const String totalOverLimit = 'Tổng cộng thấp hơn 100 triệu đồng';
   static const String addScrap = 'Thêm phế liệu';
 }

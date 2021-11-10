@@ -290,6 +290,8 @@ class CreateTransactionBloc
       yield state.copyWith(items: items);
       // Update category dropdown
       _updateScrapCategoryMap();
+      // Recalculate total and total bonus amount
+      _recalculateTotalAndBonusAmount();
       // Update the item list
       yield state.copyWith(isItemsUpdated: true);
       yield state.copyWith(isItemsUpdated: false);

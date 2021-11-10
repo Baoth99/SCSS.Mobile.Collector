@@ -304,7 +304,7 @@ class TransactionServiceImpl implements TransactionService {
           body: createSellCollectTransactionRequestModelToJson(model),
         );
         //get info review
-        return result['isSuccess'];
+        return result['isSuccess'] ?? false;
       } else
         throw Exception(TextConstants.missingBearerToken);
     } catch (e) {
