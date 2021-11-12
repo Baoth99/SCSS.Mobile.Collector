@@ -541,24 +541,6 @@ class _RequestMapState extends State<RequestMap> {
       },
     );
   }
-
-  void _animateCrurentLocation() async {
-    LatLng latLng = LatLng(currentLatitude, currentLongitude);
-    await _animateLocation(latLng);
-  }
-
-  Future<void> _animateLocation(LatLng? latlng) async {
-    if (latlng != null) {
-      await controller?.animateCamera(
-        CameraUpdate.newLatLng(
-          latlng,
-        ),
-      );
-      await controller?.animateCamera(
-        CameraUpdate.zoomTo(15),
-      );
-    }
-  }
 }
 
 // ignore: must_be_immutable
