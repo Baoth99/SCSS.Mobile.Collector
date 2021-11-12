@@ -8,7 +8,6 @@ import 'package:collector_app/exceptions/custom_exceptions.dart';
 import 'package:collector_app/providers/configs/injection_config.dart';
 import 'package:collector_app/providers/networks/models/request/cancel_request_request_model.dart';
 import 'package:collector_app/providers/networks/request_network.dart';
-import 'package:collector_app/providers/services/models/get_receive_request_model.dart';
 import 'package:collector_app/utils/common_utils.dart';
 import 'package:http/http.dart' as http;
 

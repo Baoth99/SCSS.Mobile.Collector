@@ -41,4 +41,9 @@ extension DatetimeExtension on DateTime {
   String toOnlyDateString() {
     return '$year-$month-$day';
   }
+
+  String toStringPendingRequest() {
+    String dayOfWeek = VietnameseDate.weekdayMap[weekday] ?? Symbols.empty;
+    return '$dayOfWeek, ${day.toStringLeadingTwoZero()} thg $month';
+  }
 }

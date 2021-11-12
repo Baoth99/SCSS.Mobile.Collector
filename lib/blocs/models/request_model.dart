@@ -25,7 +25,7 @@ class Request extends Equatable {
   String collectingRequestCode;
   String sellerName;
   int dayOfWeek;
-  String collectingRequestDate;
+  DateTime collectingRequestDate;
   String fromTime;
   String toTime;
   String area;

@@ -60,7 +60,7 @@ class ResDatum {
   String collectingRequestCode;
   String sellerName;
   int dayOfWeek;
-  String collectingRequestDate;
+  DateTime collectingRequestDate;
   String fromTime;
   String toTime;
   String area;
@@ -78,7 +78,7 @@ class ResDatum {
         collectingRequestCode: json["collectingRequestCode"],
         sellerName: json["sellerName"],
         dayOfWeek: json["dayOfWeek"],
-        collectingRequestDate: json["collectingRequestDate"],
+        collectingRequestDate: DateTime.parse(json["collectingRequestDate"]),
         fromTime: json["fromTime"],
         toTime: json["toTime"],
         area: json["area"],

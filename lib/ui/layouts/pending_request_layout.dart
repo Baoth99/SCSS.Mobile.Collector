@@ -15,6 +15,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:logging/logging.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:signalr_client/signalr_client.dart';
+import 'package:collector_app/utils/extension_methods.dart';
 
 class PendingRequestLayout extends StatelessWidget {
   const PendingRequestLayout({Key? key}) : super(key: key);
@@ -169,6 +170,9 @@ class _PendingRequestLayoutState extends State<PendingRequestMain> {
               distance: r.distanceText,
               placeName: r.area,
               isActive: r.isActive,
+              time: r.collectingRequestDate,
+              fromTime: r.fromTime,
+              toTime: r.toTime,
             ),
           );
         }
@@ -325,8 +329,9 @@ class _PendingRequestLayoutState extends State<PendingRequestMain> {
                   bookingId: r.id,
                   distance: r.distanceText,
                   cusName: r.sellerName,
-                  time:
-                      '${VietnameseDate.weekdayServer[r.dayOfWeek]}, ${r.collectingRequestDate}, ${r.fromTime} - ${r.toTime}',
+                  time: r.collectingRequestDate,
+                  fromTime: r.fromTime,
+                  toTime: r.toTime,
                   placeName: r.area,
                   bulky: r.isBulky,
                   isActive: r.isActive,
@@ -389,7 +394,9 @@ class CollectingRequest extends StatelessWidget {
     required this.bookingId,
     required this.distance,
     required this.cusName,
-    this.time,
+    required this.time,
+    required this.fromTime,
+    required this.toTime,
     required this.placeName,
     required this.bulky,
     required this.isActive,
@@ -398,7 +405,9 @@ class CollectingRequest extends StatelessWidget {
   final String bookingId;
   final String distance;
   final String cusName;
-  final String? time;
+  final DateTime time;
+  final String fromTime;
+  final String toTime;
   final String placeName;
   final bool bulky;
   final bool isActive;
@@ -498,16 +507,15 @@ class CollectingRequest extends StatelessWidget {
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            time != null && time!.isNotEmpty
-                                ? _getContainerColumn(
-                                    CustomText(
-                                      text: time!,
-                                      color: Colors.green[600],
-                                      fontSize: 42.sp,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  )
-                                : SizedBox.shrink(),
+                            _getContainerColumn(
+                              CustomText(
+                                text:
+                                    '${time.toStringPendingRequest()}, $fromTime - $toTime',
+                                color: Colors.green[600],
+                                fontSize: 42.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
                             _getContainerColumn(
                               CustomText(
                                 text: placeName,
