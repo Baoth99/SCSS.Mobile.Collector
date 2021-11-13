@@ -43,14 +43,17 @@ class DealerSearchLayout extends StatelessWidget {
   Widget _body(BuildContext context) {
     return Column(
       children: [
-        Container(
-          padding: EdgeInsets.symmetric(
-            vertical: 50.h,
+        Material(
+          elevation: 1,
+          child: Container(
+            padding: EdgeInsets.only(
+              bottom: 40.h,
+            ),
+            child: CommonMarginContainer(
+              child: SearchWidget(),
+            ),
+            color: Theme.of(context).scaffoldBackgroundColor,
           ),
-          child: CommonMarginContainer(
-            child: SearchWidget(),
-          ),
-          color: Theme.of(context).scaffoldBackgroundColor,
         ),
         Expanded(
           child: CommonMarginContainer(
@@ -83,13 +86,16 @@ class DealerSearchLayout extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
-          Container(
-            width: double.infinity,
-            child: CustomText(
-              text: 'Các vựa thu gom gần bạn',
-              fontWeight: FontWeight.w500,
-              fontSize: 50.sp,
-            ),
+          // Container(
+          //   width: double.infinity,
+          //   child: CustomText(
+          //     text: 'Các vựa thu gom gần bạn',
+          //     fontWeight: FontWeight.w500,
+          //     fontSize: 50.sp,
+          //   ),
+          // ),
+          SizedBox(
+            height: 50.h,
           ),
           Expanded(
             child: BlocBuilder<DealerSearchBloc, DealerSearchState>(
@@ -524,11 +530,23 @@ class DealerWidget extends StatelessWidget {
           horizontal: 30.w,
           vertical: 30.h,
         ),
+        margin: EdgeInsets.symmetric(
+          horizontal: 20.w,
+          vertical: 10.h
+        ),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.all(
-              Radius.circular(30.0.r) //                 <--- border radius here
+              Radius.circular(20.0.r) //                 <--- border radius here
               ),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.greyFFDADADA,
+              blurRadius: 1.0,
+              spreadRadius: 0.0,
+              offset: Offset(1.0, 1.0), // shadow direction: bottom right
+            )
+          ],
         ),
         child: IntrinsicHeight(
           child: Row(
@@ -536,25 +554,28 @@ class DealerWidget extends StatelessWidget {
               Container(
                 height: 230.r,
                 width: 230.r,
-                child: CachedNetworkImage(
-                  httpHeaders: {HttpHeaders.authorizationHeader: bearerToken},
-                  imageUrl: urlImage,
-                  imageBuilder: (context, imageProvider) => Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: imageProvider,
-                        fit: BoxFit.cover,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20.r),
+                  child: CachedNetworkImage(
+                    httpHeaders: {HttpHeaders.authorizationHeader: bearerToken},
+                    imageUrl: urlImage,
+                    imageBuilder: (context, imageProvider) => Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
-                  ),
-                  placeholder: (context, url) => Container(
-                    child: Center(
-                      child: FunctionalWidgets.getLoadingCircle(),
+                    placeholder: (context, url) => Container(
+                      child: Center(
+                        child: FunctionalWidgets.getLoadingCircle(),
+                      ),
                     ),
-                  ),
-                  errorWidget: (context, url, error) => Icon(
-                    Icons.error,
-                    color: AppColors.orangeFFE4625D,
+                    errorWidget: (context, url, error) => Icon(
+                      Icons.error,
+                      color: AppColors.orangeFFE4625D,
+                    ),
                   ),
                 ),
               ),
@@ -562,25 +583,40 @@ class DealerWidget extends StatelessWidget {
                 width: 20.w,
               ),
               Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    CustomText(text: name),
-                    CustomText(text: address),
-                    Row(
-                      children: [
-                        Expanded(
-                          child:
-                              CustomText(text: 'Mở cửa: $fromTime - $toTime'),
-                        ),
-                        CustomText(
-                          text: distance,
-                        )
-                      ],
-                    )
-                  ],
+                child: Container(
+                  margin: EdgeInsets.only(
+                    left: 20.w,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      CustomText(
+                          text: name,
+                        fontSize: 44.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      CustomText(
+                          text: address,
+                        fontSize: 40.sp,
+                        color: AppColors.greyFF939393,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child:
+                                CustomText(text: 'Mở cửa: $fromTime - $toTime'),
+                          ),
+                          CustomText(
+                            text: distance,
+                            fontWeight: FontWeight.w500,
+                          )
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ),
             ],

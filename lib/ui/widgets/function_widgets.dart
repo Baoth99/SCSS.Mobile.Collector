@@ -37,7 +37,7 @@ class FunctionalWidgets {
 
   static Widget getLoadingAnimation() {
     return const SpinKitRing(
-      color: AppColors.greenFF61C53D,
+      color: AppColors.greenFF01C971,
     );
   }
 
@@ -59,7 +59,7 @@ class FunctionalWidgets {
     );
   }
 
-  static Widget getLoadingCircle([Color color = AppColors.greenFF61C53D]) {
+  static Widget getLoadingCircle([Color color = AppColors.greenFF01C971]) {
     return SpinKitFadingCircle(
       color: color,
     );
@@ -152,6 +152,7 @@ class FunctionalWidgets {
     List<Widget>? action,
     Widget? title,
     bool? centerTitle,
+    Container? flexibleSpace,
   }) {
     return AppBar(
       leading: ArrowBackIconButton(
@@ -162,6 +163,7 @@ class FunctionalWidgets {
       actions: action,
       title: title,
       centerTitle: centerTitle,
+      flexibleSpace: flexibleSpace,
     );
   }
 

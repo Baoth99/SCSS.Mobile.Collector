@@ -11,13 +11,15 @@ class RadiantGradientMask extends StatelessWidget {
   Widget build(BuildContext context) {
     return ShaderMask(
       shaderCallback: (bounds) => LinearGradient(
-        begin: Alignment.centerLeft,
-        end: Alignment(0.5, 0.0),
-        colors: [
-          AppColors.greenFF39AC8F,
-          AppColors.greenFF61C53D,
-        ],
-        tileMode: TileMode.mirror,
+        begin: Alignment.topLeft,
+        end: Alignment
+            .bottomRight, // 10% of the width, so there are ten blinds.
+        colors: <Color>[
+          AppColors.greenFF61C53D.withOpacity(0.7),
+          AppColors.greenFF39AC8F.withOpacity(0.7),
+        ], // red to yellow
+        tileMode:
+        TileMode.repeated, // repeats the gradient over the canvas
       ).createShader(bounds),
       child: child,
     );

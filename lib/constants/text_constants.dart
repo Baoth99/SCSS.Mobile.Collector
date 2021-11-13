@@ -23,7 +23,7 @@ class TextConstants {
   static const String scrapCategoryName = 'Tên danh mục phế liệu';
   static const String inputScrapCategoryName = 'Nhập tên loại phế liệu';
   static const String scrapNameExisted = 'Tên phế liệu đã tồn tại';
-  static const String detail = 'Chi tiết';
+  static const String detail = 'Thông tin phế liệu';
   static const String unit = 'Đơn vị';
   static const String unitIsExisted = 'Đơn vị đã có';
   static const String unitPrice = 'Đơn giá';

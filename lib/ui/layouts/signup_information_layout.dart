@@ -398,7 +398,7 @@ class _RadioButtonGender extends StatelessWidget {
           buildWhen: (previous, current) => previous.gender != current.gender,
           builder: (context, state) {
             return Radio<Gender>(
-              activeColor: AppColors.greenFF61C53D,
+              activeColor: AppColors.greenFF01C971,
               groupValue: state.gender,
               value: gender,
               onChanged: (value) {
@@ -429,7 +429,7 @@ class _SubmmitedButton extends StatelessWidget {
         builder: (context, state) {
           return ElevatedButton(
             style: ElevatedButton.styleFrom(
-              primary: AppColors.greenFF61C53D,
+              primary: AppColors.greenFF01C971,
             ),
             //TODO: case failure
             onPressed: state.status.isValid ? _onPressed(context) : null,
@@ -488,7 +488,7 @@ class _TextField extends StatelessWidget {
             SignupInformationLayoutConstants.circularBorderRadius.r,
           ),
           borderSide: const BorderSide(
-            color: AppColors.greenFF61C53D,
+            color: AppColors.greenFF01C971,
           ),
         ),
         labelText: labelText,

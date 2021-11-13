@@ -14,6 +14,7 @@ import 'package:collector_app/ui/widgets/complaint_done_widget.dart';
 import 'package:collector_app/ui/widgets/custom_button.dart';
 import 'package:collector_app/ui/widgets/custom_text_widget.dart';
 import 'package:collector_app/ui/widgets/function_widgets.dart';
+import 'package:collector_app/ui/widgets/radiant_gradient_mask.dart';
 import 'package:collector_app/utils/common_utils.dart';
 import 'package:collector_app/utils/env_util.dart';
 import 'package:flutter/material.dart';
@@ -145,37 +146,43 @@ class PendingRequestDetailBody extends StatelessWidget {
                 ),
               ),
             ),
+            // Positioned.fill(
+            //   right: 50.w,
+            //   top: 100.h,
+            //   child: Align(
+            //     alignment: Alignment.topRight,
+            //     child: IconButton(
+            //       icon: Icon(
+            //         Icons.cancel,
+            //         size: 70.sp,
+            //         color: Colors.grey,
+            //       ),
+            //       onPressed: () {
+            //         Navigator.of(context).pop();
+            //       },
+            //     ),
+            //   ),
+            // ),
             Positioned.fill(
               right: 50.w,
-              top: 100.h,
+              top: 750.h,
               child: Align(
                 alignment: Alignment.topRight,
-                child: IconButton(
-                  icon: Icon(
-                    Icons.cancel,
-                    size: 70.sp,
-                    color: Colors.grey,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(70.r),
+                    color: AppColors.blueFF4F94E8,
                   ),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ),
-            ),
-            Positioned.fill(
-              right: 50.w,
-              top: 700.h,
-              child: Align(
-                alignment: Alignment.topRight,
-                child: IconButton(
-                  icon: Icon(
-                    Icons.directions,
-                    size: 70.sp,
-                    color: Colors.grey,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.directions,
+                      size: 90.sp,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      CommonUtils.launchMapDir(state.latitude, state.longtitude);
+                    },
                   ),
-                  onPressed: () {
-                    CommonUtils.launchMapDir(state.latitude, state.longtitude);
-                  },
                 ),
               ),
             ),
@@ -197,6 +204,9 @@ class PendingRequestDetailBody extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(
+                  height: 50.h,
+                ),
                 getTitleRow(),
                 RequestDetailElementPattern(
                   icon: Icons.place,
@@ -257,6 +267,9 @@ class PendingRequestDetailBody extends StatelessWidget {
                         ),
                       )
                     : SizedBox.shrink(),
+                SizedBox(
+                  height: 70.h,
+                ),
                 state.collectingRequestDetailStatus ==
                         CollectingRequestDetailStatus.pending
                     ? getApproveButton(context)
@@ -295,7 +308,7 @@ class PendingRequestDetailBody extends StatelessWidget {
             });
           },
           width: 300.w,
-          color: Colors.red,
+          color: Colors.grey[400],
         ),
         SizedBox(
           width: 40.w,
@@ -346,6 +359,7 @@ class PendingRequestDetailBody extends StatelessWidget {
           btnCancelText: 'Hủy',
         );
       },
+      color: AppColors.greenFF01C971,
       title: 'Nhận đơn',
     );
   }
@@ -429,8 +443,10 @@ class PendingRequestDetailBody extends StatelessWidget {
     return InkWell(
       onTap: onPressed,
       child: Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: 15.w,
+        padding: EdgeInsets.only(
+          right: 15.w,
+          top: 20.h,
+          left: 15.w,
         ),
         child: Column(
           children: [
@@ -443,11 +459,16 @@ class PendingRequestDetailBody extends StatelessWidget {
                 size: 60.sp,
               ),
             ),
-            CustomText(
-              text: title,
-              fontWeight: FontWeight.w300,
-              fontSize: 28.sp,
-              color: color,
+            Container(
+              margin: EdgeInsets.only(
+                top: 5.h,
+              ),
+              child: CustomText(
+                text: title,
+                fontWeight: FontWeight.w400,
+                fontSize: 28.sp,
+                color: AppColors.black,
+              ),
             ),
           ],
         ),
@@ -564,18 +585,22 @@ class RequestDetailElementPattern extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(
-        vertical: 25.h,
+        vertical: 30.h,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Icon(
-                icon,
-                color: AppColors.greenFF61C53D,
+              RadiantGradientMask(
+                child: Icon(
+                  icon,
+                  color: AppColors.greenFF01C971,
+                  size: 60.sp,
+                ),
               ),
               Expanded(
                 child: Container(
@@ -584,7 +609,7 @@ class RequestDetailElementPattern extends StatelessWidget {
                   ),
                   child: CustomText(
                     text: title,
-                    fontSize: 36.sp,
+                    fontSize: 40.sp,
                     color: Colors.grey[600],
                   ),
                 ),
@@ -661,9 +686,13 @@ class SellerInforatmionDialog extends StatelessWidget {
 
   Widget getName() {
     return Container(
+      margin: EdgeInsets.symmetric(
+        vertical: 30.h
+      ),
       child: CustomText(
         text: name,
         textAlign: TextAlign.center,
+        fontWeight: FontWeight.w500,
       ),
       width: double.infinity,
     );
@@ -684,26 +713,32 @@ class SellerInforatmionDialog extends StatelessWidget {
       },
       child: Container(
         width: double.infinity,
-        color: Colors.grey.withOpacity(0.3),
+        color: Colors.grey.withOpacity(0.2),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Container(
-              margin: EdgeInsets.all(
-                20.r,
+              margin: EdgeInsets.only(
+                top: 40.r,
+                bottom: 40.r,
+                left: 90.r,
+                right: 60.r
               ),
               padding: EdgeInsets.all(
                 20.r,
               ),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.r),
-                color: Colors.grey,
+                borderRadius: BorderRadius.circular(30.r),
+                color: AppColors.greyFFB5B5B5,
               ),
               child: Icon(
                 Icons.phone,
               ),
             ),
-            CustomText(text: sellerPhoneNumber),
+            CustomText(
+                text: sellerPhoneNumber,
+                fontSize: 50.sp,
+            ),
           ],
         ),
       ),
@@ -724,7 +759,7 @@ class SellerInforatmionDialog extends StatelessWidget {
     return TextButton(
       child: CustomText(
         text: 'Đóng',
-        color: AppColors.orangeFFE4625D,
+        color: AppColors.black,
       ),
       onPressed: () {
         Navigator.of(context).pop();
@@ -736,7 +771,7 @@ class SellerInforatmionDialog extends StatelessWidget {
     return TextButton(
       child: CustomText(
         text: 'Phản hồi',
-        color: AppColors.orangeFFE4625D,
+        color: AppColors.orangeFFF5670A,
       ),
       onPressed: () {
         FunctionalWidgets.showCustomModalBottomSheet(
@@ -928,7 +963,7 @@ class CancelRequestWidget extends StatelessWidget {
                     double.infinity,
                     WidgetConstants.buttonCommonHeight.h,
                   ),
-                  primary: AppColors.greenFF61C53D,
+                  primary: AppColors.greenFF01C971,
                 ),
               );
             },

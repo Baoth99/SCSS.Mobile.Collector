@@ -179,15 +179,18 @@ class _DealerMapBodyState extends State<DealerMapBody> {
 
         Padding(
           padding: EdgeInsets.only(
-            top: 80.h,
-            left: 40.w,
+            top: 120.h,
+            left: 60.w,
           ),
           child: Align(
             child: CircleAvatar(
               backgroundColor: Colors.white,
               radius: 70.r,
               child: IconButton(
-                icon: Icon(Icons.arrow_back_ios_new),
+                icon: Icon(
+                    Icons.arrow_back_ios_new,
+                  color: AppColors.black,
+                ),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },

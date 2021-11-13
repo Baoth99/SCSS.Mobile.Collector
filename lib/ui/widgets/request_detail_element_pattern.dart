@@ -1,5 +1,6 @@
 import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/ui/widgets/custom_text_widget.dart';
+import 'package:collector_app/ui/widgets/radiant_gradient_mask.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -25,29 +26,33 @@ class RequestDetailElementPatternHistory extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(
-        vertical: 25.h,
-        horizontal: 50.w,
+        vertical: 30.h,
+        // horizontal: 50.w,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Icon(
-                icon,
-                color: AppColors.greenFF61C53D,
+              RadiantGradientMask(
+                child: Icon(
+                  icon,
+                  color: AppColors.greenFF01C971,
+                  size: 60.sp,
+                ),
               ),
               Expanded(
                 child: Container(
                   margin: EdgeInsets.only(
-                    left: 50.w,
+                    left: 20.w,
                   ),
                   child: CustomText(
                     text: title,
-                    fontSize: 36.sp,
-                    color: titleColor,
+                    fontSize: 40.sp,
+                    color: Colors.grey[600],
                   ),
                 ),
               ),

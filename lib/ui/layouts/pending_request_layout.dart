@@ -117,10 +117,17 @@ class _PendingRequestLayoutState extends State<PendingRequestMain> {
         context: context,
         color: AppColors.greyFFB5B5B5,
         title: CustomText(text: 'Yêu cầu thu gom mới'),
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        elevation: 0,
+        backgroundColor: AppColors.white,
+        elevation: 1,
       ),
       body: body(context),
+    );
+  }
+
+  Widget contentDivider(){
+    return Divider(
+      thickness: 20.h,
+      color: AppColors.greyFFEEEEEE,
     );
   }
 
@@ -128,7 +135,6 @@ class _PendingRequestLayoutState extends State<PendingRequestMain> {
     return Column(
       children: [
         getNowRequests(),
-        Divider(),
         Expanded(
           child: BlocBuilder<RequestBookListBloc, RequestBookListState>(
             builder: (context, state) {
@@ -179,10 +185,10 @@ class _PendingRequestLayoutState extends State<PendingRequestMain> {
 
         return state.listRequest.isNotEmpty
             ? Material(
-                elevation: 1,
+                elevation: 0,
                 child: Container(
                   decoration: BoxDecoration(
-                    color: AppColors.white,
+                    // color: AppColors.white,
                   ),
                   child: Column(
                     children: [
@@ -190,7 +196,7 @@ class _PendingRequestLayoutState extends State<PendingRequestMain> {
                         Container(
                           padding: EdgeInsets.only(top: 30.h, left: 45.w),
                           child: CustomText(
-                            text: 'Yêu cầu chờ tới ngay',
+                            text: 'Yêu cầu chờ đến ngay',
                             fontSize: 45.sp,
                             fontWeight: FontWeight.w500,
                           ),
@@ -228,6 +234,7 @@ class _PendingRequestLayoutState extends State<PendingRequestMain> {
                               ),
                             )
                           : SizedBox.shrink(),
+                      contentDivider(),
                     ],
                   ),
                 ),
@@ -294,7 +301,7 @@ class _PendingRequestLayoutState extends State<PendingRequestMain> {
       enablePullDown: true,
       enablePullUp: true,
       header: const WaterDropHeader(
-        waterDropColor: AppColors.greenFF61C53D,
+        waterDropColor: AppColors.greenFF01C971,
         failed: SizedBox.shrink(),
         complete: SizedBox.shrink(),
       ),
@@ -493,7 +500,7 @@ class CollectingRequest extends StatelessWidget {
                       child: Container(
                         margin: EdgeInsets.symmetric(
                             horizontal: 20.w, vertical: 20.h),
-                        constraints: BoxConstraints(minHeight: 130.h),
+                        constraints: BoxConstraints(minHeight: 270.h),
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceAround,

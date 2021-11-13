@@ -58,10 +58,15 @@ class ProfileLayout extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CachedAvatarWidget(
-              isMale: args.gender == Gender.male,
-              width: 700.w,
-              path: imageUrl,
+            Container(
+              margin: EdgeInsets.symmetric(
+                vertical: 40.h
+              ),
+              child: CachedAvatarWidget(
+                isMale: args.gender == Gender.male,
+                width: 900.w,
+                path: imageUrl,
+              ),
             ),
             InputContainer(
               lable: 'Tên',
@@ -83,10 +88,10 @@ class ProfileLayout extends StatelessWidget {
               lable: 'Địa chỉ',
               text: args.address,
             ),
-            InputContainer(
-              lable: 'Chứng minh thư',
-              text: args.idCard,
-            ),
+            // InputContainer(
+            //   lable: 'Chứng minh thư',
+            //   text: args.idCard,
+            // ),
             InputContainer(
               lable: 'Email',
               text: args.email,

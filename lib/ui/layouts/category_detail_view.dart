@@ -5,6 +5,8 @@ import 'package:collector_app/blocs/events/category_detail_event.dart';
 import 'package:collector_app/blocs/states/category_detail_state.dart';
 import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/constants/text_constants.dart';
+import 'package:collector_app/ui/widgets/arrow_back_button.dart';
+import 'package:collector_app/ui/widgets/custom_text_widget.dart';
 import 'package:collector_app/ui/widgets/function_widgets.dart';
 import 'package:collector_app/utils/cool_alert.dart';
 import 'package:collector_app/utils/currency_text_formatter.dart';
@@ -15,6 +17,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CategoryDetailLayout extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
@@ -85,9 +88,15 @@ class CategoryDetailLayout extends StatelessWidget {
           child: Scaffold(
             appBar: AppBar(
               elevation: 1,
-              title: Text(
-                TextConstants.detail,
+              title: CustomText(
+                text: TextConstants.detail,
+                color: AppColors.black,
+                fontSize: 60.sp,
               ),
+              leading: ArrowBackIconButton(
+                color: AppColors.greyFF939393,
+              ),
+              backgroundColor: AppColors.white,
             ),
             body: _addCategoryBody(),
           ),
@@ -343,7 +352,7 @@ class CategoryDetailLayout extends StatelessWidget {
                   .add(EventTapDeleteButton());
             }
           },
-          backgroundColor: MaterialStateProperty.all(Colors.red[400]),
+          backgroundColor: MaterialStateProperty.all(AppColors.greyFF939393),
           textColor: MaterialStateProperty.all(Colors.white),
         ),
         FunctionalWidgets.customElevatedButton(

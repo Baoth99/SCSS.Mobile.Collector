@@ -121,15 +121,17 @@ class _Body extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 60.w),
             child: Row(
               children: [
-                CustomTextButton(
-                  text: 'Quên mật khẩu',
-                  onPressed: () {
-                    Navigator.of(context)
-                        .pushNamed(Routes.forgetPasswordPhoneNumber);
-                  },
-                  color: AppColors.black,
-                  fontSize: 45.sp,
-                  fontWeight: FontWeight.w500,
+                Expanded(
+                  child: CustomTextButton(
+                    text: 'Quên mật khẩu',
+                    onPressed: () {
+                      Navigator.of(context)
+                          .pushNamed(Routes.forgetPasswordPhoneNumber);
+                    },
+                    color: AppColors.black,
+                    fontSize: 45.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 // Spacer(),
                 // CustomTextButton(
@@ -178,7 +180,7 @@ class _Form extends StatelessWidget {
                   onChanged: _onPhoneNumberChanged(context),
                   style: _getInputFieldTextStyle(),
                   labelText: 'Số điện thoại',
-                  commonColor: AppColors.greenFF61C53D,
+                  commonColor: AppColors.greenFF01C971,
                   defaultColor: AppColors.greyFF969090,
                   keyboardType: TextInputType.phone,
                   inputFormatters: <TextInputFormatter>[
@@ -217,7 +219,7 @@ class _Form extends StatelessWidget {
                   onChanged: _onPasswordChanged(context),
                   style: _getInputFieldTextStyle(),
                   labelText: 'Mật khẩu',
-                  commonColor: AppColors.greenFF61C53D,
+                  commonColor: AppColors.greenFF01C971,
                   defaultColor: AppColors.greyFF969090,
                   keyboardType: TextInputType.visiblePassword,
                   obscureText: state.password.value.isHide,
@@ -284,7 +286,7 @@ class _Form extends StatelessWidget {
             text: 'Đăng nhập',
             fontSize: 60.sp,
             onPressed: _onPressed(context),
-            color: AppColors.greenFF66D095,
+            color: AppColors.greenFF01C971,
             textColor: AppColors.white,
             height: 150.h,
             width: double.infinity,
