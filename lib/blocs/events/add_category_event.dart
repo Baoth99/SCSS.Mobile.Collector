@@ -1,8 +1,12 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 abstract class AddCategoryEvent extends Equatable {}
+
+class EventInitData extends AddCategoryEvent {
+  @override
+  List<Object?> get props => [];
+}
 
 class EventChangeScrapImageRequest extends AddCategoryEvent {
   @override
@@ -19,12 +23,8 @@ class EventOpenImagePicker extends AddCategoryEvent {
 }
 
 class EventAddScrapCategoryUnit extends AddCategoryEvent {
-  final Map<TextEditingController, TextEditingController> controllers;
-
-  EventAddScrapCategoryUnit({required this.controllers});
-
   @override
-  List<Object?> get props => [controllers];
+  List<Object?> get props => [];
 }
 
 class EventSubmitScrapCategory extends AddCategoryEvent {
@@ -41,7 +41,17 @@ class EventChangeScrapName extends AddCategoryEvent {
   List<Object?> get props => [scrapName];
 }
 
-class EventCloseImagePicker extends AddCategoryEvent {
+class EventChangeUnitAndPrice extends AddCategoryEvent {
+  final int index;
+  final String unit;
+  final String price;
+
+  EventChangeUnitAndPrice({
+    required this.index,
+    required this.unit,
+    required this.price,
+  });
+
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [index, unit, price];
 }

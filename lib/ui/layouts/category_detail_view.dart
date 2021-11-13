@@ -21,6 +21,7 @@ class CategoryDetailLayout extends StatelessWidget {
 
   //controllers
   final TextEditingController _scrapNameController = TextEditingController();
+  // final Map<TextEditingController, TextEditingController> _unitControllers = {};
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +41,7 @@ class CategoryDetailLayout extends StatelessWidget {
             BlocListener<CategoryDetailBloc, CategoryDetailState>(
                 listener: (context, state) {
               if (state is LoadingState) {
-                EasyLoading.show(status: TextConstants.processing);
+                EasyLoading.show();
               } else {
                 EasyLoading.dismiss();
                 if (state is SubmittedState) {
@@ -261,6 +262,7 @@ class CategoryDetailLayout extends StatelessWidget {
                             floatingLabelBehavior: FloatingLabelBehavior.auto,
                             suffix: Text(Symbols.vndSymbolText),
                           ),
+                          keyboardType: TextInputType.number,
                           inputFormatters: [CurrencyTextFormatter()],
                           initialValue: CustomFormats.numberFormat
                               .format(state.units[index].price),
