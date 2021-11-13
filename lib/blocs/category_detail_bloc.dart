@@ -246,18 +246,6 @@ class CategoryDetailBloc
     }
   }
 
-  Future<Map<TextEditingController, TextEditingController>> _createControllers(
-      List<CategoryDetailItemModel> details) async {
-    Map<TextEditingController, TextEditingController> units = {};
-    for (var item in details) {
-      units.putIfAbsent(
-        TextEditingController(text: item.unit),
-        () => TextEditingController(text: item.price.toString()),
-      );
-    }
-    return units;
-  }
-
   Future<List<CategoryDetailItemModel>> _getListFiltered({
     required List<CategoryDetailItemModel> units,
   }) async {

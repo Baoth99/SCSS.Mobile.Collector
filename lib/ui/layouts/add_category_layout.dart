@@ -7,6 +7,8 @@ import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/constants/text_constants.dart';
 import 'package:collector_app/ui/widgets/function_widgets.dart';
 import 'package:collector_app/utils/cool_alert.dart';
+import 'package:collector_app/utils/currency_text_formatter.dart';
+import 'package:collector_app/utils/custom_formats.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -19,9 +21,6 @@ class AddCategoryLayout extends StatelessWidget {
 
   //controllers
   final TextEditingController _scrapNameController = TextEditingController();
-  final Map<TextEditingController, TextEditingController> _unitControllers = {
-    new TextEditingController(): new TextEditingController(),
-  };
 
   @override
   Widget build(BuildContext context) {
@@ -37,10 +36,9 @@ class AddCategoryLayout extends StatelessWidget {
                 }
               }),
           BlocListener<AddCategoryBloc, AddCategoryState>(
-              // listenWhen: (p, c) => state,
               listener: (context, state) {
             if (state is LoadingState) {
-              EasyLoading.show(status: TextConstants.processing);
+              EasyLoading.show();
             } else {
               EasyLoading.dismiss();
               if (state is SubmittedState) {
@@ -65,6 +63,7 @@ class AddCategoryLayout extends StatelessWidget {
         ],
         child: Scaffold(
           appBar: AppBar(
+            elevation: 1,
             title: Text(
               TextConstants.addCategory,
             ),
@@ -119,12 +118,12 @@ class AddCategoryLayout extends StatelessWidget {
       buildWhen: (p, c) => p.isNameExisted != c.isNameExisted,
       builder: (context, state) {
         return TextFormField(
-          controller: _scrapNameController,
           decoration: InputDecoration(
             border: OutlineInputBorder(),
             labelText: TextConstants.scrapCategoryName,
             floatingLabelBehavior: FloatingLabelBehavior.auto,
           ),
+          controller: _scrapNameController,
           onChanged: (value) {
             context
                 .read<AddCategoryBloc>()
@@ -148,11 +147,7 @@ class AddCategoryLayout extends StatelessWidget {
         FunctionalWidgets.customText(text: TextConstants.detail),
         InkWell(
           onTap: () {
-            _unitControllers.putIfAbsent(
-                new TextEditingController(), () => new TextEditingController());
-            context
-                .read<AddCategoryBloc>()
-                .add(EventAddScrapCategoryUnit(controllers: _unitControllers));
+            context.read<AddCategoryBloc>().add(EventAddScrapCategoryUnit());
           },
           child: SizedBox(width: 50, child: Icon(Icons.add)),
         )
@@ -173,12 +168,7 @@ class AddCategoryLayout extends StatelessWidget {
                     .read<AddCategoryBloc>()
                     .add(EventChangeScrapImageRequest());
               },
-              child: state.pickedImageUrl != TextConstants.emptyString
-                  ? Image.file(File(state.pickedImageUrl))
-                  : Icon(
-                      Icons.add_a_photo,
-                      size: 100,
-                    ),
+              child: _getScrapImage(state),
             ),
           ),
         );
@@ -200,24 +190,33 @@ class AddCategoryLayout extends StatelessWidget {
               ListView.builder(
                   primary: false,
                   shrinkWrap: true,
-                  itemCount: state.controllers.length,
+                  itemCount: state.units.length,
                   itemBuilder: (context, index) {
                     return FunctionalWidgets.rowFlexibleBuilder(
                       SizedBox(
                         height: 90,
                         child: TextFormField(
-                          controller: state.controllers.keys.elementAt(index),
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
                             labelText: TextConstants.unit,
                             floatingLabelBehavior: FloatingLabelBehavior.auto,
                           ),
+                          initialValue: state.units[index].unit,
+                          onChanged: (value) {
+                            context
+                                .read<AddCategoryBloc>()
+                                .add(EventChangeUnitAndPrice(
+                                  index: index,
+                                  unit: value,
+                                  price: state.units[index].price.toString(),
+                                ));
+                          },
                           validator: (value) {
                             if (value == TextConstants.emptyString) return null;
                             var text = TextConstants.unitIsExisted;
                             var count = 0;
-                            _unitControllers.keys.forEach((element) {
-                              if (element.text == value?.trim()) {
+                            state.units.forEach((element) {
+                              if (element.unit == value?.trim()) {
                                 count++;
                               }
                             });
@@ -231,12 +230,26 @@ class AddCategoryLayout extends StatelessWidget {
                       SizedBox(
                         height: 90,
                         child: TextFormField(
-                          controller: state.controllers.values.elementAt(index),
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
                             labelText: TextConstants.unitPrice,
                             floatingLabelBehavior: FloatingLabelBehavior.auto,
+                            suffix: Text(Symbols.vndSymbolText),
                           ),
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [CurrencyTextFormatter()],
+                          initialValue: CustomFormats.numberFormat
+                              .format(state.units[index].price),
+                          onChanged: (value) {
+                            context
+                                .read<AddCategoryBloc>()
+                                .add(EventChangeUnitAndPrice(
+                                  index: index,
+                                  unit: state.units[index].unit,
+                                  price:
+                                      value.replaceAll(RegExp(r'[^0-9]'), ''),
+                                ));
+                          },
                         ),
                       ),
                       rowFlexibleType.bigToSmall,
@@ -261,36 +274,34 @@ class AddCategoryLayout extends StatelessWidget {
     };
 
     showModalBottomSheet(
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(10),
-          topRight: Radius.circular(10),
+        context: context,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(10),
+            topRight: Radius.circular(10),
+          ),
         ),
-      ),
-      builder: (_) => ListView(
-        shrinkWrap: true,
-        children: [
-          ListTile(
-            leading: Icon(Icons.camera_alt),
-            title: Text(TextConstants.camera),
-            onTap: () {
-              Navigator.pop(context);
-              selectImageSource(ImageSource.camera);
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.image),
-            title: Text(TextConstants.gallery),
-            onTap: () {
-              Navigator.pop(context);
-              selectImageSource(ImageSource.gallery);
-            },
-          ),
-        ],
-      ),
-    ).then((value) =>
-        context.read<AddCategoryBloc>().add(EventCloseImagePicker()));
+        builder: (_) => ListView(
+              shrinkWrap: true,
+              children: [
+                ListTile(
+                  leading: Icon(Icons.camera_alt),
+                  title: Text(TextConstants.camera),
+                  onTap: () {
+                    Navigator.pop(context);
+                    selectImageSource(ImageSource.camera);
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.image),
+                  title: Text(TextConstants.gallery),
+                  onTap: () {
+                    Navigator.pop(context);
+                    selectImageSource(ImageSource.gallery);
+                  },
+                ),
+              ],
+            ));
   }
 
   Container _buttons(BuildContext blocContext) {
@@ -307,5 +318,20 @@ class AddCategoryLayout extends StatelessWidget {
         rowFlexibleType.smallToBig,
       ),
     );
+  }
+
+  Widget _getScrapImage(state) {
+    if (state.pickedImageUrl != TextConstants.emptyString) {
+      return Image.file(File(state.pickedImageUrl));
+    } else if (state.initScrapImage != null) {
+      return Image(
+        image: state.initScrapImage,
+        fit: BoxFit.cover,
+      );
+    } else
+      return Icon(
+        Icons.add_a_photo,
+        size: 100,
+      );
   }
 }
