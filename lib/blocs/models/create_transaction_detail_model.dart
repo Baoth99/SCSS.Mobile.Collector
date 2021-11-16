@@ -3,7 +3,7 @@ import 'package:collector_app/constants/text_constants.dart';
 class SellCollectTransactionDetailModel {
   String collectorCategoryId;
   String? collectorCategoryDetailId;
-  int quantity;
+  double quantity;
   String? unit;
   int total;
   int price;
@@ -13,7 +13,7 @@ class SellCollectTransactionDetailModel {
 
   int get totalCalculated {
     if (isCalculatedByUnitPrice && price != 0)
-      return price * quantity;
+      return (price * quantity).truncate();
     else
       return 0;
   }

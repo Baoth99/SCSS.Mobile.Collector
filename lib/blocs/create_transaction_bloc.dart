@@ -58,6 +58,7 @@ class CreateTransactionBloc
         yield state.copyWith(process: CreateTransactionProcess.neutral);
       }
     } else if (event is EventShowItemDialog) {
+      yield state.copyWith(process: CreateTransactionProcess.processing);
       //clear item values
       _resetItemValue();
       // Update dropdown list
@@ -105,7 +106,10 @@ class CreateTransactionBloc
         state.scrapCategoryDetails = details ?? [];
       }
       // Open dialog
-      yield state.copyWith(isItemDialogShowed: true);
+      yield state.copyWith(
+        isItemDialogShowed: true,
+        process: CreateTransactionProcess.processed,
+      );
       yield state.copyWith(isItemDialogShowed: false);
     } else if (event is EventCalculatedByUnitPriceChanged) {
       // If switched on
@@ -168,11 +172,14 @@ class CreateTransactionBloc
         yield state.copyWith(process: CreateTransactionProcess.neutral);
       }
     } else if (event is EventQuantityChanged) {
-      var quantity = int.tryParse(event.quantity);
+      var quantity = double.tryParse(event.quantity);
       if (quantity != null)
         yield state.copyWith(itemQuantity: quantity);
       else {
-        yield state.copyWith(process: CreateTransactionProcess.error);
+        yield state.copyWith(
+          itemQuantity: 0,
+          process: CreateTransactionProcess.error,
+        );
         yield state.copyWith(process: CreateTransactionProcess.neutral);
       }
     } else if (event is EventUnitPriceChanged) {

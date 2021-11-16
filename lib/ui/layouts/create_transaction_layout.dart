@@ -236,7 +236,7 @@ class CreateTransactionLayout extends StatelessWidget {
                               child: Text(
                                 state.items[index].quantity != 0 &&
                                         state.items[index].unit != null
-                                    ? '${CustomFormats.numberFormat.format(state.items[index].quantity)} ${state.items[index].unit}'
+                                    ? '${CustomFormats.quantityFormat.format(state.items[index].quantity).replaceAll(RegExp(r'\.'), ',')} ${state.items[index].unit}'
                                     : TextConstants.emptyString,
                                 textAlign: TextAlign.center,
                               ),
@@ -489,15 +489,19 @@ class CreateTransactionLayout extends StatelessWidget {
                 labelText: TextConstants.quantity,
                 floatingLabelBehavior: FloatingLabelBehavior.auto,
               ),
-              keyboardType: TextInputType.number,
-              inputFormatters: [CurrencyTextFormatter()],
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'(^\d*,?\d*)')),
+              ],
               initialValue:
-                  CustomFormats.numberFormat.format(state.itemQuantity),
+                  state.itemQuantity.toString().replaceAll(RegExp(r'\.'), ','),
               onChanged: (value) {
-                if (value != TextConstants.emptyString) {
-                  context.read<CreateTransactionBloc>().add(
-                      EventQuantityChanged(
-                          quantity: value.replaceAll(RegExp(r'[^0-9]'), '')));
+                if (value != TextConstants.emptyString && value != ',') {
+                  var valueWithDot = value.replaceAll(RegExp(r'[^0-9],'), '');
+                  valueWithDot = valueWithDot.replaceAll(RegExp(r','), '.');
+                  context
+                      .read<CreateTransactionBloc>()
+                      .add(EventQuantityChanged(quantity: valueWithDot));
                 } else {
                   context.read<CreateTransactionBloc>().add(
                       EventQuantityChanged(quantity: TextConstants.zeroString));

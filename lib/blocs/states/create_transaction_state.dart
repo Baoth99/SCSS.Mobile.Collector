@@ -34,7 +34,7 @@ class CreateTransactionState {
   String itemDealerCategoryId;
   String? itemDealerCategoryDetailId;
   int itemTotal;
-  int itemQuantity;
+  double itemQuantity;
   int itemPrice;
   bool isItemTotalCalculatedByUnitPrice;
   List<ScrapCategoryUnitModel> scrapCategoryDetails;
@@ -47,7 +47,7 @@ class CreateTransactionState {
 
   int get itemTotalCalculated {
     if (isItemTotalCalculatedByUnitPrice && itemPrice != 0)
-      return itemPrice * itemQuantity;
+      return (itemPrice * itemQuantity).truncate();
     else
       return 0;
   }
@@ -155,7 +155,7 @@ class CreateTransactionState {
     int? key,
     String? itemDealerCategoryId,
     String? itemDealerCategoryDetailId,
-    int? itemQuantity,
+    double? itemQuantity,
     String? itemPromotionId,
     int? itemBonusAmount,
     int? itemTotal,
@@ -211,7 +211,7 @@ class CreateTransactionState {
     int? key,
     String? itemDealerCategoryId,
     String? itemDealerCategoryDetailId,
-    int? itemQuantity,
+    double? itemQuantity,
     String? itemPromotionId,
     int? itemBonusAmount,
     int? itemTotal,
