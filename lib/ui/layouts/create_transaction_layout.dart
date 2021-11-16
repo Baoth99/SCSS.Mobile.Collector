@@ -71,7 +71,7 @@ class CreateTransactionLayout extends StatelessWidget {
                 TextConstants.createTransaction,
               ),
             ),
-            body: _body(),
+            body: _body(arguments: arguments),
           ),
         ),
       );
@@ -79,7 +79,7 @@ class CreateTransactionLayout extends StatelessWidget {
       return FunctionalWidgets.customErrorWidget();
   }
 
-  _body() {
+  _body({required Map arguments}) {
     return BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
       builder: (context, state) {
         return Container(
@@ -94,8 +94,26 @@ class CreateTransactionLayout extends StatelessWidget {
                   fit: FlexFit.tight,
                   child: ListView(
                     children: [
-                      // _phoneField(),
-                      // _nameField(),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.receipt_long,
+                            color: Colors.green,
+                          ),
+                          SizedBox(width: 10),
+                          Text('Mã Đơn: ${arguments['collectingRequestCode']}'),
+                        ],
+                      ),
+                      Divider(),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Người bán: ${arguments['sellerName']}'),
+                          SizedBox(height: 10),
+                          Text('SĐT người bán: ${arguments['sellerPhone']}'),
+                        ],
+                      ),
+                      Divider(),
                       _detailText(),
                       _items(),
                       const Divider(),
@@ -109,43 +127,6 @@ class CreateTransactionLayout extends StatelessWidget {
                   child: _transactionButtons(),
                 ),
               ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  _phoneField() {
-    return BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
-      buildWhen: (p, c) => false,
-      builder: (context, state) {
-        return SizedBox(
-          height: 90,
-          child: TextFormField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: TextConstants.sellerPhone,
-              floatingLabelBehavior: FloatingLabelBehavior.always,
-            ),
-            enabled: false,
-          ),
-        );
-      },
-    );
-  }
-
-  _nameField() {
-    return BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
-      builder: (context, state) {
-        return SizedBox(
-          height: 90,
-          child: TextFormField(
-            enabled: false,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: TextConstants.sellerName,
-              floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
           ),
         );
