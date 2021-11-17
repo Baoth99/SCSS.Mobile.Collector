@@ -3,6 +3,7 @@ import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/ui/widgets/custom_text_widget.dart';
 import 'package:collector_app/ui/widgets/function_widgets.dart';
 import 'package:collector_app/utils/extension_methods.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -24,8 +25,15 @@ class PromotionLayout extends StatelessWidget {
           PromotionBloc(dealerId: args.id)..add(PromotionInitial()),
       child: Scaffold(
         appBar: FunctionalWidgets.buildAppBar(
+          elevation: 1,
           context: context,
-          title: CustomText(text: 'Khuyến mãi'),
+          title: CustomText(
+              text: 'Khuyến mãi',
+            color: AppColors.black,
+            fontSize: 60.sp,
+          ),
+          color: AppColors.greyFFB5B5B5,
+          backgroundColor: AppColors.white,
         ),
         body: buildBody(),
       ),
@@ -59,8 +67,9 @@ class PromotionLayout extends StatelessWidget {
   }
 
   Widget seperator() {
-    return SizedBox(
+    return Container(
       height: 10.h,
+      color: AppColors.greyFFEEEEEE,
     );
   }
 
@@ -85,29 +94,32 @@ class PromotionLayout extends StatelessWidget {
   }
 
   Widget emptyList() {
-    return Column(
-      children: [
-        SizedBox(
-          height: 200.h,
-        ),
-        Image.asset(
-          ImagesPaths.emptyActivityList,
-          height: 200.h,
-        ),
-        Container(
-          child: CustomText(
-            text: 'Vựa không có khuyến mãi nào',
-            fontSize: 40.sp,
-            fontWeight: FontWeight.w400,
-            color: Colors.grey[600],
-            textAlign: TextAlign.center,
+    return Container(
+      width: double.infinity,
+      child: Column(
+        children: [
+          SizedBox(
+            height: 200.h,
           ),
-          padding: EdgeInsets.symmetric(
-            horizontal: 100.w,
-            vertical: 50.w,
+          Image.asset(
+            ImagesPaths.emptyActivityList,
+            height: 200.h,
           ),
-        ),
-      ],
+          Container(
+            child: CustomText(
+              text: 'Vựa không có khuyến mãi nào',
+              fontSize: 40.sp,
+              fontWeight: FontWeight.w400,
+              color: Colors.grey[600],
+              textAlign: TextAlign.center,
+            ),
+            padding: EdgeInsets.symmetric(
+              horizontal: 100.w,
+              vertical: 50.w,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -132,27 +144,71 @@ class PromotionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Container(
-        padding: EdgeInsets.all(10),
-        child: Row(
-          children: [
-            Flexible(
-              fit: FlexFit.tight,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(name),
-                  SizedBox(height: 5),
-                  Text('${bonusAmount.toAppPrice()} thưởng'),
-                  Text(
-                      '$appliedScrapCategory tối thiếu ${appliedAmount.toAppPrice()}'),
-                  Text('$from - $to'),
-                ],
-              ),
+    return Container(
+      color: AppColors.white,
+      padding: EdgeInsets.only(
+          top: 35.h,
+          right: 50.w,
+          bottom: 35.h,
+          left: 70.w
+      ),
+      child: Row(
+        children: [
+          Flexible(
+            fit: FlexFit.tight,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomText(
+                    text: name,
+                  fontSize: 45.sp,
+                  fontWeight: FontWeight.w500,
+                ),
+                SizedBox(height: 5),
+                Row(
+                  children: [
+                    CustomText(
+                        text: 'Loại phế liệu: '
+                    ),
+                    CustomText(
+                        text: appliedScrapCategory,
+                      fontSize: 40.sp,
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.orangeFFF5670A,
+                    )
+                  ],
+                ),
+                SizedBox(height: 5),
+                Row(
+                  children: [
+                    CustomText(
+                        text: 'Thưởng ',
+                    ),
+                    CustomText(
+                        text: bonusAmount.toAppPrice(),
+                      color: AppColors.orangeFFF5670A,
+                    ),
+                    CustomText(
+                        text: ' khi bán đủ '
+                    ),
+                    CustomText(
+                        text: appliedAmount.toAppPrice(),
+                      color: AppColors.orangeFFF5670A,
+                    ),
+                  ],
+                ),
+                SizedBox(height: 5),
+                CustomText(
+                    text: 'Thời gian: $from đến $to'
+                )
+                // Text('${bonusAmount.toAppPrice()} thưởng'),
+                // Text(
+                //     '$appliedScrapCategory tối thiếu ${appliedAmount.toAppPrice()}'),
+                // Text('$from - $to'),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

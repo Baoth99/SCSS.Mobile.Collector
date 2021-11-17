@@ -91,7 +91,7 @@ class AccountBody extends StatelessWidget {
                       child: CustomText(
                         text: state.name,
                         color: AppColors.white,
-                        fontSize: 70.sp,
+                        fontSize: 60.sp,
                         fontWeight: FontWeight.w500,
                       ),
                       margin: EdgeInsets.only(

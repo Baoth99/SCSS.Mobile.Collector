@@ -30,6 +30,7 @@ class ActivityLayout extends StatelessWidget {
         appBar: AppBar(
           title: const CommonScaffoldTitle('Hoạt động của tôi'),
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          elevation: 1,
           bottom: TabBar(
             indicatorColor: Colors.green[600],
             labelColor: Colors.green[600],
@@ -73,7 +74,7 @@ class SellerActivityLayout extends StatelessWidget {
         body: CommonMarginContainer(
           child: body(),
         ),
-        backgroundColor: Colors.grey[200],
+        // backgroundColor: Colors.grey[200],
       ),
     );
   }
@@ -154,7 +155,7 @@ class _SellerTransactionListState extends State<SellerTransactionList> {
       enablePullDown: true,
       enablePullUp: true,
       header: const WaterDropHeader(
-        waterDropColor: AppColors.greenFF61C53D,
+        waterDropColor: AppColors.greenFF01C971,
         failed: SizedBox.shrink(),
         complete: SizedBox.shrink(),
       ),
@@ -278,15 +279,30 @@ class SellerActivity extends StatelessWidget {
         );
       },
       child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20.r),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.greyFFDADADA,
+              blurRadius: 3.0,
+              spreadRadius: 0.0,
+              offset: Offset(2.0, 2.0), // shadow direction: bottom right
+            )
+          ]
+        ),
         child: main(context),
         margin: EdgeInsets.symmetric(
           vertical: 20.h,
+          horizontal: 30.w
         ),
         padding: EdgeInsets.symmetric(
           vertical: 40.h,
           horizontal: 30.w,
         ),
-        color: Colors.white,
+        constraints: BoxConstraints(
+          minHeight: 220.h,
+        ),
       ),
     );
   }
@@ -295,21 +311,42 @@ class SellerActivity extends StatelessWidget {
     return IntrinsicHeight(
       child: Row(
         children: [
-          RadiantGradientMask(
+          AvatarRadiantGradientMask(
             child: Icon(
               Icons.account_circle_sharp,
-              color: Colors.white,
               size: 120.sp,
+              color: Colors.white,
             ),
           ),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CustomText(text: name),
-                CustomText(text: datetime),
-                _getPrice(context, status),
-              ],
+            child: Container(
+              margin: EdgeInsets.only(
+                left: 30.w,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CustomText(
+                      text: name,
+                      fontSize: 44.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  SizedBox(
+                    height: 15.h,
+                  ),
+                  CustomText(
+                      text: datetime,
+                      color: AppColors.greyFF939393,
+                    fontSize: 35.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  SizedBox(
+                    height: 15.h,
+                  ),
+                  _getPrice(context, status),
+                ],
+              ),
             ),
           ),
           Column(
@@ -326,7 +363,9 @@ class SellerActivity extends StatelessWidget {
   Widget _getPrice(BuildContext context, int status) {
     switch (status) {
       case ActivityLayoutConstants.completed:
-        return CustomText(text: price.toAppPrice());
+        return CustomText(
+            text: price.toAppPrice(),
+        );
       case ActivityLayoutConstants.cancelBySeller:
       case ActivityLayoutConstants.cancelBySystem:
       case ActivityLayoutConstants.cancelByCollect:
@@ -343,7 +382,7 @@ class SellerActivity extends StatelessWidget {
       case ActivityLayoutConstants.cancelByCollect:
         return _getStatusTextHeader('Đã hủy', AppColors.orangeFFF5670A);
       case ActivityLayoutConstants.completed:
-        return _getStatusTextHeader('Hoàn thành', AppColors.greenFF61C53D);
+        return _getStatusTextHeader('Hoàn thành', AppColors.greenFF01C971);
       default:
         return const SizedBox.shrink();
     }
@@ -356,6 +395,8 @@ class SellerActivity extends StatelessWidget {
     return CustomText(
       text: text,
       color: color,
+      fontWeight: FontWeight.w500,
+      fontSize: 40.sp,
     );
   }
 }
@@ -374,7 +415,7 @@ class DealerActivityLayout extends StatelessWidget {
         body: CommonMarginContainer(
           child: body(),
         ),
-        backgroundColor: Colors.grey[200],
+        // backgroundColor: Colors.grey[200],
       ),
     );
   }
@@ -455,7 +496,7 @@ class _DealerTransactionListState extends State<DealerTransactionList> {
       enablePullDown: true,
       enablePullUp: true,
       header: const WaterDropHeader(
-        waterDropColor: AppColors.greenFF61C53D,
+        waterDropColor: AppColors.greenFF01C971,
         failed: SizedBox.shrink(),
         complete: SizedBox.shrink(),
       ),
@@ -585,6 +626,7 @@ class DealerActivity extends StatelessWidget {
         ),
         margin: EdgeInsets.symmetric(
           vertical: 20.h,
+          horizontal: 30.w,
         ),
         padding: EdgeInsets.symmetric(
           horizontal: 30.w,
@@ -593,34 +635,45 @@ class DealerActivity extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.all(
-              Radius.circular(30.0.r) //                 <--- border radius here
+              Radius.circular(20.0.r) //                 <--- border radius here
               ),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.greyFFDADADA,
+              blurRadius: 3.0,
+              spreadRadius: 0.0,
+              offset: Offset(2.0, 2.0), // shadow direction: bottom right
+            )
+          ]
         ),
         child: IntrinsicHeight(
           child: Row(
             children: [
               Container(
-                height: 230.r,
-                width: 230.r,
-                child: CachedNetworkImage(
-                  httpHeaders: {HttpHeaders.authorizationHeader: bearerToken},
-                  imageUrl: dealerUrl,
-                  imageBuilder: (context, imageProvider) => Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: imageProvider,
-                        fit: BoxFit.cover,
+                height: 190.r,
+                width: 190.r,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20.r),
+                  child: CachedNetworkImage(
+                    httpHeaders: {HttpHeaders.authorizationHeader: bearerToken},
+                    imageUrl: dealerUrl,
+                    imageBuilder: (context, imageProvider) => Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
-                  ),
-                  placeholder: (context, url) => Container(
-                    child: Center(
-                      child: FunctionalWidgets.getLoadingCircle(),
+                    placeholder: (context, url) => Container(
+                      child: Center(
+                        child: FunctionalWidgets.getLoadingCircle(),
+                      ),
                     ),
-                  ),
-                  errorWidget: (context, url, error) => Icon(
-                    Icons.error,
-                    color: AppColors.orangeFFE4625D,
+                    errorWidget: (context, url, error) => Icon(
+                      Icons.error,
+                      color: AppColors.orangeFFE4625D,
+                    ),
                   ),
                 ),
               ),
@@ -628,27 +681,66 @@ class DealerActivity extends StatelessWidget {
                 width: 20.w,
               ),
               Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    CustomText(text: dealerName),
-                    CustomText(text: time),
-                    Container(
-                      child: CustomText(
-                        text: price.toAppPrice(),
-                        textAlign: TextAlign.right,
+                child: Container(
+                  margin: EdgeInsets.only(
+                    left: 30.w,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      CustomText(
+                          text: dealerName,
+                        fontSize: 44.sp,
+                        fontWeight: FontWeight.w500,
                       ),
-                      width: double.infinity,
-                    ),
-                  ],
+                      CustomText(
+                          text: time,
+                        color: AppColors.greyFF939393,
+                        fontSize: 35.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      Container(
+                        child: CustomText(
+                          text: price.toAppPrice(),
+                          // textAlign: TextAlign.right,
+                        ),
+                        width: double.infinity,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class AvatarRadiantGradientMask extends StatelessWidget {
+  AvatarRadiantGradientMask({
+    required this.child,
+  });
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return ShaderMask(
+      shaderCallback: (bounds) => LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment
+            .bottomRight, // 10% of the width, so there are ten blinds.
+        colors: <Color>[
+          AppColors.greenFF61C53D.withOpacity(1),
+          AppColors.greenFF39AC8F.withOpacity(1),
+        ], // red to yellow
+        tileMode:
+        TileMode.repeated, // repeats the gradient over the canvas
+      ).createShader(bounds),
+      child: child,
     );
   }
 }

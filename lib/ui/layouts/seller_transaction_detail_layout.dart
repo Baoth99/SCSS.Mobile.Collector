@@ -8,11 +8,14 @@ import 'package:collector_app/ui/widgets/custom_text_widget.dart';
 import 'package:collector_app/ui/widgets/function_widgets.dart';
 import 'package:collector_app/ui/widgets/radiant_gradient_mask.dart';
 import 'package:collector_app/ui/widgets/request_detail_element_pattern.dart';
+import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:formz/formz.dart';
 import 'package:collector_app/utils/extension_methods.dart';
+
+import 'activity_layout.dart';
 
 class SellerTransctionDetailArgs {
   final String id;
@@ -39,11 +42,26 @@ class SellerTransactionDetailLayout extends StatelessWidget {
           title: CustomText(
             text: 'Yêu cầu thu gom',
             color: AppColors.white,
-            fontSize: 43.sp,
+            fontSize: 50.sp,
           ),
           color: AppColors.white,
           centerTitle: true,
           elevation: 0,
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.centerRight,
+                end: Alignment
+                    .centerLeft, // 10% of the width, so there are ten blinds.
+                colors: <Color>[
+                  AppColors.greenFF61C53D.withOpacity(0.5),
+                  AppColors.greenFF39AC8F.withOpacity(0.5),
+                ], // red to yellow
+                tileMode:
+                TileMode.repeated, // repeats the gradient over the canvas
+              ),
+            ),
+          ),
         ),
         body: BlocBuilder<SellerTransactionDetailBloc,
             SellerTransactionDetailState>(
@@ -199,11 +217,11 @@ class SellerInfo extends StatelessWidget {
   }
 
   Widget avatar() {
-    return RadiantGradientMask(
+    return AvatarRadiantGradientMask(
       child: Icon(
         Icons.account_circle_sharp,
         color: Colors.white,
-        size: 120.sp,
+        size: 130.sp,
       ),
     );
   }
@@ -212,7 +230,16 @@ class SellerInfo extends StatelessWidget {
     return BlocBuilder<SellerTransactionDetailBloc,
         SellerTransactionDetailState>(
       builder: (context, state) {
-        return CustomText(text: state.sellerName);
+        return Container(
+          margin: EdgeInsets.only(
+            left: 30.w,
+          ),
+          child: CustomText(
+              text: state.sellerName,
+            fontSize: 40.sp,
+            fontWeight: FontWeight.w500,
+          ),
+        );
       },
     );
   }
@@ -241,9 +268,12 @@ class RequestDetailHeader extends StatelessWidget {
   Widget _requestId(BuildContext context, String code) {
     return Row(
       children: <Widget>[
-        const Icon(
-          Icons.description_outlined,
-          color: AppColors.greenFF61C53D,
+        RadiantGradientMask(
+          child: Icon(
+            Icons.description_outlined,
+            color: AppColors.greenFF01C971,
+            size: 60.sp,
+          ),
         ),
         Expanded(
           child: Container(
@@ -251,7 +281,7 @@ class RequestDetailHeader extends StatelessWidget {
               horizontal: 20.w,
             ),
             child: CustomText(
-              text: 'Mã Đơn Hẹn: $code',
+              text: 'Mã Đơn: $code',
               fontWeight: FontWeight.w500,
               fontSize: 35.sp,
             ),
@@ -281,7 +311,11 @@ class RequestDetailBill extends StatelessWidget {
   }
 
   Widget title() {
-    return CustomText(text: 'Thông tin thu gom');
+    return CustomText(
+        text: 'Thông tin thu gom',
+      fontSize: 40.sp,
+      fontWeight: FontWeight.w500,
+    );
   }
 
   Widget time() {
@@ -313,7 +347,7 @@ class RequestDetailBill extends StatelessWidget {
   Widget bodyTime() {
     return BlocBuilder<SellerTransactionDetailBloc,
         SellerTransactionDetailState>(
-      builder: (context, state) {
+      builder: (context, state){
         return CustomText(
           text: state.doneActivityTime,
         );
@@ -358,9 +392,12 @@ class RequestDetailBill extends StatelessWidget {
     return Column(
       children: [
         getItems(),
-        getDivider(),
-        getSubInfo(),
-        getDivider(),
+        // getDivider(),
+        Container(
+            margin: EdgeInsets.only(top: 25.h, bottom: 15.h),
+            child: getSubInfo()
+        ),
+        _getDottedDivider(),
         Row(
           children: [
             Expanded(
@@ -468,7 +505,7 @@ class RequestDetailBill extends StatelessWidget {
   Widget getSubInfoItem(String name, String value) {
     return Container(
       margin: EdgeInsets.symmetric(
-        vertical: 8.h,
+        vertical: 12.h,
       ),
       child: Row(
         children: [
@@ -484,7 +521,8 @@ class RequestDetailBill extends StatelessWidget {
   Widget getSubInfoItemText(String text) {
     return CustomText(
       text: text,
-      color: Colors.grey[600],
+      color: AppColors.black,
+      fontSize: 38.sp,
     );
   }
 
@@ -493,6 +531,18 @@ class RequestDetailBill extends StatelessWidget {
       thickness: 2.5.h,
     );
   }
+
+  _getDottedDivider() {
+    return Container(
+      padding: EdgeInsets.only(top: 10.h, bottom: 30.h),
+      child: DottedLine(
+        direction: Axis.horizontal,
+        dashGapLength: 3.0,
+        dashColor: AppColors.greyFFB5B5B5,
+      ),
+    );
+  }
+
 }
 
 class RequestDetailDivider extends StatelessWidget {
@@ -501,8 +551,9 @@ class RequestDetailDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Divider(
-      thickness: 4.h,
+      thickness: 20.h,
       height: 100.h,
+      color: AppColors.greyFFEEEEEE,
     );
   }
 }

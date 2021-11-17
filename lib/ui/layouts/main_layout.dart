@@ -12,6 +12,7 @@ import 'package:collector_app/ui/layouts/home_layout.dart';
 import 'package:collector_app/ui/layouts/notification_layout.dart';
 import 'package:collector_app/ui/layouts/statistic_layout.dart';
 import 'package:collector_app/ui/widgets/custom_text_widget.dart';
+import 'package:collector_app/ui/widgets/radiant_gradient_mask.dart';
 import 'package:collector_app/utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -66,20 +67,20 @@ class _MainLayoutState extends State<MainLayout> {
     } catch (e) {
       AppLog.error(e);
     }
-    // try {
-    //   _timer5 = Timer.periodic(
-    //     const Duration(seconds: 60),
-    //     (timer) {
-    //       try {
-    //         context.read<HomeBloc>().add(HomeFetch());
-    //       } catch (e) {
-    //         AppLog.error(e);
-    //       }
-    //     },
-    //   );
-    // } catch (e) {
-    //   AppLog.error(e);
-    // }
+    try {
+      _timer5 = Timer.periodic(
+        const Duration(seconds: 60),
+        (timer) {
+          try {
+            context.read<HomeBloc>().add(HomeFetch());
+          } catch (e) {
+            AppLog.error(e);
+          }
+        },
+      );
+    } catch (e) {
+      AppLog.error(e);
+    }
   }
 
   @override
@@ -103,16 +104,18 @@ class _MainLayoutState extends State<MainLayout> {
                 backgroundColor: Colors.transparent,
                 elevation: 0,
                 type: BottomNavigationBarType.fixed,
-                selectedItemColor: Color(0xFF61C53D),
+                selectedItemColor: AppColors.greenFF01C971,
                 unselectedFontSize: 23.sp,
                 selectedFontSize: 26.sp,
                 currentIndex: state.screenIndex,
                 items: <BottomNavigationBarItem>[
                   BottomNavigationBarItem(
-                    icon: Icon(
-                      state.screenIndex == MainLayoutConstants.statistic
-                          ? Icons.analytics
-                          : Icons.analytics_outlined,
+                    icon: RadiantGradientMask(
+                      child: Icon(
+                        state.screenIndex == MainLayoutConstants.statistic
+                            ? Icons.analytics
+                            : Icons.analytics_outlined,
+                      ),
                     ),
                     label: 'Thống kê',
                   ),
@@ -122,11 +125,13 @@ class _MainLayoutState extends State<MainLayout> {
                         return Stack(
                           clipBehavior: Clip.none,
                           children: [
-                            Icon(
-                              state.screenIndex ==
-                                      MainLayoutConstants.notification
-                                  ? Icons.notifications
-                                  : Icons.notifications_outlined,
+                            RadiantGradientMask(
+                              child: Icon(
+                                state.screenIndex ==
+                                        MainLayoutConstants.notification
+                                    ? Icons.notifications
+                                    : Icons.notifications_outlined,
+                              ),
                             ),
                             sno.unreadCount > 0
                                 ? Positioned(
@@ -160,26 +165,32 @@ class _MainLayoutState extends State<MainLayout> {
                     label: 'Thông báo',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(
-                      state.screenIndex == MainLayoutConstants.home
-                          ? Icons.home
-                          : Icons.home_outlined,
+                    icon: RadiantGradientMask(
+                      child: Icon(
+                        state.screenIndex == MainLayoutConstants.home
+                            ? Icons.home
+                            : Icons.home_outlined,
+                      ),
                     ),
                     label: 'Trang chủ',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(
-                      state.screenIndex == MainLayoutConstants.activity
-                          ? Icons.history
-                          : Icons.history_outlined,
+                    icon: RadiantGradientMask(
+                      child: Icon(
+                        state.screenIndex == MainLayoutConstants.activity
+                            ? Icons.history
+                            : Icons.history_outlined,
+                      ),
                     ),
                     label: 'Hoạt động',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(
-                      state.screenIndex == MainLayoutConstants.account
-                          ? Icons.person
-                          : Icons.person_outline,
+                    icon: RadiantGradientMask(
+                      child: Icon(
+                        state.screenIndex == MainLayoutConstants.account
+                            ? Icons.person
+                            : Icons.person_outline,
+                      ),
                     ),
                     label: 'Tài khoản',
                   ),

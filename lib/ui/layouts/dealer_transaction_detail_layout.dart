@@ -11,6 +11,8 @@ import 'package:collector_app/ui/widgets/complaint_done_widget.dart';
 import 'package:collector_app/ui/widgets/custom_text_widget.dart';
 import 'package:collector_app/ui/widgets/function_widgets.dart';
 import 'package:collector_app/ui/widgets/request_detail_element_pattern.dart';
+import 'package:dotted_line/dotted_line.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -41,13 +43,28 @@ class DealerTransactionDetailLayout extends StatelessWidget {
         appBar: FunctionalWidgets.buildAppBar(
           context: context,
           title: CustomText(
-            text: 'Yêu cầu thu gom',
+            text: 'Lịch sử bán',
             color: AppColors.white,
-            fontSize: 43.sp,
+            fontSize: 50.sp,
           ),
           color: AppColors.white,
           centerTitle: true,
           elevation: 0,
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.centerRight,
+                end: Alignment
+                    .centerLeft, // 10% of the width, so there are ten blinds.
+                colors: <Color>[
+                  AppColors.greenFF61C53D.withOpacity(0.5),
+                  AppColors.greenFF39AC8F.withOpacity(0.5),
+                ], // red to yellow
+                tileMode:
+                TileMode.repeated, // repeats the gradient over the canvas
+              ),
+            ),
+          ),
         ),
         body: BlocBuilder<DealerTransactionDetailBloc,
             DealerTransactionDetailState>(
@@ -219,9 +236,10 @@ class RequestDetailHeader extends StatelessWidget {
   Widget _requestId(BuildContext context, String code) {
     return Row(
       children: <Widget>[
-        const Icon(
+         Icon(
           Icons.description_outlined,
-          color: AppColors.greenFF61C53D,
+          color: AppColors.greenFF01C971,
+          size: 60.sp,
         ),
         Expanded(
           child: Container(
@@ -259,7 +277,9 @@ class DealerInfo extends StatelessWidget {
     return BlocBuilder<DealerTransactionDetailBloc,
         DealerTransactionDetailState>(
       builder: (context, state) {
-        return AvatarDealerCircle(url: state.dealerImageUrl);
+        return AvatarDealerCircle(
+            url: state.dealerImageUrl,
+        );
       },
     );
   }
@@ -268,16 +288,26 @@ class DealerInfo extends StatelessWidget {
     return BlocBuilder<DealerTransactionDetailBloc,
         DealerTransactionDetailState>(
       builder: (context, state) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CustomText(
-              text: state.dealerName,
-            ),
-            CustomText(
-              text: state.dealerPhone,
-            ),
-          ],
+        return Container(
+          margin: EdgeInsets.only(
+            left: 30.w,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CustomText(
+                text: state.dealerName,
+                fontSize: 40.sp,
+                fontWeight: FontWeight.w500,
+              ),
+              SizedBox(
+                height: 10.h,
+              ),
+              CustomText(
+                text: state.dealerPhone,
+              ),
+            ],
+          ),
         );
       },
     );
@@ -342,9 +372,12 @@ class RequestDetailBill extends StatelessWidget {
     return Column(
       children: [
         getItems(),
-        getDivider(),
-        getSubInfo(),
-        getDivider(),
+        // getDivider(),
+        Container(
+            margin: EdgeInsets.only(top: 25.h, bottom: 15.h),
+            child: getSubInfo()
+        ),
+        _getDottedDivider(),
         Row(
           children: [
             Expanded(
@@ -422,7 +455,7 @@ class RequestDetailBill extends StatelessWidget {
   }) {
     return Container(
       margin: EdgeInsets.symmetric(
-        vertical: 8.h,
+        vertical: 12.h,
       ),
       child: Row(
         children: [
@@ -466,7 +499,8 @@ class RequestDetailBill extends StatelessWidget {
   Widget getSubInfoItemText(String text) {
     return CustomText(
       text: text,
-      color: Colors.grey[600],
+      color: AppColors.black,
+      fontSize: 38.sp,
     );
   }
 
@@ -540,6 +574,17 @@ class RequestDetailBill extends StatelessWidget {
   Widget getDivider() {
     return Divider(
       thickness: 2.5.h,
+    );
+  }
+
+  _getDottedDivider() {
+    return Container(
+      padding: EdgeInsets.only(top: 10.h, bottom: 30.h),
+      child: DottedLine(
+        direction: Axis.horizontal,
+        dashGapLength: 3.0,
+        dashColor: AppColors.greyFFB5B5B5,
+      ),
     );
   }
 }
@@ -728,7 +773,7 @@ class Feedback extends StatelessWidget {
                 ),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColors.greenFF61C53D),
+                borderSide: BorderSide(color: AppColors.greenFF01C971),
               ),
             ),
             textInputAction: TextInputAction.done,
@@ -752,7 +797,7 @@ class Feedback extends StatelessWidget {
                 double.infinity,
                 WidgetConstants.buttonCommonHeight.h,
               ),
-              primary: AppColors.greenFF61C53D,
+              primary: AppColors.greenFF01C971,
             ),
           ),
         ),
@@ -767,8 +812,9 @@ class RequestDetailDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Divider(
-      thickness: 4.h,
+      thickness: 20.h,
       height: 100.h,
+      color: AppColors.greyFFEEEEEE,
     );
   }
 }

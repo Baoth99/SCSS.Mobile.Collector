@@ -7,7 +7,7 @@ class CustomBorderTextFormField extends StatefulWidget {
   const CustomBorderTextFormField({
     Key? key,
     this.labelText,
-    this.commonColor = AppColors.greenFF61C53D,
+    this.commonColor = AppColors.greenFF01C971,
     this.defaultColor = AppColors.greyFFB5B5B5,
     this.keyboardType = TextInputType.multiline,
     this.obscureText = false,

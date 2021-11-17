@@ -11,7 +11,7 @@ class DeviceConstants {
 
 class AppConstants {
   static const String appTitle = "Collector";
-  static const Color primaryColor = AppColors.greenFF61C53D;
+  static const Color primaryColor = AppColors.greenFF01C971;
   static const Color accentColor = AppColors.greenFF61C53D;
   static const double horizontalScaffoldMargin = 48.0;
   static const Color lightGray = const Color.fromARGB(255, 248, 248, 248);

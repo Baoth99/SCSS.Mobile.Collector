@@ -4,6 +4,8 @@ import 'package:collector_app/blocs/models/scrap_category_model.dart';
 import 'package:collector_app/blocs/states/categories_state.dart';
 import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/constants/text_constants.dart';
+import 'package:collector_app/ui/widgets/arrow_back_button.dart';
+import 'package:collector_app/ui/widgets/custom_text_widget.dart';
 import 'package:collector_app/ui/widgets/function_widgets.dart';
 import 'package:collector_app/utils/cool_alert.dart';
 import 'package:cool_alert/cool_alert.dart';
@@ -12,6 +14,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CategoriesLayout extends StatelessWidget {
   const CategoriesLayout();
@@ -55,9 +58,15 @@ class CategoriesLayout extends StatelessWidget {
   AppBar _appBar(BuildContext context) {
     return AppBar(
       elevation: 0,
-      title: Text(
-        TextConstants.category,
+      title: CustomText(
+        text: TextConstants.category,
+        color: AppColors.black,
+        fontSize: 60.sp,
       ),
+      leading: ArrowBackIconButton(
+        color: AppColors.greyFF939393,
+      ),
+      backgroundColor: AppColors.white,
       actions: [
         BlocBuilder<CategoriesBloc, CategoriesState>(
           buildWhen: (p, c) => false,
@@ -73,6 +82,7 @@ class CategoriesLayout extends StatelessWidget {
                 child: Center(
                   child: Icon(
                     Icons.add,
+                    color: AppColors.black,
                   ),
                 ),
               ),
@@ -87,9 +97,12 @@ class CategoriesLayout extends StatelessWidget {
     return Container(
       child: Column(
         children: [
-          SizedBox(
-            height: 70,
-            child: _searchField(),
+          Material(
+            elevation: 1,
+            child: SizedBox(
+              height: 70,
+              child: _searchField(),
+            ),
           ),
           Flexible(
             child: _list(),
@@ -109,11 +122,16 @@ class CategoriesLayout extends StatelessWidget {
           child: TextFormField(
             decoration: InputDecoration(
               border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
-              labelText: 'Tìm danh mục...',
+                  OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide.none,
+                  ),
+              hintText: 'Tìm danh mục...',
               floatingLabelBehavior: FloatingLabelBehavior.auto,
               prefixIcon:
-                  Icon(Icons.search, color: Theme.of(context).accentColor),
+                  Icon(Icons.search, color: Colors.grey[600]),
+              fillColor: Colors.grey[200],
+              filled: true,
             ),
             onChanged: (value) {
               context
