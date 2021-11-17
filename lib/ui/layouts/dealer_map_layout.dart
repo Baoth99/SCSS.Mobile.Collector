@@ -5,12 +5,14 @@ import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/log/logger.dart';
 import 'package:collector_app/providers/services/dealer_service.dart';
 import 'package:collector_app/ui/layouts/dealer_search_layout.dart';
+import 'package:collector_app/ui/widgets/function_widgets.dart';
 import 'package:collector_app/utils/env_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 
 class DealerMapLayout extends StatelessWidget {
   const DealerMapLayout({DealerService? dealerService, Key? key})
@@ -21,7 +23,15 @@ class DealerMapLayout extends StatelessWidget {
     return BlocProvider(
       create: (context) => DealerSearchBloc()..add(DealerSearchInitialEvent()),
       child: Scaffold(
-        body: DealerMapBody(),
+        body: BlocBuilder<DealerSearchBloc, DealerSearchState>(
+          builder: (context, state) {
+            return state.status.isSubmissionSuccess
+                ? DealerMapBody()
+                : state.status.isSubmissionFailure
+                    ? FunctionalWidgets.getErrorIcon()
+                    : FunctionalWidgets.getLoadingAnimation();
+          },
+        ),
       ),
     );
   }
@@ -47,13 +57,16 @@ class _DealerMapBodyState extends State<DealerMapBody> {
     super.dispose();
   }
 
-  void _onStyleLoaded() {
-    addImageFromAsset(ImagesPaths.placeSymbolName, ImagesPaths.placeSymbol);
+  void Function() _onStyleLoaded(DealerSearchState state) {
+    return () {
+      addImageFromAsset(ImagesPaths.placeSymbolName, ImagesPaths.placeSymbol);
+      controller!.onSymbolTapped.add(_onSymbolTapped);
+      _addAll(state.listDealers);
+    };
   }
 
   void _onMapCreated(controller) {
     this.controller = controller;
-    controller.onSymbolTapped.add(_onSymbolTapped);
   }
 
   void _onSymbolTapped(Symbol symbol) {
@@ -124,7 +137,6 @@ class _DealerMapBodyState extends State<DealerMapBody> {
         BlocBuilder<DealerSearchBloc, DealerSearchState>(
           buildWhen: (previous, current) => previous.status != current.status,
           builder: (context, state) {
-            _addAll(state.listDealers);
             return MapboxMap(
               initialCameraPosition: CameraPosition(
                 target: LatLng(
@@ -137,7 +149,7 @@ class _DealerMapBodyState extends State<DealerMapBody> {
               onMapCreated: _onMapCreated,
               trackCameraPosition: true,
               styleString: EnvMapSettingValue.mapStype,
-              onStyleLoadedCallback: _onStyleLoaded,
+              onStyleLoadedCallback: _onStyleLoaded(state),
               rotateGesturesEnabled: false,
               scrollGesturesEnabled: true,
               tiltGesturesEnabled: false,
@@ -188,7 +200,7 @@ class _DealerMapBodyState extends State<DealerMapBody> {
               radius: 70.r,
               child: IconButton(
                 icon: Icon(
-                    Icons.arrow_back_ios_new,
+                  Icons.arrow_back_ios_new,
                   color: AppColors.black,
                 ),
                 onPressed: () {
@@ -221,23 +233,5 @@ class _DealerMapBodyState extends State<DealerMapBody> {
             : SizedBox.shrink(),
       ],
     );
-  }
-
-  void _animateCrurentLocation() async {
-    LatLng latLng = LatLng(currentLatitude, currentLongitude);
-    await _animateLocation(latLng);
-  }
-
-  Future<void> _animateLocation(LatLng? latlng) async {
-    if (latlng != null) {
-      await controller?.animateCamera(
-        CameraUpdate.newLatLng(
-          latlng,
-        ),
-      );
-      await controller?.animateCamera(
-        CameraUpdate.zoomTo(15),
-      );
-    }
   }
 }
