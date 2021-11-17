@@ -38,6 +38,10 @@ class CreateTransactionBloc
       //get categories
       yield state.copyWith(process: CreateTransactionProcess.processing);
       try {
+        var infoReviewModel = await collectDealTransactionHandler
+            .getSellCollectTransactionInfoReview(
+                collectingRequestId: collectingRequestId);
+
         var scrapCategories = await dataHandler.getScrapCategoryList();
         if (scrapCategories != null) {
           Map<String, String> scrapCategoryMap = {};
@@ -48,6 +52,7 @@ class CreateTransactionBloc
             scrapCategories: scrapCategories,
             scrapCategoryMap: scrapCategoryMap,
             itemDealerCategoryId: TextConstants.zeroId,
+            transactionFeePercent: infoReviewModel.transactionFeePercent,
           );
         }
         yield state.copyWith(process: CreateTransactionProcess.processed);

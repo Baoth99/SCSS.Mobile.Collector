@@ -18,7 +18,7 @@ class CreateTransactionState {
   String collectorPhone;
   String? collectorName;
   int total;
-  int transactionFeePercent;
+  double transactionFeePercent;
 
   List<SellCollectTransactionDetailModel> items;
 
@@ -63,7 +63,11 @@ class CreateTransactionState {
   }
 
   int get transactionFee {
-    return transactionFeePercent * total;
+    return (transactionFeePercent * total).truncate();
+  }
+
+  int get grandTotal {
+    return total - transactionFee;
   }
 
   //validators
@@ -143,7 +147,7 @@ class CreateTransactionState {
     String? collectorPhone,
     String? collectorName,
     int? total,
-    int? transactionFeePercent,
+    double? transactionFeePercent,
     List<SellCollectTransactionDetailModel>? items,
     CreateTransactionProcess? process,
     bool? isModalBottomSheetShowed,
@@ -199,7 +203,7 @@ class CreateTransactionState {
     String? collectorPhone,
     String? collectorName,
     int? total,
-    int? transactionFeePercent,
+    double? transactionFeePercent,
     List<SellCollectTransactionDetailModel>? items,
     CreateTransactionProcess? process,
     bool? isItemDialogShowed,

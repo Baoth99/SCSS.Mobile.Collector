@@ -116,7 +116,8 @@ class CreateTransactionLayout extends StatelessWidget {
                       Divider(),
                       _detailText(),
                       _items(),
-                      const Divider(),
+                      if (state.transactionFee != 0) const Divider(),
+                      if (state.transactionFee != 0) _transactionFee(),
                       const Divider(),
                       _total(),
                     ],
@@ -274,6 +275,20 @@ class CreateTransactionLayout extends StatelessWidget {
     );
   }
 
+  _transactionFee() {
+    return BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
+      builder: (context, state) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(TextConstants.transactionFee),
+            Text(CustomFormats.currencyFormat.format(state.transactionFee)),
+          ],
+        );
+      },
+    );
+  }
+
   _total() {
     return BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
       builder: (context, state) {
@@ -281,7 +296,7 @@ class CreateTransactionLayout extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(TextConstants.total),
-            Text(CustomFormats.currencyFormat.format(state.total)),
+            Text(CustomFormats.currencyFormat.format(state.grandTotal)),
           ],
         );
       },
