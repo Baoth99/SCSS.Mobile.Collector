@@ -163,29 +163,33 @@ class PendingRequestDetailBody extends StatelessWidget {
             //     ),
             //   ),
             // ),
-            Positioned.fill(
-              right: 50.w,
-              top: 750.h,
-              child: Align(
-                alignment: Alignment.topRight,
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(70.r),
-                    color: AppColors.blueFF4F94E8,
-                  ),
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.directions,
-                      size: 90.sp,
-                      color: Colors.white,
+            state.collectingRequestDetailStatus ==
+                    CollectingRequestDetailStatus.pending
+                ? SizedBox.shrink()
+                : Positioned.fill(
+                    right: 50.w,
+                    top: 750.h,
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(70.r),
+                          color: AppColors.blueFF4F94E8,
+                        ),
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.directions,
+                            size: 90.sp,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {
+                            CommonUtils.launchMapDir(
+                                state.latitude, state.longtitude);
+                          },
+                        ),
+                      ),
                     ),
-                    onPressed: () {
-                      CommonUtils.launchMapDir(state.latitude, state.longtitude);
-                    },
                   ),
-                ),
-              ),
-            ),
           ],
         );
       },
@@ -686,9 +690,7 @@ class SellerInforatmionDialog extends StatelessWidget {
 
   Widget getName() {
     return Container(
-      margin: EdgeInsets.symmetric(
-        vertical: 30.h
-      ),
+      margin: EdgeInsets.symmetric(vertical: 30.h),
       child: CustomText(
         text: name,
         textAlign: TextAlign.center,
@@ -719,11 +721,7 @@ class SellerInforatmionDialog extends StatelessWidget {
           children: [
             Container(
               margin: EdgeInsets.only(
-                top: 40.r,
-                bottom: 40.r,
-                left: 90.r,
-                right: 60.r
-              ),
+                  top: 40.r, bottom: 40.r, left: 90.r, right: 60.r),
               padding: EdgeInsets.all(
                 20.r,
               ),
@@ -736,8 +734,8 @@ class SellerInforatmionDialog extends StatelessWidget {
               ),
             ),
             CustomText(
-                text: sellerPhoneNumber,
-                fontSize: 50.sp,
+              text: sellerPhoneNumber,
+              fontSize: 50.sp,
             ),
           ],
         ),
