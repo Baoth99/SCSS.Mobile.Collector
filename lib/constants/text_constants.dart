@@ -58,4 +58,5 @@ class TextConstants {
   static const String totalSmallerThanZero = 'Tổng cộng phải lớn hơn 0 đ';
   static const String totalOverLimit = 'Tổng cộng thấp hơn 100 triệu đồng';
   static const String addScrap = 'Thêm phế liệu';
+  static const String transactionFee = 'Phí giao dịch';
 }

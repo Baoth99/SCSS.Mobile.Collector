@@ -71,6 +71,8 @@ class APIServiceURI {
       '/api/v4/scrap-category/remove';
   static const String apiUrlPostSellCollectTransaction =
       '/api/v4/transaction/sell-colect/create';
+  static const String apiUrlGetSellCollectTransactionInfoReview =
+      '/api/v4/transaction/sell-colect/info-review';
   /* Thien */
   static final notificationGet = '${apiUrl}notification/get';
   static final notificationUnreadCount = '${apiUrl}notification/unread-count';
@@ -119,6 +121,8 @@ class CommonApiConstants {
       'Failed to get collector phones';
   static const String getImageFailedException = 'Failed to Get Image';
   static const String postImageFailedException = 'Failed to Post Image';
+  static const String getInfoReviewException =
+      'Failed to get info review at transaction network';
 
   static final unnamedScrapCategory = ScrapCategoryModel.createTransactionModel(
     id: '00000000-0000-0000-0000-000000000000',

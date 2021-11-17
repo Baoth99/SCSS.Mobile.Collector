@@ -71,7 +71,7 @@ class CreateTransactionLayout extends StatelessWidget {
                 TextConstants.createTransaction,
               ),
             ),
-            body: _body(),
+            body: _body(arguments: arguments),
           ),
         ),
       );
@@ -79,7 +79,7 @@ class CreateTransactionLayout extends StatelessWidget {
       return FunctionalWidgets.customErrorWidget();
   }
 
-  _body() {
+  _body({required Map arguments}) {
     return BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
       builder: (context, state) {
         return Container(
@@ -94,11 +94,30 @@ class CreateTransactionLayout extends StatelessWidget {
                   fit: FlexFit.tight,
                   child: ListView(
                     children: [
-                      // _phoneField(),
-                      // _nameField(),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.receipt_long,
+                            color: Colors.green,
+                          ),
+                          SizedBox(width: 10),
+                          Text('Mã Đơn: ${arguments['collectingRequestCode']}'),
+                        ],
+                      ),
+                      Divider(),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Người bán: ${arguments['sellerName']}'),
+                          SizedBox(height: 10),
+                          Text('SĐT người bán: ${arguments['sellerPhone']}'),
+                        ],
+                      ),
+                      Divider(),
                       _detailText(),
                       _items(),
-                      const Divider(),
+                      if (state.transactionFee != 0) const Divider(),
+                      if (state.transactionFee != 0) _transactionFee(),
                       const Divider(),
                       _total(),
                     ],
@@ -109,43 +128,6 @@ class CreateTransactionLayout extends StatelessWidget {
                   child: _transactionButtons(),
                 ),
               ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  _phoneField() {
-    return BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
-      buildWhen: (p, c) => false,
-      builder: (context, state) {
-        return SizedBox(
-          height: 90,
-          child: TextFormField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: TextConstants.sellerPhone,
-              floatingLabelBehavior: FloatingLabelBehavior.always,
-            ),
-            enabled: false,
-          ),
-        );
-      },
-    );
-  }
-
-  _nameField() {
-    return BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
-      builder: (context, state) {
-        return SizedBox(
-          height: 90,
-          child: TextFormField(
-            enabled: false,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: TextConstants.sellerName,
-              floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
           ),
         );
@@ -236,8 +218,22 @@ class CreateTransactionLayout extends StatelessWidget {
                               child: Text(
                                 state.items[index].quantity != 0 &&
                                         state.items[index].unit != null
-                                    ? '${CustomFormats.numberFormat.format(state.items[index].quantity)} ${state.items[index].unit}'
+                                    ? '${CustomFormats.quantityFormat.format(state.items[index].quantity).replaceAll(RegExp(r'\.'), ',')} ${state.items[index].unit}'
                                     : TextConstants.emptyString,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        if (!(state.items[index].quantity != 0 &&
+                            state.items[index].unit != null &&
+                            state.items[index].isCalculatedByUnitPrice))
+                          Flexible(
+                            flex: 3,
+                            fit: FlexFit.loose,
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                '-',
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -279,6 +275,20 @@ class CreateTransactionLayout extends StatelessWidget {
     );
   }
 
+  _transactionFee() {
+    return BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
+      builder: (context, state) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(TextConstants.transactionFee),
+            Text(CustomFormats.currencyFormat.format(state.transactionFee)),
+          ],
+        );
+      },
+    );
+  }
+
   _total() {
     return BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
       builder: (context, state) {
@@ -286,7 +296,7 @@ class CreateTransactionLayout extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(TextConstants.total),
-            Text(CustomFormats.currencyFormat.format(state.total)),
+            Text(CustomFormats.currencyFormat.format(state.grandTotal)),
           ],
         );
       },
@@ -323,23 +333,39 @@ class CreateTransactionLayout extends StatelessWidget {
         value: BlocProvider.of<CreateTransactionBloc>(context),
         child: AlertDialog(
           insetPadding: EdgeInsets.zero,
-          content: SizedBox(
-            width: 320,
-            height: 400,
-            child: Form(
-              key: _itemFormKey,
-              child: ListView(
-                children: [
-                  _calculatedByUnitPriceSwitch(),
-                  FunctionalWidgets.rowFlexibleBuilder(
-                    _scrapCategoryUnitField(),
-                    _scrapCategoryField(),
-                    rowFlexibleType.bigToSmall,
-                  ),
-                  _quantityField(),
-                  _unitPriceField(),
-                  _totalField(),
-                ],
+          content: Scrollbar(
+            isAlwaysShown: true,
+            child: SizedBox(
+              width: 320,
+              height: 340,
+              child: Form(
+                key: _itemFormKey,
+                child: ListView(
+                  children: [
+                    _calculatedByUnitPriceSwitch(),
+                    FunctionalWidgets.rowFlexibleBuilder(
+                      _scrapCategoryUnitField(),
+                      _scrapCategoryField(),
+                      rowFlexibleType.bigToSmall,
+                    ),
+                    _quantityField(),
+                    BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
+                      builder: (context, state) {
+                        return Visibility(
+                          visible: (state.itemQuantity -
+                                  state.itemQuantity.truncate()) >
+                              0,
+                          child: SizedBox(
+                            height: 30,
+                            child: Text('abcxyz'),
+                          ),
+                        );
+                      },
+                    ),
+                    _unitPriceField(),
+                    _totalField(),
+                  ],
+                ),
               ),
             ),
           ),
@@ -489,15 +515,19 @@ class CreateTransactionLayout extends StatelessWidget {
                 labelText: TextConstants.quantity,
                 floatingLabelBehavior: FloatingLabelBehavior.auto,
               ),
-              keyboardType: TextInputType.number,
-              inputFormatters: [CurrencyTextFormatter()],
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'(^\d*,?\d*)')),
+              ],
               initialValue:
-                  CustomFormats.numberFormat.format(state.itemQuantity),
+                  state.itemQuantity.toString().replaceAll(RegExp(r'\.'), ','),
               onChanged: (value) {
-                if (value != TextConstants.emptyString) {
-                  context.read<CreateTransactionBloc>().add(
-                      EventQuantityChanged(
-                          quantity: value.replaceAll(RegExp(r'[^0-9]'), '')));
+                if (value != TextConstants.emptyString && value != ',') {
+                  var valueWithDot = value.replaceAll(RegExp(r'[^0-9],'), '');
+                  valueWithDot = valueWithDot.replaceAll(RegExp(r','), '.');
+                  context
+                      .read<CreateTransactionBloc>()
+                      .add(EventQuantityChanged(quantity: valueWithDot));
                 } else {
                   context.read<CreateTransactionBloc>().add(
                       EventQuantityChanged(quantity: TextConstants.zeroString));

@@ -18,7 +18,7 @@ class CreateTransactionState {
   String collectorPhone;
   String? collectorName;
   int total;
-  int transactionFeePercent;
+  double transactionFeePercent;
 
   List<SellCollectTransactionDetailModel> items;
 
@@ -34,7 +34,7 @@ class CreateTransactionState {
   String itemDealerCategoryId;
   String? itemDealerCategoryDetailId;
   int itemTotal;
-  int itemQuantity;
+  double itemQuantity;
   int itemPrice;
   bool isItemTotalCalculatedByUnitPrice;
   List<ScrapCategoryUnitModel> scrapCategoryDetails;
@@ -47,7 +47,7 @@ class CreateTransactionState {
 
   int get itemTotalCalculated {
     if (isItemTotalCalculatedByUnitPrice && itemPrice != 0)
-      return itemPrice * itemQuantity;
+      return (itemPrice * itemQuantity).truncate();
     else
       return 0;
   }
@@ -63,7 +63,11 @@ class CreateTransactionState {
   }
 
   int get transactionFee {
-    return transactionFeePercent * total;
+    return (transactionFeePercent * total).truncate();
+  }
+
+  int get grandTotal {
+    return total - transactionFee;
   }
 
   //validators
@@ -143,7 +147,7 @@ class CreateTransactionState {
     String? collectorPhone,
     String? collectorName,
     int? total,
-    int? transactionFeePercent,
+    double? transactionFeePercent,
     List<SellCollectTransactionDetailModel>? items,
     CreateTransactionProcess? process,
     bool? isModalBottomSheetShowed,
@@ -155,7 +159,7 @@ class CreateTransactionState {
     int? key,
     String? itemDealerCategoryId,
     String? itemDealerCategoryDetailId,
-    int? itemQuantity,
+    double? itemQuantity,
     String? itemPromotionId,
     int? itemBonusAmount,
     int? itemTotal,
@@ -199,7 +203,7 @@ class CreateTransactionState {
     String? collectorPhone,
     String? collectorName,
     int? total,
-    int? transactionFeePercent,
+    double? transactionFeePercent,
     List<SellCollectTransactionDetailModel>? items,
     CreateTransactionProcess? process,
     bool? isItemDialogShowed,
@@ -211,7 +215,7 @@ class CreateTransactionState {
     int? key,
     String? itemDealerCategoryId,
     String? itemDealerCategoryDetailId,
-    int? itemQuantity,
+    double? itemQuantity,
     String? itemPromotionId,
     int? itemBonusAmount,
     int? itemTotal,

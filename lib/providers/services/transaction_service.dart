@@ -9,6 +9,7 @@ import 'package:collector_app/constants/text_constants.dart';
 import 'package:collector_app/providers/configs/injection_config.dart';
 import 'package:collector_app/providers/networks/models/request/create_collect_deal_transaction_request_model.dart.dart';
 import 'package:collector_app/providers/networks/models/request/feedback_dealer_transaction_request_model.dart';
+import 'package:collector_app/providers/networks/models/response/get_sell_collect_transaction_info_review_response_model.dart';
 import 'package:collector_app/providers/networks/models/response/sell_collect_complaint_request_model.dart';
 import 'package:collector_app/providers/networks/transaction_network.dart';
 import 'package:collector_app/utils/common_utils.dart';
@@ -34,6 +35,9 @@ abstract class TransactionService {
       String sellingFeedback, int complaintType);
   Future<bool> createSellCollectTransaction(
       {required CreateSellCollectTransactionRequestModel model});
+  Future<GetSellCollectTransactionInfoReviewModel>
+      getSellCollectTransactionInfoReview(
+          {required String collectingRequestId});
 }
 
 class TransactionServiceImpl implements TransactionService {
@@ -305,6 +309,27 @@ class TransactionServiceImpl implements TransactionService {
         );
         //get info review
         return result['isSuccess'] ?? false;
+      } else
+        throw Exception(TextConstants.missingBearerToken);
+    } catch (e) {
+      throw (e);
+    }
+  }
+
+  Future<GetSellCollectTransactionInfoReviewModel>
+      getSellCollectTransactionInfoReview(
+          {required String collectingRequestId}) async {
+    try {
+      //get access token
+      var accessToken = await NetworkUtils.getBearerTokenPure();
+      if (accessToken.isNotEmpty) {
+        var result =
+            await TransactionNetworkImpl.getSellCollectTransactionInfoReview(
+          bearerToken: accessToken,
+          collectingRequestId: collectingRequestId,
+        );
+        //get info review
+        return result.resData;
       } else
         throw Exception(TextConstants.missingBearerToken);
     } catch (e) {

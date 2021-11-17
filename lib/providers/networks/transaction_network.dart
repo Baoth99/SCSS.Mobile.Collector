@@ -18,6 +18,8 @@ import 'package:http/http.dart';
 import 'package:collector_app/utils/extension_methods.dart';
 import 'package:http/http.dart' as http;
 
+import 'models/response/get_sell_collect_transaction_info_review_response_model.dart';
+
 abstract class TransactionNetwork {
   Future<SellerTransactionResponseModel> getSellerTransaction(
     int page,
@@ -241,5 +243,36 @@ class TransactionNetworkImpl implements TransactionNetwork {
     );
 
     return json.decode(response.body);
+  }
+
+  static Future<GetSellCollectTransactionInfoReviewResponseModel>
+      getSellCollectTransactionInfoReview({
+    required String bearerToken,
+    required String collectingRequestId,
+  }) async {
+    try {
+      //add headers
+      Map<String, String> headers = {
+        HttpHeaders.contentTypeHeader: 'application/json',
+        HttpHeaders.authorizationHeader: 'Bearer $bearerToken',
+      };
+
+      Map<String, dynamic> params = {
+        'collectingRequestId': collectingRequestId,
+      };
+
+      final uri = Uri.http(EnvBaseAppSettingValue.baseApiUrlWithoutHttp,
+          APIServiceURI.apiUrlGetSellCollectTransactionInfoReview, params);
+
+      final response = await http.get(
+        uri,
+        headers: headers,
+      );
+
+      return getSellCollectTransactionInfoReviewResponseModelFromJson(
+          response.body);
+    } catch (e) {
+      throw CommonApiConstants.getInfoReviewException;
+    }
   }
 }

@@ -11,6 +11,7 @@ import 'package:collector_app/ui/widgets/complaint_done_widget.dart';
 import 'package:collector_app/ui/widgets/custom_text_widget.dart';
 import 'package:collector_app/ui/widgets/function_widgets.dart';
 import 'package:collector_app/ui/widgets/request_detail_element_pattern.dart';
+import 'package:collector_app/utils/custom_formats.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -554,20 +555,34 @@ class RequestDetailBill extends StatelessWidget {
             ),
             width: 350.w,
           ),
-          getItemText(quantity == 0 || unit.isEmpty
-              ? Symbols.minus
-              : '${quantity.toStringAndRemoveFractionalIfCan()} $unit'),
-          getItemText(price),
+          SizedBox(
+            width: 60,
+            child: getItemText(
+              quantity == 0 || unit.isEmpty
+                  ? Symbols.minus
+                  : '${CustomFormats.quantityFormat.format(quantity).replaceAll(RegExp(r'\.'), ',')} $unit',
+              textAlign: TextAlign.left,
+            ),
+          ),
+          SizedBox(
+            width: 80,
+            child: getItemText(
+              price,
+              textAlign: TextAlign.right,
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget getItemText(String text) {
+  Widget getItemText(String text, {TextAlign? textAlign}) {
     return CustomText(
       text: text,
       fontSize: 40.sp,
       color: Colors.grey[800],
+      overflow: TextOverflow.ellipsis,
+      textAlign: textAlign,
     );
   }
 
