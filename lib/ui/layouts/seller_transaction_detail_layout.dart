@@ -59,7 +59,7 @@ class SellerTransactionDetailLayout extends StatelessWidget {
                   AppColors.greenFF39AC8F.withOpacity(0.5),
                 ], // red to yellow
                 tileMode:
-                TileMode.repeated, // repeats the gradient over the canvas
+                    TileMode.repeated, // repeats the gradient over the canvas
               ),
             ),
           ),
@@ -236,7 +236,7 @@ class SellerInfo extends StatelessWidget {
             left: 30.w,
           ),
           child: CustomText(
-              text: state.sellerName,
+            text: state.sellerName,
             fontSize: 40.sp,
             fontWeight: FontWeight.w500,
           ),
@@ -313,7 +313,7 @@ class RequestDetailBill extends StatelessWidget {
 
   Widget title() {
     return CustomText(
-        text: 'Thông tin thu gom',
+      text: 'Thông tin thu gom',
       fontSize: 40.sp,
       fontWeight: FontWeight.w500,
     );
@@ -348,7 +348,7 @@ class RequestDetailBill extends StatelessWidget {
   Widget bodyTime() {
     return BlocBuilder<SellerTransactionDetailBloc,
         SellerTransactionDetailState>(
-      builder: (context, state){
+      builder: (context, state) {
         return CustomText(
           text: state.doneActivityTime,
         );
@@ -396,8 +396,7 @@ class RequestDetailBill extends StatelessWidget {
         // getDivider(),
         Container(
             margin: EdgeInsets.only(top: 25.h, bottom: 15.h),
-            child: getSubInfo()
-        ),
+            child: getSubInfo()),
         _getDottedDivider(),
         Row(
           children: [
@@ -471,7 +470,7 @@ class RequestDetailBill extends StatelessWidget {
             child: getItemText(
               quantity == 0 || unit.isEmpty
                   ? Symbols.minus
-                  : '${CustomFormats.quantityFormat.format(quantity).replaceAll(RegExp(r'\.'), ',')} $unit',
+                  : '${CustomFormats.replaceDotWithComma(CustomFormats.quantityFormat.format(quantity))} $unit',
               textAlign: TextAlign.left,
             ),
           ),
@@ -557,7 +556,6 @@ class RequestDetailBill extends StatelessWidget {
       ),
     );
   }
-
 }
 
 class RequestDetailDivider extends StatelessWidget {

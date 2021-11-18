@@ -218,7 +218,7 @@ class CreateTransactionLayout extends StatelessWidget {
                               child: Text(
                                 state.items[index].quantity != 0 &&
                                         state.items[index].unit != null
-                                    ? '${CustomFormats.quantityFormat.format(state.items[index].quantity).replaceAll(RegExp(r'\.'), ',')} ${state.items[index].unit}'
+                                    ? '${CustomFormats.replaceDotWithComma(CustomFormats.quantityFormat.format(state.items[index].quantity))} ${state.items[index].unit}'
                                     : TextConstants.emptyString,
                                 textAlign: TextAlign.center,
                               ),
@@ -244,8 +244,8 @@ class CreateTransactionLayout extends StatelessWidget {
                           child: Align(
                             alignment: Alignment.centerRight,
                             child: Text(
-                              CustomFormats.currencyFormat
-                                  .format(state.items[index].total),
+                              CustomFormats.currencyFormat(
+                                  state.items[index].total),
                               textAlign: TextAlign.right,
                             ),
                           ),
@@ -282,7 +282,7 @@ class CreateTransactionLayout extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(TextConstants.transactionFee),
-            Text(CustomFormats.currencyFormat.format(state.transactionFee)),
+            Text(CustomFormats.currencyFormat(state.transactionFee)),
           ],
         );
       },
@@ -296,7 +296,7 @@ class CreateTransactionLayout extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(TextConstants.total),
-            Text(CustomFormats.currencyFormat.format(state.grandTotal)),
+            Text(CustomFormats.currencyFormat(state.grandTotal)),
           ],
         );
       },
@@ -519,8 +519,8 @@ class CreateTransactionLayout extends StatelessWidget {
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'(^\d*,?\d*)')),
               ],
-              initialValue:
-                  state.itemQuantity.toString().replaceAll(RegExp(r'\.'), ','),
+              initialValue: CustomFormats.replaceDotWithComma(
+                  CustomFormats.quantityFormat.format(state.itemQuantity)),
               onChanged: (value) {
                 if (value != TextConstants.emptyString && value != ',') {
                   var valueWithDot = value.replaceAll(RegExp(r'[^0-9],'), '');
@@ -567,7 +567,7 @@ class CreateTransactionLayout extends StatelessWidget {
               keyboardType: TextInputType.number,
               inputFormatters: [CurrencyTextFormatter()],
               //get the unit price for each unit
-              initialValue: CustomFormats.numberFormat.format(state.itemPrice),
+              initialValue: CustomFormats.numberFormat(state.itemPrice),
               onChanged: (value) {
                 if (value != TextConstants.emptyString) {
                   context.read<CreateTransactionBloc>().add(
@@ -613,8 +613,8 @@ class CreateTransactionLayout extends StatelessWidget {
             keyboardType: TextInputType.number,
             inputFormatters: [CurrencyTextFormatter()],
             initialValue: state.isItemTotalCalculatedByUnitPrice
-                ? CustomFormats.numberFormat.format(state.itemTotalCalculated)
-                : CustomFormats.numberFormat.format(state.itemTotal),
+                ? CustomFormats.numberFormat(state.itemTotalCalculated)
+                : CustomFormats.numberFormat(state.itemTotal),
             onChanged: (value) {
               if (value != TextConstants.emptyString) {
                 context.read<CreateTransactionBloc>().add(EventItemTotalChanged(
