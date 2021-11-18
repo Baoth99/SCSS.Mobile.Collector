@@ -432,7 +432,11 @@ class CreateTransactionLayout extends StatelessWidget {
             maxHeight: 250,
             showSelectedItems: true,
             showSearchBox: true,
-            label: TextConstants.scrapType,
+            dropdownSearchDecoration: InputDecoration(
+              labelText: TextConstants.scrapType,
+              contentPadding: EdgeInsets.fromLTRB(12, 12, 0, 0),
+              border: OutlineInputBorder(),
+            ),
             items: state.scrapCategoryMap.keys.toList(),
             selectedItem:
                 state.itemDealerCategoryId != TextConstants.emptyString
@@ -467,6 +471,11 @@ class CreateTransactionLayout extends StatelessWidget {
         return SizedBox(
           height: 90,
           child: DropdownSearch(
+            dropdownSearchDecoration: InputDecoration(
+              labelText: TextConstants.unit,
+              contentPadding: EdgeInsets.fromLTRB(12, 12, 0, 0),
+              border: OutlineInputBorder(),
+            ),
             enabled: state.scrapCategoryDetails.isNotEmpty &&
                 state.isItemTotalCalculatedByUnitPrice,
             selectedItem: state.itemDealerCategoryDetailId != null &&
@@ -477,7 +486,6 @@ class CreateTransactionLayout extends StatelessWidget {
             mode: Mode.DIALOG,
             maxHeight: 250,
             showSelectedItems: true,
-            label: TextConstants.unit,
             items: state.scrapCategoryDetails,
             compareFn: (ScrapCategoryUnitModel? item,
                     ScrapCategoryUnitModel? selectedItem) =>
@@ -562,7 +570,7 @@ class CreateTransactionLayout extends StatelessWidget {
                 border: OutlineInputBorder(),
                 labelText: TextConstants.unitPrice,
                 floatingLabelBehavior: FloatingLabelBehavior.auto,
-                suffixText: Symbols.vndSymbolText,
+                suffixText: Symbols.vndSymbolUnderlined,
               ),
               keyboardType: TextInputType.number,
               inputFormatters: [CurrencyTextFormatter()],
@@ -604,7 +612,7 @@ class CreateTransactionLayout extends StatelessWidget {
               border: OutlineInputBorder(),
               labelText: TextConstants.total,
               floatingLabelBehavior: FloatingLabelBehavior.auto,
-              suffixText: Symbols.vndSymbolText,
+              suffixText: Symbols.vndSymbolUnderlined,
               errorStyle: TextStyle(
                 color: Theme.of(context).errorColor, // or any other color
               ),

@@ -67,6 +67,7 @@ class Symbols {
   static const String comma = ',';
   static const String minus = '-';
   static const String vndSymbolText = 'đ';
+  static const String vndSymbolUnderlined = '₫';
 }
 
 class Others {

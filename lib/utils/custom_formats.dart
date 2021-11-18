@@ -13,5 +13,5 @@ class CustomFormats {
   static String replaceDotWithComma(String string) =>
       string.replaceAll(RegExp(r'\.'), ',');
   static String currencyFormat(int value) => replaceCommaWithDot(
-      NumberFormat('###,### ${Symbols.vndSymbolText}').format(value));
+      NumberFormat('###,### ${Symbols.vndSymbolUnderlined}').format(value));
 }
