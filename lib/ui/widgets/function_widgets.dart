@@ -18,9 +18,32 @@ class FunctionalWidgets {
       context: context,
       barrierDismissible: false,
       builder: (_) => WillPopScope(
-        child: CustomProgressIndicatorDialog(
-          text: text,
-          semanticLabel: label,
+        child: Dialog(
+          insetPadding: EdgeInsets.symmetric(
+            horizontal: 350.w,
+          ),
+          backgroundColor: Colors.white,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15.r),
+              color: Colors.white,
+            ),
+            height: 300.h,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                SizedBox(
+                    width: 200.r,
+                    height: 200.r,
+                    child: CircularProgressIndicator()),
+                Image.asset(
+                  ImagesPaths.collectorLogo,
+                  height: 130.r,
+                  width: 130.r,
+                ),
+              ],
+            ),
+          ),
         ),
         onWillPop: () async => false,
       ),

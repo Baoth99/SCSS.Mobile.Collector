@@ -4,6 +4,7 @@ import 'package:collector_app/blocs/profile_bloc.dart';
 import 'package:collector_app/ui/layouts/profile_layout.dart';
 import 'package:collector_app/ui/layouts/profile_password_edit_layout.dart';
 import 'package:collector_app/ui/widgets/custom_progress_indicator_dialog_widget.dart';
+import 'package:collector_app/ui/widgets/function_widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,12 +24,7 @@ class AccountLayout extends StatelessWidget {
       child: BlocListener<AccountBloc, AccountState>(
         listener: (context, state) {
           if (state.status.isSubmissionInProgress) {
-            showDialog(
-              context: context,
-              builder: (context) => const CustomProgressIndicatorDialog(
-                text: 'Xin vui lòng đợi',
-              ),
-            );
+            FunctionalWidgets.showCustomDialog(context);
           }
           if (state.status.isSubmissionFailure) {
             // Navigator.of(context).popUntil(
