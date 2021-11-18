@@ -62,7 +62,7 @@ class DealerTransactionDetailLayout extends StatelessWidget {
                   AppColors.greenFF39AC8F.withOpacity(0.5),
                 ], // red to yellow
                 tileMode:
-                TileMode.repeated, // repeats the gradient over the canvas
+                    TileMode.repeated, // repeats the gradient over the canvas
               ),
             ),
           ),
@@ -237,7 +237,7 @@ class RequestDetailHeader extends StatelessWidget {
   Widget _requestId(BuildContext context, String code) {
     return Row(
       children: <Widget>[
-         Icon(
+        Icon(
           Icons.description_outlined,
           color: AppColors.greenFF01C971,
           size: 60.sp,
@@ -279,7 +279,7 @@ class DealerInfo extends StatelessWidget {
         DealerTransactionDetailState>(
       builder: (context, state) {
         return AvatarDealerCircle(
-            url: state.dealerImageUrl,
+          url: state.dealerImageUrl,
         );
       },
     );
@@ -376,8 +376,7 @@ class RequestDetailBill extends StatelessWidget {
         // getDivider(),
         Container(
             margin: EdgeInsets.only(top: 25.h, bottom: 15.h),
-            child: getSubInfo()
-        ),
+            child: getSubInfo()),
         _getDottedDivider(),
         Row(
           children: [
@@ -560,7 +559,7 @@ class RequestDetailBill extends StatelessWidget {
             child: getItemText(
               quantity == 0 || unit.isEmpty
                   ? Symbols.minus
-                  : '${CustomFormats.quantityFormat.format(quantity).replaceAll(RegExp(r'\.'), ',')} $unit',
+                  : '${CustomFormats.replaceDotWithComma(CustomFormats.quantityFormat.format(quantity))} $unit',
               textAlign: TextAlign.left,
             ),
           ),
