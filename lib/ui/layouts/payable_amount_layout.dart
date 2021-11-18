@@ -180,6 +180,7 @@ class MainPayableAmount extends StatelessWidget {
   }
 
   Widget chooseDate() {
+    var dropDownColor = Colors.white;
     return BlocBuilder<PayableAmountBloc, PayableAmountState>(
       builder: (context, state) {
         return state.status.isSubmissionSuccess
@@ -200,10 +201,26 @@ class MainPayableAmount extends StatelessWidget {
                       AppLog.error('Value is null');
                     }
                   },
+                  dropDownButton: Icon(
+                    Icons.arrow_drop_down,
+                    color: dropDownColor,
+                  ),
                   dropdownSearchDecoration:
                       InputDecoration(border: InputBorder.none),
+                  dropdownBuilder: (context, selectedItem) {
+                    if (selectedItem != null) {
+                      return CustomText(
+                        text: selectedItem.timePeriod,
+                        color: dropDownColor,
+                      );
+                    }
+                    return Container();
+                  },
                   itemAsString: (item) {
-                    return item!.timePeriod;
+                    if (item != null) {
+                      return item.timePeriod;
+                    }
+                    return Symbols.empty;
                   },
                   selectedItem: state.listPayableAmount.isNotEmpty
                       ? state.listPayableAmount.first
