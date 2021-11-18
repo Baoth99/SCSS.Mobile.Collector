@@ -76,16 +76,16 @@ class MainLayout extends StatelessWidget {
         ),
       ),
       decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment
-                .bottomCenter, // 10% of the width, so there are ten blinds.
-            colors: <Color>[
-              AppColors.greenFF61C53D.withOpacity(0.7),
-              AppColors.greenFF39AC8F.withOpacity(0.7),
-            ], // red to yellow
-            tileMode: TileMode.repeated, // repeats the gradient over the canvas
-          ),
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment
+              .bottomCenter, // 10% of the width, so there are ten blinds.
+          colors: <Color>[
+            AppColors.greenFF61C53D.withOpacity(0.7),
+            AppColors.greenFF39AC8F.withOpacity(0.7),
+          ], // red to yellow
+          tileMode: TileMode.repeated, // repeats the gradient over the canvas
+        ),
       ),
       height: 500.h,
       width: double.infinity,
@@ -114,11 +114,12 @@ class MainLayout extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CustomText(
-                  text:
-                      '${state.fromDate.toStatisticString()}  -  ${state.toDate.toStatisticString()}',
-              fontSize: 55.sp,
-              color: AppColors.white,
-              fontWeight: FontWeight.w500,),
+                text:
+                    '${state.fromDate.toStatisticString()}  -  ${state.toDate.toStatisticString()}',
+                fontSize: 55.sp,
+                color: AppColors.white,
+                fontWeight: FontWeight.w500,
+              ),
               Icon(
                 Icons.arrow_drop_down,
                 color: Colors.white,
@@ -163,13 +164,10 @@ class MainLayout extends StatelessWidget {
     return CommonMarginContainer(
       child: Container(
         margin: EdgeInsets.only(top: 60.h),
-        padding: EdgeInsets.only(
-          top: 60.h,
-          bottom: 60.h
-        ),
+        padding: EdgeInsets.only(top: 60.h, bottom: 60.h),
         width: double.infinity,
         decoration: BoxDecoration(
-            color: Colors.white,
+          color: Colors.white,
           borderRadius: BorderRadius.circular(40.0.r),
           boxShadow: [
             BoxShadow(
@@ -195,16 +193,16 @@ class MainLayout extends StatelessWidget {
     return BlocBuilder<StatisticBloc, StatisticState>(
       builder: (context, state) {
         return Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: 30.w
-          ),
+          padding: EdgeInsets.symmetric(horizontal: 30.w),
           child: Column(
             children: [
               DataPattern(
                 title: 'Tổng thu mua',
                 price: state.statisticData.collectingTotal,
               ),
-              SizedBox(height: 40.h,),
+              SizedBox(
+                height: 40.h,
+              ),
               DataPattern(
                 title: 'Tổng bán',
                 price: state.statisticData.sellingTotal,
@@ -238,9 +236,7 @@ class MainLayout extends StatelessWidget {
 
   Widget divider() {
     return Container(
-      margin: EdgeInsets.symmetric(
-        vertical: 40.h
-      ),
+      margin: EdgeInsets.symmetric(vertical: 40.h),
       child: Divider(
         thickness: 4.h,
         indent: 50.w,

@@ -9,6 +9,7 @@ import 'package:collector_app/providers/networks/models/response/base_response_m
 import 'package:collector_app/providers/networks/models/response/dealer_transaction_detail_response_model.dart';
 import 'package:collector_app/providers/networks/models/response/dealer_transaction_response_model.dart';
 import 'package:collector_app/providers/networks/models/response/get_statistic_response_model.dart';
+import 'package:collector_app/providers/networks/models/response/payable_amount_response_model.dart';
 import 'package:collector_app/providers/networks/models/response/sell_collect_complaint_request_model.dart';
 import 'package:collector_app/providers/networks/models/response/seller_transaction_detail_response_model.dart';
 import 'package:collector_app/providers/networks/models/response/seller_transaction_response_model.dart';
@@ -51,6 +52,7 @@ abstract class TransactionNetwork {
       CreateCollectDealTransactionRequestModel requestModel, Client client);
   Future<BaseResponseModel> createSellCollectComplaint(
       SellCollectComplaintRequestModel requestModel, Client client);
+  Future<PayableAmountResponseModel> getServiceFee(Client client);
 }
 
 class TransactionNetworkImpl implements TransactionNetwork {
@@ -274,5 +276,20 @@ class TransactionNetworkImpl implements TransactionNetwork {
     } catch (e) {
       throw CommonApiConstants.getInfoReviewException;
     }
+  }
+
+  @override
+  Future<PayableAmountResponseModel> getServiceFee(Client client) async {
+    var response = await NetworkUtils.getNetworkWithBearer(
+      uri: APIServiceURI.payableAmount,
+      client: client,
+    );
+    // get model
+    var responseModel = await NetworkUtils
+        .checkSuccessStatusCodeAPIMainResponseModel<PayableAmountResponseModel>(
+      response,
+      payableAmountResponseModelFromJson,
+    );
+    return responseModel;
   }
 }

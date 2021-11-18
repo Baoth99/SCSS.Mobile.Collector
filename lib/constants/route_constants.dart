@@ -59,4 +59,6 @@ class Routes {
   static const signupInformation = 'signupInformation';
   static const promotion = 'promotion';
   static const createTransaction = 'createTransaction';
+
+  static const payableAmount = 'payableAmount';
 }

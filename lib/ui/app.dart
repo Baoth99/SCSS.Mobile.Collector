@@ -14,6 +14,7 @@ import 'package:collector_app/ui/layouts/forget_password_otp_layout.dart';
 import 'package:collector_app/ui/layouts/forget_password_phone_number_layout.dart';
 import 'package:collector_app/ui/layouts/login_layout.dart';
 import 'package:collector_app/ui/layouts/main_layout.dart';
+import 'package:collector_app/ui/layouts/payable_amount_layout.dart';
 import 'package:collector_app/ui/layouts/pending_request_detail_layout.dart';
 import 'package:collector_app/ui/layouts/pending_request_layout.dart';
 import 'package:collector_app/ui/layouts/profile_layout.dart';
@@ -107,6 +108,7 @@ class CollectorApp extends StatelessWidget {
             Routes.signupPhoneNumber: (_) => const SignupPhoneNumberLayout(),
             Routes.promotion: (_) => const PromotionLayout(),
             Routes.createTransaction: (_) => CreateTransactionLayout(),
+            Routes.payableAmount: (_) => PayableAmountLayout(),
           },
           builder: EasyLoading.init(),
         ),

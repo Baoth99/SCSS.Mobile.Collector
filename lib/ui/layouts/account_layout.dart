@@ -208,6 +208,16 @@ class AccountBody extends StatelessWidget {
               );
             },
           ),
+          option(
+            'Phí dịch vụ',
+            () {
+              Navigator.of(context).pushNamed(
+                Routes.payableAmount,
+              );
+            },
+            Colors.black,
+            Icons.arrow_forward_ios,
+          ),
           BlocBuilder<ProfileBloc, ProfileState>(
             builder: (context, state) {
               return option(

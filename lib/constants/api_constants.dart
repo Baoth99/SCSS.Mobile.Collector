@@ -82,6 +82,7 @@ class APIServiceURI {
       '${EnvID4AppSettingValue.apiUrl}api/identity/account/confirm-otp-register';
   static final register = '${apiUrl}collector/account/register';
   static final dealerInfoPromotion = '${apiUrl}dealer-info/promotions';
+  static final payableAmount = '${apiUrl}statistic/service-fee';
 }
 
 class IdentityAPIConstants {
