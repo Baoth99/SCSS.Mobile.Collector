@@ -243,7 +243,7 @@ class AddCategoryLayout extends StatelessWidget {
                             border: OutlineInputBorder(),
                             labelText: TextConstants.unitPrice,
                             floatingLabelBehavior: FloatingLabelBehavior.auto,
-                            suffix: Text(Symbols.vndSymbolText),
+                            suffix: Text(Symbols.vndSymbolUnderlined),
                           ),
                           keyboardType: TextInputType.number,
                           inputFormatters: [CurrencyTextFormatter()],
