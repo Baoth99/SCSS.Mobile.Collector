@@ -1,5 +1,6 @@
 import 'package:collector_app/blocs/dealer_transaction_bloc.dart';
 import 'package:collector_app/blocs/dealer_transaction_detail_bloc.dart';
+import 'package:collector_app/blocs/payable_amount_bloc.dart';
 import 'package:collector_app/blocs/seller_transaction_bloc.dart';
 import 'package:collector_app/blocs/seller_transaction_detail_bloc.dart';
 import 'package:collector_app/blocs/statistic_bloc.dart';
@@ -38,6 +39,8 @@ abstract class TransactionService {
   Future<GetSellCollectTransactionInfoReviewModel>
       getSellCollectTransactionInfoReview(
           {required String collectingRequestId});
+
+  Future<PayableAmountState> getPayableAmount();
 }
 
 class TransactionServiceImpl implements TransactionService {
@@ -335,5 +338,31 @@ class TransactionServiceImpl implements TransactionService {
     } catch (e) {
       throw (e);
     }
+  }
+
+  @override
+  Future<PayableAmountState> getPayableAmount() async {
+    PayableAmountState result = PayableAmountState();
+    Client client = Client();
+    var responseModel = await _transactionNetwork
+        .getServiceFee(
+          client,
+        )
+        .whenComplete(
+          () => client.close(),
+        );
+    var d = responseModel.resData;
+
+    List<PayableAmount> data = d
+        .map((e) => PayableAmount(
+            id: e.id,
+            timePeriod: e.timePeriod,
+            dateTimeFrom: e.dateTimeFrom,
+            dateTimeTo: e.dateTimeTo,
+            isFinished: e.isFinished,
+            amount: e.amount))
+        .toList();
+    result = PayableAmountState(listPayableAmount: data);
+    return result;
   }
 }
