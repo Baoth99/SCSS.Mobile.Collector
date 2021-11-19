@@ -28,7 +28,7 @@ class PromotionLayout extends StatelessWidget {
           elevation: 1,
           context: context,
           title: CustomText(
-              text: 'Khuyến mãi',
+              text: 'Ưu đãi',
             color: AppColors.black,
             fontSize: 60.sp,
           ),
@@ -107,7 +107,7 @@ class PromotionLayout extends StatelessWidget {
           ),
           Container(
             child: CustomText(
-              text: 'Vựa không có khuyến mãi nào',
+              text: 'Vựa không có ưu đãi nào',
               fontSize: 40.sp,
               fontWeight: FontWeight.w400,
               color: Colors.grey[600],
@@ -168,11 +168,12 @@ class PromotionCard extends StatelessWidget {
                 Row(
                   children: [
                     CustomText(
-                        text: 'Loại phế liệu: '
+                        text: 'Loại phế liệu: ',
+                      fontSize: 43.sp,
                     ),
                     CustomText(
                         text: appliedScrapCategory,
-                      fontSize: 40.sp,
+                      fontSize: 43.sp,
                       fontWeight: FontWeight.w400,
                       color: AppColors.orangeFFF5670A,
                     )
@@ -183,17 +184,21 @@ class PromotionCard extends StatelessWidget {
                   children: [
                     CustomText(
                         text: 'Thưởng ',
+                      fontSize: 43.sp,
                     ),
                     CustomText(
                         text: bonusAmount.toAppPrice(),
                       color: AppColors.orangeFFF5670A,
+                      fontSize: 43.sp,
                     ),
                     CustomText(
-                        text: ' khi bán đủ '
+                        text: ' khi bán đủ ',
+                      fontSize: 43.sp,
                     ),
                     CustomText(
                         text: appliedAmount.toAppPrice(),
                       color: AppColors.orangeFFF5670A,
+                      fontSize: 43.sp,
                     ),
                   ],
                 ),

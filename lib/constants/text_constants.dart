@@ -28,7 +28,7 @@ class TextConstants {
   static const String unitIsExisted = 'Đơn vị đã có';
   static const String unitPrice = 'Đơn giá';
   static const String eachScrapCategoryHasAtLeastOneUnit =
-      'Mỗi danh mục nên có một đơn vị';
+      'Mỗi loại phế liệu nên có tối thiểu một đơn vị';
   static const String camera = 'Máy ảnh';
   static const String gallery = 'Thư viện';
   static const String saveUpdate = 'Lưu thay đổi';
@@ -39,7 +39,7 @@ class TextConstants {
   static const String sellerPhone = 'Số điện thoại người bán';
   static const String phoneBlank = 'Số điện thoại không được để trống';
   static const String sellerName = 'Tên người bán';
-  static const String noItemsErrorText = 'Giao dịch phải có một danh mục';
+  static const String noItemsErrorText = 'Giao dịch phải có một phế liệu';
   static const String subTotal = 'Tạm tính';
   static const String total = 'Khách hàng nhận';
   static const String calculatedByUnitPrice = 'Tính theo đơn giá';

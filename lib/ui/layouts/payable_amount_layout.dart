@@ -68,7 +68,7 @@ class MainPayableAmount extends StatelessWidget {
     return CommonMarginContainer(
       child: Container(
         margin: EdgeInsets.only(top: 60.h),
-        padding: EdgeInsets.only(top: 60.h, bottom: 60.h),
+        padding: EdgeInsets.only(top: 70.h, bottom: 70.h),
         width: double.infinity,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -85,14 +85,31 @@ class MainPayableAmount extends StatelessWidget {
         child: state.listPayableAmount.isNotEmpty
             ? Column(
                 children: [
-                  CustomText(text: 'Tổng cộng'),
                   CustomText(
-                    text: state.listPayableAmount[state.chosenIndex].amount
-                        .toAppPrice(),
+                      text: 'Tổng cộng',
+                    fontSize: 58.sp,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.greyFF969090,
                   ),
-                  CustomText(
-                    text:
-                        '* Phí được tổng hợp từ các giao dịch của bạn theo chu kỳ mỗi tháng',
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 80.h),
+                    child: CustomText(
+                      text: state.listPayableAmount[state.chosenIndex].amount
+                          .toAppPrice(),
+                      fontSize: 98.sp,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 50.w
+                    ),
+                    child: CustomText(
+                      text:
+                          '* Phí được tổng hợp từ các giao dịch của bạn theo chu kỳ mỗi tháng',
+                      color: AppColors.greyFF969090,
+                      fontSize: 35.sp,
+                    ),
                   ),
                 ],
               )
@@ -130,17 +147,15 @@ class MainPayableAmount extends StatelessWidget {
 
   Widget titlePart(BuildContext context) {
     return Container(
-      child: CommonMarginContainer(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            SizedBox(
-              height: 100.h,
-            ),
-            title(),
-            chooseDate(),
-          ],
-        ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          SizedBox(
+            height: 100.h,
+          ),
+          title(),
+          chooseDate(),
+        ],
       ),
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -166,8 +181,11 @@ class MainPayableAmount extends StatelessWidget {
           ArrowBackIconButton(
             color: Colors.white,
           ),
+          SizedBox(
+            width: 50.w,
+          ),
           CustomText(
-            text: 'Thống kê',
+            text: 'Phí dịch vụ',
             textAlign: TextAlign.left,
             color: AppColors.white,
             fontSize: 80.sp,
@@ -186,7 +204,7 @@ class MainPayableAmount extends StatelessWidget {
         return state.status.isSubmissionSuccess
             ? Container(
                 padding: EdgeInsets.symmetric(
-                  horizontal: 100.w,
+                  horizontal: 250.w,
                 ),
                 child: DropdownSearch<PayableAmount>(
                   mode: Mode.BOTTOM_SHEET,
@@ -212,6 +230,8 @@ class MainPayableAmount extends StatelessWidget {
                       return CustomText(
                         text: selectedItem.timePeriod,
                         color: dropDownColor,
+                        fontSize: 55.sp,
+                        fontWeight: FontWeight.w500,
                       );
                     }
                     return Container();
