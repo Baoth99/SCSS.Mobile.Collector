@@ -10,6 +10,7 @@ import 'package:collector_app/ui/widgets/common_margin_container.dart';
 import 'package:collector_app/ui/widgets/complaint_done_widget.dart';
 import 'package:collector_app/ui/widgets/custom_text_widget.dart';
 import 'package:collector_app/ui/widgets/function_widgets.dart';
+import 'package:collector_app/ui/widgets/radiant_gradient_mask.dart';
 import 'package:collector_app/ui/widgets/request_detail_element_pattern.dart';
 import 'package:collector_app/utils/custom_formats.dart';
 import 'package:dotted_line/dotted_line.dart';
@@ -237,10 +238,12 @@ class RequestDetailHeader extends StatelessWidget {
   Widget _requestId(BuildContext context, String code) {
     return Row(
       children: <Widget>[
-        Icon(
-          Icons.description_outlined,
-          color: AppColors.greenFF01C971,
-          size: 60.sp,
+        RadiantGradientMask(
+          child: Icon(
+            Icons.description_outlined,
+            color: AppColors.greenFF01C971,
+            size: 60.sp,
+          ),
         ),
         Expanded(
           child: Container(
@@ -931,7 +934,7 @@ class PromotionInfo extends StatelessWidget {
             children: [
               Expanded(
                 child: CustomText(
-                  text: 'Khuyến mãi',
+                  text: 'Ưu đãi',
                   textAlign: TextAlign.center,
                 ),
               ),

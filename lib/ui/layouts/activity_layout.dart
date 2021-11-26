@@ -694,6 +694,7 @@ class DealerActivity extends StatelessWidget {
                           text: dealerName,
                         fontSize: 44.sp,
                         fontWeight: FontWeight.w500,
+                        overflow: TextOverflow.ellipsis,
                       ),
                       CustomText(
                           text: time,

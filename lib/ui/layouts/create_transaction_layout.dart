@@ -4,17 +4,24 @@ import 'package:collector_app/blocs/models/scrap_category_unit_model.dart';
 import 'package:collector_app/blocs/states/create_transaction_state.dart';
 import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/constants/text_constants.dart';
+import 'package:collector_app/ui/widgets/avartar_widget.dart';
+import 'package:collector_app/ui/widgets/custom_text_widget.dart';
 import 'package:collector_app/ui/widgets/function_widgets.dart';
+import 'package:collector_app/ui/widgets/radiant_gradient_mask.dart';
 import 'package:collector_app/utils/cool_alert.dart';
 import 'package:collector_app/utils/currency_text_formatter.dart';
 import 'package:collector_app/utils/custom_formats.dart';
 import 'package:cool_alert/cool_alert.dart';
+import 'package:dotted_line/dotted_line.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'activity_layout.dart';
 
 class CreateTransactionLayout extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
@@ -65,8 +72,10 @@ class CreateTransactionLayout extends StatelessWidget {
             ),
           ],
           child: Scaffold(
+            backgroundColor: AppColors.white,
             appBar: AppBar(
-              elevation: 1,
+              backgroundColor: AppColors.white,
+              elevation: 0,
               title: Text(
                 TextConstants.createTransaction,
               ),
@@ -83,7 +92,7 @@ class CreateTransactionLayout extends StatelessWidget {
     return BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
       builder: (context, state) {
         return Container(
-          padding: const EdgeInsets.fromLTRB(30, 30, 30, 30),
+          padding: const EdgeInsets.fromLTRB(0, 10, 0, 30),
           child: Form(
             key: _formKey,
             child: Column(
@@ -94,38 +103,97 @@ class CreateTransactionLayout extends StatelessWidget {
                   fit: FlexFit.tight,
                   child: ListView(
                     children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.receipt_long,
-                            color: Colors.green,
-                          ),
-                          SizedBox(width: 10),
-                          Text('Mã Đơn: ${arguments['collectingRequestCode']}'),
-                        ],
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 48.w
+                        ),
+                        child: Row(
+                          children: [
+                            RadiantGradientMask(
+                              child: Icon(
+                                Icons.description_outlined,
+                                color: AppColors.greenFF01C971,
+                                size: 60.sp,
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(
+                                  margin: EdgeInsets.symmetric(
+                                    horizontal: 20.w,
+                                  ),
+                                  child: CustomText(
+                                      text: 'Mã Đơn: ${arguments['collectingRequestCode']}',
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 35.sp,
+                                  )
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      Divider(),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Người bán: ${arguments['sellerName']}'),
-                          SizedBox(height: 10),
-                          Text('SĐT người bán: ${arguments['sellerPhone']}'),
-                        ],
+                      Divider(
+                        thickness: 20.h,
+                        height: 100.h,
+                        color: AppColors.greyFFEEEEEE,
                       ),
-                      Divider(),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 48.w
+                        ),
+                        child: Row(
+                          children: [
+                            AvatarRadiantGradientMask(
+                              child: Icon(
+                                Icons.account_circle_sharp,
+                                color: Colors.white,
+                                size: 130.sp,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 40.w,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                CustomText(
+                                    text: '${arguments['sellerName']}',
+                                  fontSize: 45.sp,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                SizedBox(height: 10),
+                                // Text('SĐT người bán: ${arguments['sellerPhone']}'),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      Divider(
+                        thickness: 20.h,
+                        height: 100.h,
+                        color: AppColors.greyFFEEEEEE,
+                      ),
                       _detailText(),
-                      _items(),
+                      Container(
+                        margin: EdgeInsets.symmetric(
+                            vertical: 30.h
+                        ),
+                        child: _items(),
+                      ),
                       if (state.transactionFee != 0) const Divider(),
                       if (state.transactionFee != 0) _transactionFee(),
-                      const Divider(),
+                      _getDottedDivider(),
                       _total(),
                     ],
                   ),
                 ),
                 Flexible(
                   flex: 10,
-                  child: _transactionButtons(),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 48.w
+                    ),
+                    child: _transactionButtons(),
+                  )
                 ),
               ],
             ),
@@ -138,23 +206,32 @@ class CreateTransactionLayout extends StatelessWidget {
   _detailText() {
     return BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
       builder: (context, state) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(TextConstants.detail),
-            //add item button
-            Visibility(
-              visible: state.scrapCategoryMap.length != 0,
-              child: InkWell(
-                onTap: () {
-                  context
-                      .read<CreateTransactionBloc>()
-                      .add(EventShowItemDialog());
-                },
-                child: SizedBox(width: 50, child: Icon(Icons.add)),
+        return Container(
+          padding: EdgeInsets.symmetric(
+              horizontal: 48.w
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              CustomText(
+                  text: 'Chi tiết',
+                color: AppColors.black,
+                fontSize: 42.sp,
               ),
-            ),
-          ],
+              //add item button
+              Visibility(
+                visible: state.scrapCategoryMap.length != 0,
+                child: InkWell(
+                  onTap: () {
+                    context
+                        .read<CreateTransactionBloc>()
+                        .add(EventShowItemDialog());
+                  },
+                  child: SizedBox(width: 50, child: Icon(Icons.add)),
+                ),
+              ),
+            ],
+          ),
         );
       },
     );
@@ -167,111 +244,133 @@ class CreateTransactionLayout extends StatelessWidget {
             current.isItemsUpdated == true;
       },
       builder: (context, state) {
-        return FormField(
-          builder: (formFieldState) => Column(
-            children: [
-              ListView.separated(
-                primary: false,
-                shrinkWrap: true,
-                itemCount: state.items.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    onTap: () {
-                      context
-                          .read<CreateTransactionBloc>()
-                          .add(EventShowItemDialog(
-                            key: index,
-                            detail: state.items[index],
-                          ));
-                    },
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(5))),
-                    tileColor: AppConstants.lightGray,
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                          flex: 3,
-                          fit: FlexFit.tight,
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              state.scrapCategories
-                                  .firstWhere((element) =>
-                                      element.id ==
-                                      state.items[index].collectorCategoryId)
-                                  .name,
-                              overflow: TextOverflow.ellipsis,
-                              softWrap: false,
-                              maxLines: 1,
-                            ),
-                          ),
-                        ),
-                        if (state.items[index].quantity != 0 &&
-                            state.items[index].unit != null &&
-                            state.items[index].isCalculatedByUnitPrice)
-                          Flexible(
-                            flex: 3,
-                            fit: FlexFit.loose,
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: Text(
-                                state.items[index].quantity != 0 &&
-                                        state.items[index].unit != null
-                                    ? '${CustomFormats.replaceDotWithComma(CustomFormats.quantityFormat.format(state.items[index].quantity))} ${state.items[index].unit}'
-                                    : TextConstants.emptyString,
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                        if (!(state.items[index].quantity != 0 &&
-                            state.items[index].unit != null &&
-                            state.items[index].isCalculatedByUnitPrice))
-                          Flexible(
-                            flex: 3,
-                            fit: FlexFit.loose,
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: Text(
-                                '-',
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                        Flexible(
-                          flex: 4,
-                          fit: FlexFit.tight,
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              CustomFormats.currencyFormat(
-                                  state.items[index].total),
-                              textAlign: TextAlign.right,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-                separatorBuilder: (BuildContext context, int index) {
-                  return SizedBox(
-                    height: 10,
-                  );
-                },
-              ),
-              if (formFieldState.hasError && formFieldState.errorText != null)
-                Text(
-                  formFieldState.errorText!,
-                  style: TextStyle(color: Colors.red),
-                ),
-            ],
+        return Container(
+          padding: EdgeInsets.symmetric(
+              horizontal: 48.w
           ),
-          validator: (value) {
-            if (state.items.length == 0) return TextConstants.noItemsErrorText;
-          },
+          child: FormField(
+            builder: (formFieldState) => Column(
+              children: [
+                ListView.separated(
+                  primary: false,
+                  shrinkWrap: true,
+                  itemCount: state.items.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      onTap: () {
+                        context
+                            .read<CreateTransactionBloc>()
+                            .add(EventShowItemDialog(
+                              key: index,
+                              detail: state.items[index],
+                            ));
+                      },
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5))),
+                      tileColor: Colors.grey[200],
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                            flex: 3,
+                            fit: FlexFit.tight,
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: CustomText(
+                                text: state.scrapCategories
+                                    .firstWhere((element) =>
+                                        element.id ==
+                                        state.items[index].collectorCategoryId)
+                                    .name,
+                                overflow: TextOverflow.ellipsis,
+                                fontSize: 42.sp,
+                                color: Colors.grey[800],
+                              ),
+                            ),
+                          ),
+                          if (state.items[index].quantity != 0 &&
+                              state.items[index].unit != null &&
+                              state.items[index].isCalculatedByUnitPrice)
+                            Flexible(
+                              flex: 3,
+                              fit: FlexFit.loose,
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: CustomText(
+                                  text: state.items[index].quantity != 0 &&
+                                          state.items[index].unit != null
+                                      ? '${CustomFormats.replaceDotWithComma(CustomFormats.quantityFormat.format(state.items[index].quantity))} ${state.items[index].unit}'
+                                      : TextConstants.emptyString,
+                                  textAlign: TextAlign.center,
+                                  fontSize: 42.sp,
+                                  color: Colors.grey[800],
+                                ),
+                              ),
+                            ),
+                          if (!(state.items[index].quantity != 0 &&
+                              state.items[index].unit != null &&
+                              state.items[index].isCalculatedByUnitPrice))
+                            Flexible(
+                              flex: 3,
+                              fit: FlexFit.loose,
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: CustomText(
+                                  text: '-',
+                                  fontSize: 60.sp,
+                                  color: Colors.grey[800],
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          Flexible(
+                            flex: 4,
+                            fit: FlexFit.tight,
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: CustomText(
+                                text: CustomFormats.currencyFormat(
+                                    state.items[index].total),
+                                textAlign: TextAlign.right,
+                                fontSize: 42.sp,
+                                color: Colors.grey[800],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return SizedBox(
+                      height: 10,
+                    );
+                  },
+                ),
+                if (formFieldState.hasError && formFieldState.errorText != null)
+                  Text(
+                    formFieldState.errorText!,
+                    style: TextStyle(color: Colors.red),
+                  ),
+              ],
+            ),
+            validator: (value) {
+              if (state.items.length == 0) return TextConstants.noItemsErrorText;
+            },
+          ),
         );
       },
+    );
+  }
+
+  _getDottedDivider() {
+    return Container(
+      padding: EdgeInsets.only(top: 50.h, bottom: 50.h, left: 48.w, right: 48.w),
+      child: DottedLine(
+        direction: Axis.horizontal,
+        dashGapLength: 3.0,
+        dashColor: AppColors.greyFFB5B5B5,
+      ),
     );
   }
 
@@ -292,12 +391,25 @@ class CreateTransactionLayout extends StatelessWidget {
   _total() {
     return BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
       builder: (context, state) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(TextConstants.total),
-            Text(CustomFormats.currencyFormat(state.grandTotal)),
-          ],
+        return Container(
+          padding: EdgeInsets.symmetric(
+              horizontal: 48.w
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              CustomText(
+                  text: TextConstants.total,
+                fontSize: 48.sp,
+                fontWeight: FontWeight.w500,
+              ),
+              CustomText(
+                  text: CustomFormats.currencyFormat(state.grandTotal),
+                fontSize: 48.sp,
+                fontWeight: FontWeight.w500,
+              ),
+            ],
+          ),
         );
       },
     );
@@ -309,7 +421,7 @@ class CreateTransactionLayout extends StatelessWidget {
         return Container(
           height: 40,
           child: FunctionalWidgets.rowFlexibleBuilder(
-            FunctionalWidgets.customCancelButton(context, TextConstants.cancel),
+            FunctionalWidgets.customCancelButton(context, 'Quay lại'),
             FunctionalWidgets.customElevatedButton(
                 context, TextConstants.createTransaction, () {
               if (_formKey.currentState!.validate()) {
@@ -340,31 +452,39 @@ class CreateTransactionLayout extends StatelessWidget {
               height: 340,
               child: Form(
                 key: _itemFormKey,
-                child: ListView(
-                  children: [
-                    _calculatedByUnitPriceSwitch(),
-                    FunctionalWidgets.rowFlexibleBuilder(
-                      _scrapCategoryUnitField(),
-                      _scrapCategoryField(),
-                      rowFlexibleType.bigToSmall,
-                    ),
-                    _quantityField(),
-                    BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
-                      builder: (context, state) {
-                        return Visibility(
-                          visible: (state.itemQuantity -
-                                  state.itemQuantity.truncate()) >
-                              0,
-                          child: SizedBox(
-                            height: 30,
-                            child: Text('abcxyz'),
-                          ),
-                        );
-                      },
-                    ),
-                    _unitPriceField(),
-                    _totalField(),
-                  ],
+                child: Container(
+                  padding: EdgeInsets.only(right: 15.w),
+                  child: ListView(
+                    children: [
+                      _calculatedByUnitPriceSwitch(),
+                      FunctionalWidgets.rowFlexibleBuilder(
+                        _scrapCategoryUnitField(),
+                        _scrapCategoryField(),
+                        rowFlexibleType.bigToSmall,
+                      ),
+                      _quantityField(),
+                      BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
+                        builder: (context, state) {
+                          return Visibility(
+                            visible: (state.itemQuantity -
+                                    state.itemQuantity.truncate()) >
+                                0,
+                            child: Container(
+                              padding: EdgeInsets.only(bottom: 40.h, left: 20.w),
+                              child: CustomText(
+                                  text: '* Chữ số thập phân sử dụng dấu "," '
+                                      'nên dùng cho các loại đơn vị như kilogam, gam, tạ, tấn,... ',
+                                fontSize: 35.sp,
+                                color: AppColors.greyFF939393,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      _unitPriceField(),
+                      _totalField(),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -403,19 +523,32 @@ class CreateTransactionLayout extends StatelessWidget {
   _calculatedByUnitPriceSwitch() {
     return BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
       builder: (context, state) {
-        return ListTile(
-          isThreeLine: true,
-          title: Text(TextConstants.calculatedByUnitPrice),
-          subtitle: Text(TextConstants.calculatedByUnitPriceExplaination),
-          trailing: Switch(
-            value: state.isItemTotalCalculatedByUnitPrice,
-            onChanged: state.itemDealerCategoryId != TextConstants.zeroId
-                ? (value) {
-                    context.read<CreateTransactionBloc>().add(
-                        EventCalculatedByUnitPriceChanged(
-                            isCalculatedByUnitPrice: value));
-                  }
-                : null,
+        return Container(
+          decoration: BoxDecoration(
+            color: AppColors.greyFFF8F8F8,
+            borderRadius: BorderRadius.circular(30.0.r),
+          ),
+          margin: EdgeInsets.only(bottom: 50.h),
+          child: SizedBox(
+            height: 210.h,
+            child: ListTile(
+              isThreeLine: true,
+              title: Text(TextConstants.calculatedByUnitPrice, style: TextStyle(fontWeight: FontWeight.w500),),
+              subtitle: Text(TextConstants.calculatedByUnitPriceExplaination, style: TextStyle(fontSize: 36.sp),),
+              trailing: SizedBox(
+                height: 80.h,
+                child: Switch(
+                  value: state.isItemTotalCalculatedByUnitPrice,
+                  onChanged: state.itemDealerCategoryId != TextConstants.zeroId
+                      ? (value) {
+                          context.read<CreateTransactionBloc>().add(
+                              EventCalculatedByUnitPriceChanged(
+                                  isCalculatedByUnitPrice: value));
+                        }
+                      : null,
+                ),
+              ),
+            ),
           ),
         );
       },
@@ -515,8 +648,8 @@ class CreateTransactionLayout extends StatelessWidget {
       builder: (context, state) {
         return Visibility(
           visible: state.isItemTotalCalculatedByUnitPrice,
-          child: SizedBox(
-            height: 90,
+          child: Container(
+            margin: EdgeInsets.only(bottom: 30.h),
             child: TextFormField(
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
@@ -560,40 +693,43 @@ class CreateTransactionLayout extends StatelessWidget {
       builder: (context, state) {
         return Visibility(
           visible: state.isItemTotalCalculatedByUnitPrice,
-          child: SizedBox(
-            height: 90,
-            child: TextFormField(
-              key: state.itemDealerCategoryDetailId != null
-                  ? Key(state.itemDealerCategoryDetailId!)
-                  : null,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: TextConstants.unitPrice,
-                floatingLabelBehavior: FloatingLabelBehavior.auto,
-                suffixText: Symbols.vndSymbolUnderlined,
+          child: Container(
+            margin: EdgeInsets.only(top: 16),
+            child: SizedBox(
+              height: 90,
+              child: TextFormField(
+                key: state.itemDealerCategoryDetailId != null
+                    ? Key(state.itemDealerCategoryDetailId!)
+                    : null,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: TextConstants.unitPrice,
+                  floatingLabelBehavior: FloatingLabelBehavior.auto,
+                  suffixText: Symbols.vndSymbolUnderlined,
+                ),
+                keyboardType: TextInputType.number,
+                inputFormatters: [CurrencyTextFormatter()],
+                //get the unit price for each unit
+                initialValue: CustomFormats.numberFormat(state.itemPrice),
+                onChanged: (value) {
+                  if (value != TextConstants.emptyString) {
+                    context.read<CreateTransactionBloc>().add(
+                        EventUnitPriceChanged(
+                            unitPrice: value.replaceAll(RegExp(r'[^0-9]'), '')));
+                  } else {
+                    context.read<CreateTransactionBloc>().add(
+                        EventUnitPriceChanged(
+                            unitPrice: TextConstants.zeroString));
+                  }
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty)
+                    return TextConstants.unitPriceBlank;
+                  if (!state.isItemPriceValid) {
+                    return TextConstants.unitPriceNegative;
+                  }
+                },
               ),
-              keyboardType: TextInputType.number,
-              inputFormatters: [CurrencyTextFormatter()],
-              //get the unit price for each unit
-              initialValue: CustomFormats.numberFormat(state.itemPrice),
-              onChanged: (value) {
-                if (value != TextConstants.emptyString) {
-                  context.read<CreateTransactionBloc>().add(
-                      EventUnitPriceChanged(
-                          unitPrice: value.replaceAll(RegExp(r'[^0-9]'), '')));
-                } else {
-                  context.read<CreateTransactionBloc>().add(
-                      EventUnitPriceChanged(
-                          unitPrice: TextConstants.zeroString));
-                }
-              },
-              validator: (value) {
-                if (value == null || value.isEmpty)
-                  return TextConstants.unitPriceBlank;
-                if (!state.isItemPriceValid) {
-                  return TextConstants.unitPriceNegative;
-                }
-              },
             ),
           ),
         );

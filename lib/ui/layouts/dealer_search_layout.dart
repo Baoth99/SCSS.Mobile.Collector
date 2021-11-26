@@ -453,7 +453,7 @@ class DealerWidget extends StatelessWidget {
                               ),
                               Expanded(
                                 child: CustomText(
-                                  text: 'Khuyến mãi',
+                                  text: 'Ưu đãi',
                                   // overflow: TextOverflow.ellipsis,
                                 ),
                               )
