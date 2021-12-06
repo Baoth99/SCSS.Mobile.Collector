@@ -9,6 +9,7 @@ import 'package:collector_app/providers/networks/models/response/approve_request
 import 'package:collector_app/providers/networks/models/response/approve_response_model.dart';
 import 'package:collector_app/providers/networks/models/response/base_response_model.dart';
 import 'package:collector_app/providers/networks/models/response/cancel_reason_response_mode.dart';
+import 'package:collector_app/providers/networks/models/response/check_request_response_model.dart';
 import 'package:collector_app/providers/networks/models/response/collecting_request_detail_response_model.dart';
 import 'package:collector_app/providers/networks/models/response/collecting_request_response_model.dart';
 import 'package:collector_app/providers/networks/models/response/receive_get_response_model.dart';
@@ -49,6 +50,8 @@ abstract class CollectingRequestNetwork {
   Future<CancelReasonResponseModel> getCancelReason(Client client);
   Future<BaseResponseModel> cancelRequest(
       CancelRequestRequestModel requestModel, Client client);
+  Future<CheckRequestApprovedResponseModel> checkRequestApproved(
+      String id, Client client);
 }
 
 class CollectingRequestNetworkImpl implements CollectingRequestNetwork {
@@ -241,6 +244,27 @@ class CollectingRequestNetworkImpl implements CollectingRequestNetwork {
       baseResponseModelFromJson,
     );
 
+    return responseModel;
+  }
+
+  @override
+  Future<CheckRequestApprovedResponseModel> checkRequestApproved(
+      String id, Client client) async {
+    var response = await NetworkUtils.getNetworkWithBearer(
+      uri: APIServiceURI.isRequestApproved,
+      client: client,
+      queries: {
+        'id': id,
+      },
+    );
+
+    // get model
+    var responseModel =
+        await NetworkUtils.checkSuccessStatusCodeAPIMainResponseModel<
+            CheckRequestApprovedResponseModel>(
+      response,
+      checkRequestApprovedResponseModelFromJson,
+    );
     return responseModel;
   }
 }

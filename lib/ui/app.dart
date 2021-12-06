@@ -1,3 +1,4 @@
+import 'package:collector_app/blocs/check_approved_request_bloc.dart';
 import 'package:collector_app/blocs/home_bloc.dart';
 import 'package:collector_app/blocs/notification_bloc.dart';
 import 'package:collector_app/blocs/profile_bloc.dart';
@@ -54,6 +55,9 @@ class CollectorApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => NotificationBloc(),
+          ),
+          BlocProvider(
+            create: (context) => CheckApprovedRequestBloc(),
           ),
         ],
         child: MaterialApp(

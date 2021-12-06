@@ -1,3 +1,4 @@
+import 'package:collector_app/blocs/check_approved_request_bloc.dart';
 import 'package:collector_app/blocs/collecting_request_detail_bloc.dart';
 import 'package:collector_app/blocs/request_book_list_bloc.dart';
 import 'package:collector_app/blocs/request_now_list_bloc.dart';
@@ -102,6 +103,9 @@ class _PendingRequestLayoutState extends State<PendingRequestMain> {
     if (parameters.isNotEmpty) {
       var data = parameters[0];
       if (data is String) {
+        context
+            .read<CheckApprovedRequestBloc>()
+            .add(CheckApprovedRealTime(data));
         context.read<RequestBookListBloc>().add(RequestBookIsApproved(data));
         context.read<RequestNowListBloc>().add(RequestNowIsApproved(data));
       } else {
@@ -452,13 +456,22 @@ class CollectingRequest extends StatelessWidget {
           InkWell(
             onTap: isActive
                 ? () {
-                    Navigator.of(context).pushNamed(
+                    context.read<CheckApprovedRequestBloc>().add(
+                          AddIdCheckApprove(bookingId),
+                        );
+                    Navigator.of(context)
+                        .pushNamed(
                       Routes.pendingRequestDetail,
                       arguments: PendingRequestDetailArgs(
                         bookingId,
                         CollectingRequestDetailStatus.pending,
                       ),
-                    );
+                    )
+                        .then((value) {
+                      context
+                          .read<CheckApprovedRequestBloc>()
+                          .add(RefershCheckApproved());
+                    });
                   }
                 : () {
                     FunctionalWidgets.showSnackBar(context,

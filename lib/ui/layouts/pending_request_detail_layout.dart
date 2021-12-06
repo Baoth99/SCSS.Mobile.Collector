@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:collector_app/blocs/cancel_request_bloc.dart';
+import 'package:collector_app/blocs/check_approved_request_bloc.dart';
 import 'package:collector_app/blocs/collecting_request_detail_bloc.dart';
 import 'package:collector_app/blocs/feedback_admin_bloc.dart';
 import 'package:collector_app/blocs/models/gender_model.dart';
@@ -91,7 +92,25 @@ class PendingRequestDetailLayout extends StatelessWidget {
           child: BlocBuilder<CollectingRequestDetailBloc,
               CollectingRequestDetailState>(
             builder: (context, state) {
-              return buildBody(state.status);
+              return BlocListener<CheckApprovedRequestBloc,
+                  CheckApprovedRequestState>(
+                listener: (checkApproveContext, checkApproveState) {
+                  if (checkApproveState.isApprovedBySomebody &&
+                      !checkApproveState.isApprovedByYou) {
+                    FunctionalWidgets.showAwesomeDialog(
+                      context,
+                      dialogType: DialogType.INFO,
+                      title: 'Không thể nhận yêu cầu',
+                      desc:
+                          'Yêu cầu thu gom này đã được nhận bởi người thu gom khác.',
+                      btnOkText: 'Đóng',
+                      okRoutePress: Routes.pendingRequests,
+                    );
+                  }
+                },
+                child:
+                    buildBody(state.status, args.collectingRequestDetailStatus),
+              );
             },
           ),
         ),
@@ -99,7 +118,8 @@ class PendingRequestDetailLayout extends StatelessWidget {
     );
   }
 
-  Widget buildBody(FormzStatus status) {
+  Widget buildBody(FormzStatus status,
+      CollectingRequestDetailStatus collectingRequestDetailStatus) {
     switch (status) {
       case FormzStatus.submissionSuccess:
         return PendingRequestDetailBody();
@@ -113,7 +133,9 @@ class PendingRequestDetailLayout extends StatelessWidget {
 }
 
 class PendingRequestDetailBody extends StatelessWidget {
-  const PendingRequestDetailBody({Key? key}) : super(key: key);
+  const PendingRequestDetailBody({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -353,6 +375,9 @@ class PendingRequestDetailBody extends StatelessWidget {
           btnOkOnpress: () {
             Navigator.of(context)
                 .popUntil(ModalRoute.withName(Routes.pendingRequestDetail));
+            context
+                .read<CheckApprovedRequestBloc>()
+                .add(ApproveCheckApproved());
             context
                 .read<CollectingRequestDetailBloc>()
                 .add(ApproveRequestEvent());

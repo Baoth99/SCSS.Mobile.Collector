@@ -38,6 +38,7 @@ abstract class CollectingRequestService {
   Future<List<String>> getCancelReasons();
 
   Future<bool> cancelRequest(String requestId, String cancelReason);
+  Future<bool> isRequestApproved(String requestId);
 }
 
 class CollectingRequestServiceImpl implements CollectingRequestService {
@@ -339,5 +340,23 @@ class CollectingRequestServiceImpl implements CollectingRequestService {
 
     return responseModel.statusCode == NetworkConstants.ok200 &&
         responseModel.isSuccess;
+  }
+
+  @override
+  Future<bool> isRequestApproved(String requestId) async {
+    http.Client client = http.Client();
+    var responseModel = await _collectingRequestNetwork
+        .checkRequestApproved(
+          requestId,
+          client,
+        )
+        .whenComplete(() => client.close());
+
+    if (responseModel.statusCode == NetworkConstants.ok200 &&
+        responseModel.isSuccess) {
+      return responseModel.resData.isApproved;
+    } else {
+      throw Exception('isRequestApproved');
+    }
   }
 }

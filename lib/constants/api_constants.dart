@@ -83,6 +83,7 @@ class APIServiceURI {
   static final register = '${apiUrl}collector/account/register';
   static final dealerInfoPromotion = '${apiUrl}dealer-info/promotions';
   static final payableAmount = '${apiUrl}statistic/service-fee';
+  static final isRequestApproved = '${apiUrl}collecting-request/is-approved';
 }
 
 class IdentityAPIConstants {
