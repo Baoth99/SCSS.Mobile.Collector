@@ -12,6 +12,14 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 enum rowFlexibleType { smallToBig, bigToSmall }
 
 class FunctionalWidgets {
+  static void showSnackBar(BuildContext context, String text) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: CustomText(text: text),
+      ),
+    );
+  }
+
   static Future<T?> showCustomDialog<T>(BuildContext context,
       [String text = 'Vui lòng đợi...', String? label]) {
     return showDialog<T>(

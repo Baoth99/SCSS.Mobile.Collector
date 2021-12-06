@@ -124,7 +124,7 @@ class _PendingRequestLayoutState extends State<PendingRequestMain> {
     );
   }
 
-  Widget contentDivider(){
+  Widget contentDivider() {
     return Divider(
       thickness: 20.h,
       color: AppColors.greyFFEEEEEE,
@@ -188,8 +188,8 @@ class _PendingRequestLayoutState extends State<PendingRequestMain> {
                 elevation: 0,
                 child: Container(
                   decoration: BoxDecoration(
-                    // color: AppColors.white,
-                  ),
+                      // color: AppColors.white,
+                      ),
                   child: Column(
                     children: [
                       Row(children: [
@@ -460,7 +460,10 @@ class CollectingRequest extends StatelessWidget {
                       ),
                     );
                   }
-                : null,
+                : () {
+                    FunctionalWidgets.showSnackBar(context,
+                        'Yêu cầu thu gom này đã được nhận bởi người thu gom khác.');
+                  },
             child: ClipRRect(
               borderRadius: BorderRadius.circular(30.0.r),
               child: IntrinsicHeight(
