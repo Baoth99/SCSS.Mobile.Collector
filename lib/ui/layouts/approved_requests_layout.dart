@@ -18,6 +18,7 @@ class ApprovedRequestLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //initial
+    context.read<HomeBloc>().add(HomeInitial());
     context.read<HomeBloc>().add(HomeSearch(Symbols.empty));
 
     //

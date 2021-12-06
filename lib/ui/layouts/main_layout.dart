@@ -69,7 +69,7 @@ class _MainLayoutState extends State<MainLayout> {
     }
     try {
       _timer5 = Timer.periodic(
-        const Duration(seconds: 60),
+        const Duration(seconds: 150),
         (timer) {
           try {
             context.read<HomeBloc>().add(HomeFetch());

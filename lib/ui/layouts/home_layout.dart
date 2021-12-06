@@ -167,16 +167,40 @@ class AccountBody extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    Row(children: [
-                      Container(
-                        padding: EdgeInsets.only(top: 30.h, left: 45.w),
-                        child: CustomText(
-                          text: 'Yêu cầu chờ thu gom',
-                          fontSize: 45.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.of(context).pushNamed(
+                          Routes.approvedRequests,
+                        );
+                      },
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              padding: EdgeInsets.only(
+                                top: 30.h,
+                                left: 45.w,
+                                bottom: 20.h,
+                              ),
+                              child: CustomText(
+                                text: 'Yêu cầu chờ thu gom',
+                                fontSize: 45.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              context.read<HomeBloc>().add(HomeInitial());
+                            },
+                            icon: Icon(
+                              Icons.replay,
+                              color: AppColors.greyFF9098B1,
+                            ),
+                          ),
+                        ],
                       ),
-                    ]),
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
