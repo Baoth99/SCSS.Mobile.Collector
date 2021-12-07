@@ -484,9 +484,6 @@ class CollectingRequest extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 30.w,
-                      ),
                       decoration: BoxDecoration(
                         color: bulky
                             ? AppColors.orangeFFF9CB79
@@ -495,11 +492,16 @@ class CollectingRequest extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset(
-                            bulky
-                                ? ActivityLayoutConstants.bulkyImage
-                                : ActivityLayoutConstants.notBulkyImage,
-                            width: 90.w,
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 40.w,
+                            ),
+                            child: Image.asset(
+                              bulky
+                                  ? ActivityLayoutConstants.bulkyImage
+                                  : ActivityLayoutConstants.notBulkyImage,
+                              width: 90.w,
+                            ),
                           ),
                           Container(
                             margin: EdgeInsets.only(top: 40.h),

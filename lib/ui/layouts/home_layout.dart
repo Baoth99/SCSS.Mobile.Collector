@@ -35,15 +35,7 @@ class AccountBody extends StatelessWidget {
     return Column(
       children: [
         avatar(context),
-        BlocBuilder<HomeBloc, HomeState>(
-          builder: (context, state) {
-            return state.status.isSubmissionSuccess
-                ? waitToCollect(context)
-                : (state.status.isSubmissionInProgress || state.status.isPure)
-                    ? FunctionalWidgets.getLoadingAnimation()
-                    : FunctionalWidgets.getErrorIcon();
-          },
-        ),
+        waitToCollect(context),
         // waitToCollectEmpty(),
 
         Expanded(
@@ -157,120 +149,151 @@ class AccountBody extends StatelessWidget {
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (context, state) {
         try {
-          if (state.totalRequest > 0) {
-            var r = state.listCollectingRequestModel.first;
-            return Material(
-              elevation: 1,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: AppColors.white,
-                ),
-                child: Column(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.of(context).pushNamed(
-                          Routes.approvedRequests,
-                        );
-                      },
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Container(
-                              padding: EdgeInsets.only(
-                                top: 30.h,
-                                left: 45.w,
-                                bottom: 20.h,
-                              ),
-                              child: CustomText(
-                                text: 'Yêu cầu chờ thu gom',
-                                fontSize: 45.sp,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              context.read<HomeBloc>().add(HomeInitial());
-                            },
-                            icon: Icon(
-                              Icons.replay,
-                              color: AppColors.greyFF9098B1,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: CollectingRequest(
-                            bookingId: r.id,
-                            distance: r.distanceText,
-                            bulky: r.isBulky,
-                            cusName: r.sellerName,
-                            time: CommonUtils.combineTimeToDateString(
-                                r.dayOfWeek,
-                                r.collectingRequestDate,
-                                r.fromTime,
-                                r.toTime),
-                            placeTitle: r.collectingAddressName,
-                            placeName: r.collectingAddress,
-                          ),
-                        ),
-                      ],
-                    ),
-                    state.totalRequest > 1
-                        ? InkWell(
-                            onTap: _onTapGetAllNotCollectedRequest(context),
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 30.h,
-                                horizontal: 200.w,
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  SizedBox(
-                                    width: 70.w,
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(bottom: 20.h),
-                                    child: CustomText(
-                                      text: 'Xem tất cả',
-                                      fontSize: 45.sp,
-                                      fontWeight: FontWeight.w500,
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(
-                                        right: 30.w, bottom: 20.h),
-                                    child: Icon(
-                                      Icons.chevron_right,
-                                      color: AppColors.greyFF9098B1,
-                                      size: 80.sp,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          )
-                        : SizedBox.shrink(),
-                  ],
-                ),
+          return Material(
+            elevation: 1,
+            child: Container(
+              constraints: BoxConstraints(minHeight: 500.h),
+              decoration: BoxDecoration(
+                color: AppColors.white,
               ),
-            );
-          } else {
-            return WaitToCollectEmpty();
-          }
+              child: Column(
+                children: [
+                  InkWell(
+                    onTap: () {
+                      Navigator.of(context).pushNamed(
+                        Routes.approvedRequests,
+                      );
+                    },
+                    child: state.status.isSubmissionInProgress
+                        ? const SizedBox.shrink()
+                        : Row(
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  padding: EdgeInsets.only(
+                                    top: 30.h,
+                                    left: 45.w,
+                                    bottom: 20.h,
+                                  ),
+                                  child: CustomText(
+                                    text: 'Yêu cầu chờ thu gom',
+                                    fontSize: 45.sp,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  context.read<HomeBloc>().add(HomeInitial());
+                                },
+                                icon: Icon(
+                                  Icons.replay,
+                                  color: AppColors.greyFF9098B1,
+                                ),
+                              ),
+                            ],
+                          ),
+                  ),
+                  state.status.isSubmissionSuccess
+                      ? showRequest(context, state)
+                      : (state.status.isSubmissionInProgress ||
+                              state.status.isPure)
+                          ? FunctionalWidgets.getLoadingAnimation()
+                          : FunctionalWidgets.getErrorIcon(),
+                ],
+              ),
+            ),
+          );
         } catch (e) {
           AppLog.error(e);
           return WaitToCollectEmpty();
         }
       },
+    );
+  }
+
+  Widget showRequest(BuildContext context, HomeState state) {
+    if (state.listCollectingRequestModel.isEmpty) {
+      return Column(
+        children: [
+          Container(
+            margin: EdgeInsets.only(top: 80.h, bottom: 20.h),
+            child: Image.asset(
+              ImagesPaths.noRequestAvailable,
+              width: 400.w,
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 20.h, bottom: 80.h),
+            child: CustomText(
+              text: 'Bạn chưa xác nhận yêu cầu thu gom nào',
+              fontSize: 40.sp,
+              fontWeight: FontWeight.w500,
+              color: AppColors.greyFF939393.withOpacity(1),
+            ),
+          )
+        ],
+      );
+    }
+
+    var r = state.listCollectingRequestModel.first;
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: CollectingRequest(
+                bookingId: r.id,
+                distance: r.distanceText,
+                bulky: r.isBulky,
+                cusName: r.sellerName,
+                time: CommonUtils.combineTimeToDateString(
+                    r.dayOfWeek, r.collectingRequestDate, r.fromTime, r.toTime),
+                placeTitle: r.collectingAddressName,
+                placeName: r.collectingAddress,
+              ),
+            ),
+          ],
+        ),
+        state.totalRequest > 1
+            ? InkWell(
+                onTap: _onTapGetAllNotCollectedRequest(context),
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 30.h,
+                    horizontal: 200.w,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(
+                        width: 70.w,
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(bottom: 20.h),
+                        child: CustomText(
+                          text: 'Xem tất cả',
+                          fontSize: 45.sp,
+                          fontWeight: FontWeight.w500,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(right: 30.w, bottom: 20.h),
+                        child: Icon(
+                          Icons.chevron_right,
+                          color: AppColors.greyFF9098B1,
+                          size: 80.sp,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              )
+            : SizedBox.shrink(),
+      ],
     );
   }
 
