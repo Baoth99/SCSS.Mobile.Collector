@@ -226,81 +226,84 @@ class PendingRequestDetailBody extends StatelessWidget {
           height: 1300.h,
           width: double.infinity,
           child: CommonMarginContainer(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 50.h,
-                ),
-                getTitleRow(),
-                RequestDetailElementPattern(
-                  icon: Icons.place,
-                  title: 'Địa chỉ thu gom',
-                  child: state.collectingRequestDetailStatus ==
-                          CollectingRequestDetailStatus.pending
-                      ? CustomText(
-                          text: state.area,
-                          fontSize: 47.sp,
-                          fontWeight: FontWeight.w500,
+            child: SingleChildScrollView(
+              padding: EdgeInsets.only(bottom: 50.h),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 50.h,
+                  ),
+                  getTitleRow(),
+                  RequestDetailElementPattern(
+                    icon: Icons.place,
+                    title: 'Địa chỉ thu gom',
+                    child: state.collectingRequestDetailStatus ==
+                            CollectingRequestDetailStatus.pending
+                        ? CustomText(
+                            text: state.area,
+                            fontSize: 47.sp,
+                            fontWeight: FontWeight.w500,
+                          )
+                        : Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CustomText(
+                                fontSize: 47.sp,
+                                text: state.collectingAddressName,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(
+                                  top: 12.h,
+                                ),
+                                child: CustomText(
+                                  text: state.collectingAddress,
+                                  fontSize: 39.sp,
+                                ),
+                              ),
+                            ],
+                          ),
+                  ),
+                  RequestDetailElementPattern(
+                    icon: AppIcons.event,
+                    title: 'Thời gian hẹn thu gom',
+                    child: CustomText(
+                      text: state.time,
+                      fontSize: 47.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  RequestDetailElementPattern(
+                    icon: Icons.kitchen,
+                    title: 'Có đồ cồng kềnh',
+                    child: CustomText(
+                      text: state.isBulky ? 'Có' : 'Không',
+                      fontSize: 47.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  state.collectingRequestDetailStatus ==
+                          CollectingRequestDetailStatus.approved
+                      ? RequestDetailElementPattern(
+                          icon: Icons.notes,
+                          title: 'Ghi chú',
+                          child: CustomText(
+                            text: state.note,
+                            fontSize: 40.sp,
+                          ),
                         )
-                      : Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CustomText(
-                              fontSize: 47.sp,
-                              text: state.collectingAddressName,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(
-                                top: 12.h,
-                              ),
-                              child: CustomText(
-                                text: state.collectingAddress,
-                                fontSize: 39.sp,
-                              ),
-                            ),
-                          ],
-                        ),
-                ),
-                RequestDetailElementPattern(
-                  icon: AppIcons.event,
-                  title: 'Thời gian hẹn thu gom',
-                  child: CustomText(
-                    text: state.time,
-                    fontSize: 47.sp,
-                    fontWeight: FontWeight.w500,
+                      : SizedBox.shrink(),
+                  SizedBox(
+                    height: 70.h,
                   ),
-                ),
-                RequestDetailElementPattern(
-                  icon: Icons.kitchen,
-                  title: 'Có đồ cồng kềnh',
-                  child: CustomText(
-                    text: state.isBulky ? 'Có' : 'Không',
-                    fontSize: 47.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                state.collectingRequestDetailStatus ==
-                        CollectingRequestDetailStatus.approved
-                    ? RequestDetailElementPattern(
-                        icon: Icons.notes,
-                        title: 'Ghi chú',
-                        child: CustomText(
-                          text: state.note,
-                          fontSize: 40.sp,
-                        ),
-                      )
-                    : SizedBox.shrink(),
-                SizedBox(
-                  height: 70.h,
-                ),
-                state.collectingRequestDetailStatus ==
-                        CollectingRequestDetailStatus.pending
-                    ? getApproveButton(context)
-                    : getCancelAndCreateTransactionButton(context, state.id),
-              ],
+                  state.collectingRequestDetailStatus ==
+                          CollectingRequestDetailStatus.pending
+                      ? getApproveButton(context)
+                      : getCancelAndCreateTransactionButton(context, state.id),
+                ],
+              ),
             ),
           ),
         );
