@@ -5,6 +5,7 @@ import 'package:collector_app/blocs/models/scrap_category_unit_model.dart';
 import 'package:collector_app/blocs/states/create_transaction_state.dart';
 import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/constants/text_constants.dart';
+import 'package:collector_app/ui/layouts/seller_transaction_detail_layout.dart';
 import 'package:collector_app/ui/widgets/avartar_widget.dart';
 import 'package:collector_app/ui/widgets/custom_text_widget.dart';
 import 'package:collector_app/ui/widgets/function_widgets.dart';
@@ -63,7 +64,18 @@ class CreateTransactionLayout extends StatelessWidget {
                       dialogType: DialogType.SUCCES,
                       desc: TextConstants.createTransactionSuccessfullyText,
                       btnOkText: 'Đóng',
-                      okRoutePress: Routes.main,
+                      btnOkOnpress: () {
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pushNamed(
+                          Routes.sellerTransactionDetail,
+                          arguments: SellerTransctionDetailArgs(
+                            arguments['collectingRequestId'],
+                          ),
+                        );
+                      },
                     );
                   }
                 }
