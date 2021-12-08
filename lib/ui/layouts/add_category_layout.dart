@@ -9,10 +9,8 @@ import 'package:collector_app/constants/text_constants.dart';
 import 'package:collector_app/ui/widgets/arrow_back_button.dart';
 import 'package:collector_app/ui/widgets/custom_text_widget.dart';
 import 'package:collector_app/ui/widgets/function_widgets.dart';
-import 'package:collector_app/utils/cool_alert.dart';
 import 'package:collector_app/utils/currency_text_formatter.dart';
 import 'package:collector_app/utils/custom_formats.dart';
-import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -46,20 +44,20 @@ class AddCategoryLayout extends StatelessWidget {
             } else {
               EasyLoading.dismiss();
               if (state is SubmittedState) {
-                CustomCoolAlert.showCoolAlert(
-                    context: context,
-                    title: state.message,
-                    type: CoolAlertType.success,
-                    onTap: () {
-                      Navigator.popUntil(
-                          context, ModalRoute.withName(Routes.categories));
-                    });
+                FunctionalWidgets.showAwesomeDialog(
+                  context,
+                  dialogType: DialogType.SUCCES,
+                  desc: state.message,
+                  btnOkText: 'Đóng',
+                  okRoutePress: Routes.categories,
+                );
               }
               if (state is ErrorState) {
-                CustomCoolAlert.showCoolAlert(
-                  context: context,
-                  title: state.message,
-                  type: CoolAlertType.error,
+                FunctionalWidgets.showAwesomeDialog(
+                  context,
+                  dialogType: DialogType.ERROR,
+                  desc: state.message,
+                  btnOkText: 'Đóng',
                 );
               }
             }

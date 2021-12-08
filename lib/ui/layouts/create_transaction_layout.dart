@@ -9,10 +9,8 @@ import 'package:collector_app/ui/widgets/avartar_widget.dart';
 import 'package:collector_app/ui/widgets/custom_text_widget.dart';
 import 'package:collector_app/ui/widgets/function_widgets.dart';
 import 'package:collector_app/ui/widgets/radiant_gradient_mask.dart';
-import 'package:collector_app/utils/cool_alert.dart';
 import 'package:collector_app/utils/currency_text_formatter.dart';
 import 'package:collector_app/utils/custom_formats.dart';
-import 'package:cool_alert/cool_alert.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
@@ -53,20 +51,20 @@ class CreateTransactionLayout extends StatelessWidget {
                 } else {
                   EasyLoading.dismiss();
                   if (state.process == CreateTransactionProcess.error) {
-                    CustomCoolAlert.showCoolAlert(
-                      context: context,
-                      title: TextConstants.createTransactionFailedText,
-                      type: CoolAlertType.error,
+                    FunctionalWidgets.showAwesomeDialog(
+                      context,
+                      dialogType: DialogType.ERROR,
+                      desc: TextConstants.createTransactionFailedText,
+                      btnOkText: 'Đóng',
                     );
                   } else if (state.process == CreateTransactionProcess.valid) {
-                    CustomCoolAlert.showCoolAlert(
-                        context: context,
-                        title: TextConstants.createTransactionSuccessfullyText,
-                        type: CoolAlertType.success,
-                        onTap: () {
-                          Navigator.popUntil(
-                              context, ModalRoute.withName(Routes.main));
-                        });
+                    FunctionalWidgets.showAwesomeDialog(
+                      context,
+                      dialogType: DialogType.SUCCES,
+                      desc: TextConstants.createTransactionSuccessfullyText,
+                      btnOkText: 'Đóng',
+                      okRoutePress: Routes.main,
+                    );
                   }
                 }
               },

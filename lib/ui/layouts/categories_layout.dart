@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:collector_app/blocs/categories_bloc.dart';
 import 'package:collector_app/blocs/events/categories_event.dart';
 import 'package:collector_app/blocs/models/scrap_category_model.dart';
@@ -7,8 +8,6 @@ import 'package:collector_app/constants/text_constants.dart';
 import 'package:collector_app/ui/widgets/arrow_back_button.dart';
 import 'package:collector_app/ui/widgets/custom_text_widget.dart';
 import 'package:collector_app/ui/widgets/function_widgets.dart';
-import 'package:collector_app/utils/cool_alert.dart';
-import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -33,14 +32,12 @@ class CategoriesLayout extends StatelessWidget {
               } else {
                 EasyLoading.dismiss();
                 if (state is ErrorState) {
-                  CustomCoolAlert.showCoolAlert(
-                    context: context,
-                    title: state.errorMessage,
-                    type: CoolAlertType.success,
-                    onTap: () {
-                      Navigator.popUntil(
-                          context, ModalRoute.withName(Routes.main));
-                    },
+                  FunctionalWidgets.showAwesomeDialog(
+                    context,
+                    dialogType: DialogType.ERROR,
+                    desc: state.errorMessage,
+                    btnOkText: 'Đóng',
+                    okRoutePress: Routes.main,
                   );
                 }
               }
@@ -121,15 +118,13 @@ class CategoriesLayout extends StatelessWidget {
           color: Colors.white,
           child: TextFormField(
             decoration: InputDecoration(
-              border:
-                  OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide.none,
-                  ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: BorderSide.none,
+              ),
               hintText: 'Tìm danh mục...',
               floatingLabelBehavior: FloatingLabelBehavior.auto,
-              prefixIcon:
-                  Icon(Icons.search, color: Colors.grey[600]),
+              prefixIcon: Icon(Icons.search, color: Colors.grey[600]),
               fillColor: Colors.grey[200],
               filled: true,
             ),
