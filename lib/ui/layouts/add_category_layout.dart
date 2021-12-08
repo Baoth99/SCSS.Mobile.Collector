@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:collector_app/blocs/add_category_bloc.dart';
 import 'package:collector_app/blocs/events/add_category_event.dart';
 import 'package:collector_app/blocs/states/add_category_state.dart';
@@ -139,6 +140,7 @@ class AddCategoryLayout extends StatelessWidget {
                 .add(EventChangeScrapName(scrapName: value));
           },
           autovalidateMode: AutovalidateMode.onUserInteraction,
+          maxLength: 100,
           validator: (value) {
             if (value == null || value.isEmpty)
               return TextConstants.inputScrapCategoryName;
@@ -321,7 +323,18 @@ class AddCategoryLayout extends StatelessWidget {
         FunctionalWidgets.customElevatedButton(
             blocContext, TextConstants.addScrapCategory, () {
           if (_formKey.currentState!.validate()) {
-            blocContext.read<AddCategoryBloc>().add(EventSubmitScrapCategory());
+            FunctionalWidgets.showAwesomeDialog(
+              blocContext,
+              dialogType: DialogType.QUESTION,
+              desc: 'Thêm danh mục?',
+              btnCancelText: 'Hủy',
+              btnOkText: 'Đồng ý',
+              btnOkOnpress: () {
+                blocContext
+                    .read<AddCategoryBloc>()
+                    .add(EventSubmitScrapCategory());
+              },
+            );
           }
         }),
         rowFlexibleType.smallToBig,

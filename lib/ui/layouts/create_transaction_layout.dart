@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:collector_app/blocs/create_transaction_bloc.dart';
 import 'package:collector_app/blocs/events/create_transaction_event.dart';
 import 'package:collector_app/blocs/models/scrap_category_unit_model.dart';
@@ -104,9 +105,7 @@ class CreateTransactionLayout extends StatelessWidget {
                   child: ListView(
                     children: [
                       Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 48.w
-                        ),
+                        padding: EdgeInsets.symmetric(horizontal: 48.w),
                         child: Row(
                           children: [
                             RadiantGradientMask(
@@ -122,11 +121,11 @@ class CreateTransactionLayout extends StatelessWidget {
                                     horizontal: 20.w,
                                   ),
                                   child: CustomText(
-                                      text: 'Mã Đơn: ${arguments['collectingRequestCode']}',
+                                    text:
+                                        'Mã Đơn: ${arguments['collectingRequestCode']}',
                                     fontWeight: FontWeight.w500,
                                     fontSize: 35.sp,
-                                  )
-                              ),
+                                  )),
                             ),
                           ],
                         ),
@@ -137,9 +136,7 @@ class CreateTransactionLayout extends StatelessWidget {
                         color: AppColors.greyFFEEEEEE,
                       ),
                       Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 48.w
-                        ),
+                        padding: EdgeInsets.symmetric(horizontal: 48.w),
                         child: Row(
                           children: [
                             AvatarRadiantGradientMask(
@@ -156,7 +153,7 @@ class CreateTransactionLayout extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 CustomText(
-                                    text: '${arguments['sellerName']}',
+                                  text: '${arguments['sellerName']}',
                                   fontSize: 45.sp,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -174,9 +171,7 @@ class CreateTransactionLayout extends StatelessWidget {
                       ),
                       _detailText(),
                       Container(
-                        margin: EdgeInsets.symmetric(
-                            vertical: 30.h
-                        ),
+                        margin: EdgeInsets.symmetric(vertical: 30.h),
                         child: _items(),
                       ),
                       if (state.transactionFee != 0) const Divider(),
@@ -187,14 +182,11 @@ class CreateTransactionLayout extends StatelessWidget {
                   ),
                 ),
                 Flexible(
-                  flex: 10,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 48.w
-                    ),
-                    child: _transactionButtons(),
-                  )
-                ),
+                    flex: 10,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 48.w),
+                      child: _transactionButtons(),
+                    )),
               ],
             ),
           ),
@@ -207,14 +199,12 @@ class CreateTransactionLayout extends StatelessWidget {
     return BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
       builder: (context, state) {
         return Container(
-          padding: EdgeInsets.symmetric(
-              horizontal: 48.w
-          ),
+          padding: EdgeInsets.symmetric(horizontal: 48.w),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               CustomText(
-                  text: 'Chi tiết',
+                text: 'Chi tiết',
                 color: AppColors.black,
                 fontSize: 42.sp,
               ),
@@ -245,9 +235,7 @@ class CreateTransactionLayout extends StatelessWidget {
       },
       builder: (context, state) {
         return Container(
-          padding: EdgeInsets.symmetric(
-              horizontal: 48.w
-          ),
+          padding: EdgeInsets.symmetric(horizontal: 48.w),
           child: FormField(
             builder: (formFieldState) => Column(
               children: [
@@ -355,7 +343,8 @@ class CreateTransactionLayout extends StatelessWidget {
               ],
             ),
             validator: (value) {
-              if (state.items.length == 0) return TextConstants.noItemsErrorText;
+              if (state.items.length == 0)
+                return TextConstants.noItemsErrorText;
             },
           ),
         );
@@ -365,7 +354,8 @@ class CreateTransactionLayout extends StatelessWidget {
 
   _getDottedDivider() {
     return Container(
-      padding: EdgeInsets.only(top: 50.h, bottom: 50.h, left: 48.w, right: 48.w),
+      padding:
+          EdgeInsets.only(top: 50.h, bottom: 50.h, left: 48.w, right: 48.w),
       child: DottedLine(
         direction: Axis.horizontal,
         dashGapLength: 3.0,
@@ -392,19 +382,17 @@ class CreateTransactionLayout extends StatelessWidget {
     return BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
       builder: (context, state) {
         return Container(
-          padding: EdgeInsets.symmetric(
-              horizontal: 48.w
-          ),
+          padding: EdgeInsets.symmetric(horizontal: 48.w),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               CustomText(
-                  text: TextConstants.total,
+                text: TextConstants.total,
                 fontSize: 48.sp,
                 fontWeight: FontWeight.w500,
               ),
               CustomText(
-                  text: CustomFormats.currencyFormat(state.grandTotal),
+                text: CustomFormats.currencyFormat(state.grandTotal),
                 fontSize: 48.sp,
                 fontWeight: FontWeight.w500,
               ),
@@ -425,9 +413,18 @@ class CreateTransactionLayout extends StatelessWidget {
             FunctionalWidgets.customElevatedButton(
                 context, TextConstants.createTransaction, () {
               if (_formKey.currentState!.validate()) {
-                context
-                    .read<CreateTransactionBloc>()
-                    .add(EventSubmitNewTransaction());
+                FunctionalWidgets.showAwesomeDialog(
+                  context,
+                  dialogType: DialogType.QUESTION,
+                  desc: 'Tạo giao dịch?',
+                  btnCancelText: 'Hủy',
+                  btnOkText: 'Đồng ý',
+                  btnOkOnpress: () {
+                    context
+                        .read<CreateTransactionBloc>()
+                        .add(EventSubmitNewTransaction());
+                  },
+                );
               }
             }),
             rowFlexibleType.smallToBig,
@@ -463,17 +460,19 @@ class CreateTransactionLayout extends StatelessWidget {
                         rowFlexibleType.bigToSmall,
                       ),
                       _quantityField(),
-                      BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
+                      BlocBuilder<CreateTransactionBloc,
+                          CreateTransactionState>(
                         builder: (context, state) {
                           return Visibility(
                             visible: (state.itemQuantity -
                                     state.itemQuantity.truncate()) >
                                 0,
                             child: Container(
-                              padding: EdgeInsets.only(bottom: 40.h, left: 20.w),
+                              padding:
+                                  EdgeInsets.only(bottom: 40.h, left: 20.w),
                               child: CustomText(
-                                  text: '* Chữ số thập phân sử dụng dấu "," '
-                                      'nên dùng cho các loại đơn vị như kilogam, gam, tạ, tấn,... ',
+                                text: '* Chữ số thập phân sử dụng dấu "," '
+                                    'nên dùng cho các loại đơn vị như kilogam, gam, tạ, tấn,... ',
                                 fontSize: 35.sp,
                                 color: AppColors.greyFF939393,
                               ),
@@ -533,8 +532,14 @@ class CreateTransactionLayout extends StatelessWidget {
             height: 210.h,
             child: ListTile(
               isThreeLine: true,
-              title: Text(TextConstants.calculatedByUnitPrice, style: TextStyle(fontWeight: FontWeight.w500),),
-              subtitle: Text(TextConstants.calculatedByUnitPriceExplaination, style: TextStyle(fontSize: 36.sp),),
+              title: Text(
+                TextConstants.calculatedByUnitPrice,
+                style: TextStyle(fontWeight: FontWeight.w500),
+              ),
+              subtitle: Text(
+                TextConstants.calculatedByUnitPriceExplaination,
+                style: TextStyle(fontSize: 36.sp),
+              ),
               trailing: SizedBox(
                 height: 80.h,
                 child: Switch(
@@ -715,7 +720,8 @@ class CreateTransactionLayout extends StatelessWidget {
                   if (value != TextConstants.emptyString) {
                     context.read<CreateTransactionBloc>().add(
                         EventUnitPriceChanged(
-                            unitPrice: value.replaceAll(RegExp(r'[^0-9]'), '')));
+                            unitPrice:
+                                value.replaceAll(RegExp(r'[^0-9]'), '')));
                   } else {
                     context.read<CreateTransactionBloc>().add(
                         EventUnitPriceChanged(
