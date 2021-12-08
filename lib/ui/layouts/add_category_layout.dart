@@ -331,6 +331,7 @@ class AddCategoryLayout extends StatelessWidget {
                 blocContext
                     .read<AddCategoryBloc>()
                     .add(EventSubmitScrapCategory());
+                Navigator.pop(blocContext);
               },
             );
           }
