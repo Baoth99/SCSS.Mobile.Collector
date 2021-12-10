@@ -120,10 +120,23 @@ class _PendingRequestLayoutState extends State<PendingRequestMain> {
       appBar: FunctionalWidgets.buildAppBar(
         context: context,
         color: AppColors.greyFFB5B5B5,
-        title: CustomText(text: 'Yêu cầu thu gom mới'),
-        backgroundColor: AppColors.white,
-        elevation: 1,
-      ),
+          title: CustomText(text: 'Yêu cầu thu gom mới'),
+          backgroundColor: AppColors.white,
+          elevation: 1,
+          action: [
+            IconButton(
+              onPressed: () {
+                context.read<RequestNowListBloc>().add(RequestNowListInitial());
+                context
+                    .read<RequestBookListBloc>()
+                    .add(RequestBookListInitial());
+              },
+              icon: Icon(
+                Icons.replay,
+                color: AppColors.greyFF9098B1,
+              ),
+            ),
+          ]),
       body: body(context),
     );
   }
