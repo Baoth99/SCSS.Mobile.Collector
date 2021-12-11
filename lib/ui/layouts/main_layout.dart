@@ -6,6 +6,7 @@ import 'package:collector_app/blocs/notification_bloc.dart';
 import 'package:collector_app/blocs/profile_bloc.dart';
 import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/log/logger.dart';
+import 'package:collector_app/providers/services/firebase_service.dart';
 import 'package:collector_app/ui/layouts/account_layout.dart';
 import 'package:collector_app/ui/layouts/activity_layout.dart';
 import 'package:collector_app/ui/layouts/home_layout.dart';
@@ -32,7 +33,7 @@ class _MainLayoutState extends State<MainLayout> {
   @override
   void initState() {
     super.initState();
-
+    FirebaseNotification.getNotificationAfterTerminated();
     // Get number of  unread notifcation count
     context.read<NotificationBloc>().add(NotificationUncountGet());
 

@@ -26,6 +26,7 @@ class ActivityLayoutConstants {
   static const bulkyImage = ImagesPaths.bulky;
   static const notBulkyImage = ImagesPaths.notBulky;
 
+  static const pending = 1;
   static const cancelBySeller = 2;
   static const cancelByCollect = 3;
   static const approved = 4;

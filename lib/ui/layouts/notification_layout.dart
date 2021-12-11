@@ -253,6 +253,13 @@ class _NotificationElementState extends State<NotificationElement> {
             case 1:
             case 2:
               if (widget.screenDataId != null) {
+                // if (widget.notiType == ActivityLayoutConstants.pending) {
+                //   Navigator.of(context).pushNamed(
+                //     Routes.pendingRequestDetail,
+                //     arguments: PendingRequestDetailArgs(widget.screenDataId!,
+                //         CollectingRequestDetailStatus.pending),
+                //   );
+                // } else
                 if (widget.notiType == ActivityLayoutConstants.approved) {
                   Navigator.of(context).pushNamed(
                     Routes.pendingRequestDetail,
