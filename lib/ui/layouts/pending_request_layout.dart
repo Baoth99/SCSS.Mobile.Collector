@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:collector_app/blocs/check_approved_request_bloc.dart';
 import 'package:collector_app/blocs/collecting_request_detail_bloc.dart';
 import 'package:collector_app/blocs/request_book_list_bloc.dart';
@@ -102,15 +104,14 @@ class _PendingRequestLayoutState extends State<PendingRequestMain> {
     AppLog.info('Server invoked: $parameters');
     if (parameters.isNotEmpty) {
       var data = parameters[0];
-      if (data is String) {
-        context
-            .read<CheckApprovedRequestBloc>()
-            .add(CheckApprovedRealTime(data));
-        context.read<RequestBookListBloc>().add(RequestBookIsApproved(data));
-        context.read<RequestNowListBloc>().add(RequestNowIsApproved(data));
-      } else {
-        AppLog.error('Data is not String');
-      }
+      var model = collectingRequestNoticeModelFromJson(data.toString());
+      AppLog.info('Server invoked: $model');
+
+      context
+          .read<CheckApprovedRequestBloc>()
+          .add(CheckRequestStatusRealTime(model));
+      context.read<RequestBookListBloc>().add(RequestBookIsApproved(model));
+      context.read<RequestNowListBloc>().add(RequestNowIsApproved(model));
     }
   }
 
@@ -118,8 +119,8 @@ class _PendingRequestLayoutState extends State<PendingRequestMain> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: FunctionalWidgets.buildAppBar(
-        context: context,
-        color: AppColors.greyFFB5B5B5,
+          context: context,
+          color: AppColors.greyFFB5B5B5,
           title: CustomText(text: 'Yêu cầu thu gom mới'),
           backgroundColor: AppColors.white,
           elevation: 1,
@@ -192,7 +193,7 @@ class _PendingRequestLayoutState extends State<PendingRequestMain> {
               cusName: r.sellerName,
               distance: r.distanceText,
               placeName: r.area,
-              isActive: r.isActive,
+              pendingRequestStatus: r.pendingRequestStatus,
               time: r.collectingRequestDate,
               fromTime: r.fromTime,
               toTime: r.toTime,
@@ -358,7 +359,7 @@ class _PendingRequestLayoutState extends State<PendingRequestMain> {
                   toTime: r.toTime,
                   placeName: r.area,
                   bulky: r.isBulky,
-                  isActive: r.isActive,
+                  pendingRequestStatus: r.pendingRequestStatus,
                 );
               },
               separatorBuilder: (_, __) {
@@ -423,7 +424,7 @@ class CollectingRequest extends StatelessWidget {
     required this.toTime,
     required this.placeName,
     required this.bulky,
-    required this.isActive,
+    required this.pendingRequestStatus,
   }) : super(key: key);
 
   final String bookingId;
@@ -434,7 +435,7 @@ class CollectingRequest extends StatelessWidget {
   final String toTime;
   final String placeName;
   final bool bulky;
-  final bool isActive;
+  final PendingRequestStatus pendingRequestStatus;
 
   @override
   Widget build(BuildContext context) {
@@ -456,7 +457,7 @@ class CollectingRequest extends StatelessWidget {
           ]),
       child: Stack(
         children: [
-          isActive
+          pendingRequestStatus == PendingRequestStatus.pending
               ? SizedBox.shrink()
               : Positioned.fill(
                   child: Container(
@@ -467,7 +468,7 @@ class CollectingRequest extends StatelessWidget {
                   ),
                 ),
           InkWell(
-            onTap: isActive
+            onTap: pendingRequestStatus == PendingRequestStatus.pending
                 ? () {
                     context.read<CheckApprovedRequestBloc>().add(
                           AddIdCheckApprove(bookingId),
@@ -487,8 +488,14 @@ class CollectingRequest extends StatelessWidget {
                     });
                   }
                 : () {
-                    FunctionalWidgets.showSnackBar(context,
-                        'Yêu cầu thu gom này đã được nhận bởi người thu gom khác.');
+                    if (pendingRequestStatus == PendingRequestStatus.approved) {
+                      FunctionalWidgets.showSnackBar(context,
+                          'Yêu cầu thu gom này đã được nhận bởi người thu gom khác.');
+                    } else if (pendingRequestStatus ==
+                        PendingRequestStatus.canceled) {
+                      FunctionalWidgets.showSnackBar(
+                          context, 'Yêu cầu thu gom này đã bị hủy.');
+                    }
                   },
             child: ClipRRect(
               borderRadius: BorderRadius.circular(30.0.r),
@@ -600,4 +607,26 @@ class CollectingRequest extends StatelessWidget {
       child: child,
     );
   }
+}
+
+CollectingRequestNoticeModel collectingRequestNoticeModelFromJson(String str) =>
+    CollectingRequestNoticeModel.fromJson(json.decode(str));
+
+class CollectingRequestNoticeModel {
+  CollectingRequestNoticeModel({
+    required this.id,
+    required this.requestType,
+    required this.status,
+  });
+
+  final String id;
+  final int? requestType;
+  final int? status;
+
+  factory CollectingRequestNoticeModel.fromJson(Map<String, dynamic> json) =>
+      CollectingRequestNoticeModel(
+        id: json["Id"],
+        requestType: json["RequestType"],
+        status: json["Status"],
+      );
 }

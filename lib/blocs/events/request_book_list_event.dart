@@ -11,6 +11,6 @@ class RequestBookListLoading extends RequestBookListEvent {}
 class RequestBookListRefresh extends RequestBookListEvent {}
 
 class RequestBookIsApproved extends RequestBookListEvent {
-  final String id;
-  RequestBookIsApproved(this.id);
+  final CollectingRequestNoticeModel requestModel;
+  RequestBookIsApproved(this.requestModel);
 }

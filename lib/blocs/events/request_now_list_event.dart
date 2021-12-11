@@ -11,6 +11,6 @@ class RequestNowListLoading extends RequestNowListEvent {}
 class RequestNowListRefresh extends RequestNowListEvent {}
 
 class RequestNowIsApproved extends RequestNowListEvent {
-  final String id;
-  RequestNowIsApproved(this.id);
+  final CollectingRequestNoticeModel requestModel;
+  RequestNowIsApproved(this.requestModel);
 }

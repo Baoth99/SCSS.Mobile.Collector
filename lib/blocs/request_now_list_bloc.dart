@@ -5,6 +5,7 @@ import 'package:collector_app/constants/constants.dart';
 import 'package:collector_app/log/logger.dart';
 import 'package:collector_app/providers/configs/injection_config.dart';
 import 'package:collector_app/providers/services/collecting_request_service.dart';
+import 'package:collector_app/ui/layouts/pending_request_layout.dart';
 import 'package:collector_app/utils/common_function.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -53,13 +54,24 @@ class RequestNowListBloc
       yield state.copyWith(listRealTimeStatus: ListRealTimeStatus.resolving);
       try {
         var index = state.listRequest.indexWhere(
-          (r) => r.id == event.id,
+          (r) => r.id == event.requestModel.id,
         );
 
         if (index >= 0) {
           var request = state.listRequest[index];
-          request.isActive = false;
 
+          //check deactivate status
+          if (event.requestModel.status ==
+                  ActivityLayoutConstants.cancelBySeller ||
+              event.requestModel.status ==
+                  ActivityLayoutConstants.cancelBySystem) {
+            request.pendingRequestStatus = PendingRequestStatus.canceled;
+          } else if (event.requestModel.status ==
+              ActivityLayoutConstants.approved) {
+            request.pendingRequestStatus = PendingRequestStatus.approved;
+          }
+
+          //assign new list
           var newList = <Request>[]..addAll(state.listRequest);
           newList[index] = request;
           yield state.copyWith(listRequest: newList);

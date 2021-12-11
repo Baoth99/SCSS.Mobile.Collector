@@ -1,3 +1,4 @@
+import 'package:collector_app/constants/constants.dart';
 import 'package:equatable/equatable.dart';
 
 class Request extends Equatable {
@@ -18,7 +19,7 @@ class Request extends Equatable {
     required this.requestType,
     required this.distance,
     required this.distanceText,
-    this.isActive = true,
+    this.pendingRequestStatus = PendingRequestStatus.pending,
   });
 
   String id;
@@ -37,7 +38,7 @@ class Request extends Equatable {
   int requestType;
   int distance;
   String distanceText;
-  bool isActive;
+  PendingRequestStatus pendingRequestStatus;
 
   @override
   List<Object> get props => [
@@ -57,6 +58,6 @@ class Request extends Equatable {
         requestType,
         distance,
         distanceText,
-        isActive,
+        pendingRequestStatus,
       ];
 }

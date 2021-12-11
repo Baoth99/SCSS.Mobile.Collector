@@ -156,3 +156,5 @@ class CustomRegexs {
   static const String passwordRegex = r'^.{6,}$';
   static const String otpRegex = r'^[0-9]{6}$';
 }
+
+enum PendingRequestStatus { pending, approved, canceled }

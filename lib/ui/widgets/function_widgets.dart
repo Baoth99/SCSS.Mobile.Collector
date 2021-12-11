@@ -13,6 +13,7 @@ enum rowFlexibleType { smallToBig, bigToSmall }
 
 class FunctionalWidgets {
   static void showSnackBar(BuildContext context, String text) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: CustomText(text: text),

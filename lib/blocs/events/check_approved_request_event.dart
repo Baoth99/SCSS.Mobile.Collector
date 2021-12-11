@@ -27,12 +27,12 @@ class AddIdCheckApprove extends CheckApprovedRequestEvent {
   List<Object> get props => [id];
 }
 
-class CheckApprovedRealTime extends CheckApprovedRequestEvent {
-  final String id;
-  CheckApprovedRealTime(this.id);
+class CheckRequestStatusRealTime extends CheckApprovedRequestEvent {
+  final CollectingRequestNoticeModel model;
+  CheckRequestStatusRealTime(this.model);
 
   @override
-  List<Object> get props => [id];
+  List<Object> get props => [model];
 }
 
 class ApproveCheckApproved extends CheckApprovedRequestEvent {

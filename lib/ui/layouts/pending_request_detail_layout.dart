@@ -95,7 +95,9 @@ class PendingRequestDetailLayout extends StatelessWidget {
               return BlocListener<CheckApprovedRequestBloc,
                   CheckApprovedRequestState>(
                 listener: (checkApproveContext, checkApproveState) {
-                  if (checkApproveState.isApprovedBySomebody &&
+                  if (checkApproveState.pendingRequestStatus ==
+                          PendingRequestStatus.approved &&
+                      checkApproveState.isApprovedBySomebody &&
                       !checkApproveState.isApprovedByYou) {
                     FunctionalWidgets.showAwesomeDialog(
                       context,
@@ -103,6 +105,16 @@ class PendingRequestDetailLayout extends StatelessWidget {
                       title: 'Không thể nhận yêu cầu',
                       desc:
                           'Yêu cầu thu gom này đã được nhận bởi người thu gom khác.',
+                      btnOkText: 'Đóng',
+                      okRoutePress: Routes.pendingRequests,
+                    );
+                  } else if (checkApproveState.pendingRequestStatus ==
+                      PendingRequestStatus.canceled) {
+                    FunctionalWidgets.showAwesomeDialog(
+                      context,
+                      dialogType: DialogType.INFO,
+                      title: 'Không thể nhận yêu cầu',
+                      desc: 'Yêu cầu thu gom này đã bị hủy.',
                       btnOkText: 'Đóng',
                       okRoutePress: Routes.pendingRequests,
                     );
