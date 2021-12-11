@@ -51,6 +51,7 @@ class ImagesPaths {
   static const String phoneIcon = '$imagePath/phoneIcon.png';
   static const String promotionIcon = '$imagePath/promotionIcon.png';
   static const String collectorLogo = '$imagePath/collector_logo.png';
+  static const String requests = '$imagePath/request.png';
 }
 
 class SvgIcons {

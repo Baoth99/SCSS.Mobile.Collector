@@ -332,7 +332,7 @@ class AccountBody extends StatelessWidget {
               AppColors.white,
               AppColors.greenFF39AC8F,
               AppColors.greenFF61C53D,
-              ImagesPaths.createNewIcon,
+              ImagesPaths.requests,
             ),
             option(
               'Bảng giá phế liệu',
