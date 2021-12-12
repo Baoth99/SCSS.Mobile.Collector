@@ -116,6 +116,8 @@ class FirebaseNotification {
 
   static void handleMessage(RemoteMessage message) {
     CollectorApp.navigatorKey.currentContext
+      ?..read<HomeBloc>().add(HomeFetch());
+    CollectorApp.navigatorKey.currentContext
         ?.read<NotificationBloc>()
         .add(NotificationUncountGet());
     //get new messagelist
@@ -192,6 +194,8 @@ class FirebaseNotification {
 
   static Future<void> firebaseForegroundMessagingHandler() async {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      CollectorApp.navigatorKey.currentContext
+        ?..read<HomeBloc>().add(HomeFetch());
       //get uncount
       CollectorApp.navigatorKey.currentContext
           ?.read<NotificationBloc>()

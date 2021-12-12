@@ -379,32 +379,53 @@ class PendingRequestDetailBody extends StatelessWidget {
   }
 
   Widget getApproveButton(BuildContext context) {
-    return CustomButton(
-      onPressed: () {
-        FunctionalWidgets.showAwesomeDialog(
-          context,
-          dialogType: DialogType.WARNING,
-          title: 'Bạn chắc chắn nhận đơn hàng này?',
-          desc: Symbols.empty,
-          btnOkText: 'Đồng ý',
-          btnOkOnpress: () {
-            Navigator.of(context)
-                .popUntil(ModalRoute.withName(Routes.pendingRequestDetail));
-            context
-                .read<CheckApprovedRequestBloc>()
-                .add(ApproveCheckApproved());
-            context
-                .read<CollectingRequestDetailBloc>()
-                .add(ApproveRequestEvent());
-          },
-          isCancelBorder: true,
-          btnCancelColor: AppColors.errorButtonBorder,
-          textCancelColor: AppColors.errorButtonText,
-          btnCancelText: 'Hủy',
+    return BlocBuilder<CollectingRequestDetailBloc,
+        CollectingRequestDetailState>(
+      builder: (context, state) {
+        return CustomButton(
+          onPressed: state.isAllowedToApprove
+              ? () {
+                  FunctionalWidgets.showAwesomeDialog(
+                    context,
+                    dialogType: DialogType.WARNING,
+                    title: 'Bạn chắc chắn nhận đơn hàng này?',
+                    desc: Symbols.empty,
+                    btnOkText: 'Đồng ý',
+                    btnOkOnpress: () {
+                      Navigator.of(context).popUntil(
+                          ModalRoute.withName(Routes.pendingRequestDetail));
+                      context
+                          .read<CheckApprovedRequestBloc>()
+                          .add(ApproveCheckApproved());
+                      context
+                          .read<CollectingRequestDetailBloc>()
+                          .add(ApproveRequestEvent());
+                    },
+                    isCancelBorder: true,
+                    btnCancelColor: AppColors.errorButtonBorder,
+                    textCancelColor: AppColors.errorButtonText,
+                    btnCancelText: 'Hủy',
+                  );
+                }
+              : () {
+                  if (state.requestType == CollectingRequestType.book) {
+                    FunctionalWidgets.showSnackBar(
+                      context,
+                      'Bạn đã nhận số đơn đặt hẹn tối đa. Hãy hoàn tất thu gom để tiếp tục nhận đơn khác.',
+                    );
+                  } else {
+                    FunctionalWidgets.showSnackBar(
+                      context,
+                      'Bạn đã nhận 1 đơn đến ngay. Hãy hoàn tất thu gom để tiếp tục nhận đơn khác.',
+                    );
+                  }
+                },
+          color: state.isAllowedToApprove
+              ? AppColors.greenFF01C971
+              : AppColors.greyFF969090,
+          title: 'Nhận đơn',
         );
       },
-      color: AppColors.greenFF01C971,
-      title: 'Nhận đơn',
     );
   }
 
