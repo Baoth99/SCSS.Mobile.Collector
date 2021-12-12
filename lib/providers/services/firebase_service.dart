@@ -157,7 +157,6 @@ class FirebaseNotification {
                 ),
               );
             }
-
             break;
           case 3:
             CollectorApp.navigatorKey.currentState?.pushNamed(
@@ -165,6 +164,14 @@ class FirebaseNotification {
               arguments: DealerTransctionDetailArgs(
                 screenDataId,
               ),
+            );
+            break;
+          case 4:
+            CollectorApp.navigatorKey.currentState?.pushNamedAndRemoveUntil(
+              Routes.pendingRequests,
+              ModalRoute.withName(Routes.main),
+              arguments: PendingRequestDetailArgs(
+                  screenDataId, CollectingRequestDetailStatus.pending),
             );
             break;
           default:
