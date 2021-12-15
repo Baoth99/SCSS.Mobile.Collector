@@ -37,5 +37,5 @@ Future<void> configLoading() async {
       ],
     )
     ..userInteractions = false
-    ..dismissOnTap = false;
+    ..dismissOnTap = true;
 }
