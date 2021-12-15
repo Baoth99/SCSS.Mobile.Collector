@@ -377,12 +377,15 @@ class CreateTransactionLayout extends StatelessWidget {
   _transactionFee() {
     return BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
       builder: (context, state) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(TextConstants.transactionFee),
-            Text(CustomFormats.currencyFormat(state.transactionFee)),
-          ],
+        return Container(
+          padding: EdgeInsets.symmetric(horizontal: 48.w),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(TextConstants.transactionFee),
+              Text(CustomFormats.currencyFormat(state.transactionFee)),
+            ],
+          ),
         );
       },
     );
