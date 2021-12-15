@@ -144,8 +144,8 @@ class TransactionServiceImpl implements TransactionService {
       var result = SellerTransactionDetailState(
         collectingRequestCode: d.collectingRequestCode,
         serviceFee: d.transactionFee ?? 0,
-        billTotal: d.total ?? 0,
-        itemTotal: d.total ?? 0 - (d.transactionFee ?? 0),
+        billTotal: (d.total ?? 0) - (d.transactionFee ?? 0),
+        itemTotal: d.total ?? 0,
         doneActivityTime: CommonUtils.combineTime(d.dayOfWeek, d.date, d.time),
         sellerName: d.sellerName,
         transaction: d.items
