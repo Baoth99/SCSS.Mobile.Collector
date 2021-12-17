@@ -1,8 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.collector_app">
+      <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+      <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+      <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="VECHAIXANH Thu Gom"
-        android:icon="@mipmap/ic_launcher">
+        android:name=".Application"
+        android:label="VeChaiXANH Thu Gom"
+        android:icon="@mipmap/vechaixanh_ic_launcher">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -18,6 +22,9 @@
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme"
               />
+            <meta-data
+              android:name="com.google.firebase.messaging.default_notification_channel_id"
+              android:value="high_importance_channel" />
             <!-- Displays an Android View that continues showing the launch screen
                  Drawable until Flutter paints its first frame, then this splash
                  screen fades out. A splash screen is useful to avoid any visual
@@ -30,6 +37,10 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="FLUTTER_NOTIFICATION_CLICK" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.

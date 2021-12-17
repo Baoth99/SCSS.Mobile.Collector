@@ -1,0 +1,4 @@
+enum ListRealTimeStatus {
+  idle,
+  resolving,
+}
